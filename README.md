@@ -7,7 +7,7 @@
 ---
 
 ## 🚀 Demo
-Podés ver el sitio en vivo aquí: **[Link a tu deploy en Vercel/Netlify]**
+Podés ver el sitio en vivo aquí: https://scdev-portfolio.netlify.app/
 
 ---
 
@@ -48,3 +48,13 @@ scdev-portfolio/
 ├── style.css           # Estilos y animaciones
 ├── script.js           # Lógica, partículas y manejo de DOM
 └── README.md           # Documentación
+
+📬 Contacto
+
+Si tenés alguna sugerencia o querés contactarme:
+
+    LinkedIn: Santiago Cáceres
+
+    Email: 1caceres.santiago5@gmail.com
+
+© 2026 Santiago Cáceres. Todos los derechos reservados.
