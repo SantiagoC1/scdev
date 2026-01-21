@@ -1,411 +1,564 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>scdev | Santiago Cáceres - Full Stack Developer</title>
-    <link rel="icon" type="image/png" href="images/Idetidad_scdev(1).png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;500;700&family=Varela+Round&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <meta name="description" content="Portfolio de Santiago Cáceres. Desarrollador Full Stack .NET especializado en Arquitectura Limpia y Soluciones Web Escalables.">
-    <meta name="keywords" content="Santiago Cáceres, scdev, .NET Developer, Full Stack, C#, Blazor, Argentina">
-    <meta name="author" content="Santiago Cáceres">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://scdev.com.ar/"> 
-    <meta property="og:title" content="Santiago Cáceres | Full Stack .NET Developer">
-    <meta property="og:description" content="Transformando ideas en código sólido. Especialista en .NET, Clean Architecture y desarrollo web moderno.">
-    <meta property="og:image" content="https://i.imgur.com/TuImagenDePortada.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scdev | Santiago Cáceres - Desarrollo Web Estratégico</title>
+
+  <link rel="icon" type="image/png" href="images/Idetidad_scdev(1).png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;500;700&family=Varela+Round&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <link rel="stylesheet" href="style.css">
+
+  <meta name="description" content="Desarrollo web profesional en La Plata. Sitios rápidos, seguros y optimizados para vender por WhatsApp. Soluciones .NET y Landing Pages.">
+  <meta name="keywords" content="Desarrollo Web La Plata, Programador .NET, Landing Page, Diseño Web, C#, Blazor, Santiago Cáceres">
+  <meta name="author" content="Santiago Cáceres">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://scdev.com.ar/">
+  <meta property="og:title" content="Santiago Cáceres | Desarrollo Web & .NET">
+  <meta property="og:description" content="Tu negocio necesita una web que venda. Desarrollos a medida y Landing Pages en La Plata.">
+  <meta property="og:image" content="https://scdev.com.ar/images/Scdev.png">
 </head>
+
 <body>
 
-    <div id="particles-js"></div>
+  <div id="particles-js"></div>
 
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#hero" class="logo-link">
-                <img src="images/Idetidad_scdev(1).png" alt="scdev logo" class="nav-logo">
+  <a id="waFloat" class="whatsapp-float" data-wa-link data-wa-text-key="whatsapp_default_text"
+     href="#" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span>WhatsApp</span>
+  </a>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="logo-link">
+        <img src="images/Idetidad_scdev(1).png" alt="scdev logo" class="nav-logo">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#about">Perfil</a></li>
+        <li><a href="#skills">Stack</a></li>
+        <li><a href="#portfolio">Proyectos</a></li>
+        <li><a href="#services">Servicios</a></li>
+        <li><a href="#education">Formación</a></li>
+
+        <li>
+          <a class="btn-nav btn-wa"
+             data-wa-link
+             data-wa-text="Hola Santi! Quiero mejorar la presencia online de mi negocio."
+             href="#" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </li>
+
+        <li><a href="#contact" class="btn-nav">Contactar</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="hero" class="hero-section">
+    <div class="container hero-content">
+      <h1 class="hero-title">Hola, soy <span class="accent">Santiago Cáceres</span></h1>
+
+      <h2 class="hero-subtitle">
+        Desarrollo <span class="typewriter"></span>
+      </h2>
+
+      <p class="hero-text">
+        Ayudo a profesionales y negocios en <strong>La Plata</strong> a transformar visitas en clientes.
+        Diseño sitios web rápidos y soluciones .NET robustas, optimizadas para captar consultas directas a tu WhatsApp.
+      </p>
+
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-primary">Ver Planes y Precios</a>
+        <a href="#portfolio" class="btn btn-outline">Ver Mis Trabajos</a>
+
+        <a class="btn btn-outline"
+           data-wa-link
+           data-wa-text="Hola Santi! Me interesa cotizar una web."
+           href="#" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-whatsapp"></i> Cotizar Ahora
+        </a>
+
+        <a href="assets/Santiago_Caceres_CV_ES.pdf" download="Santiago_Caceres_CV.pdf" class="btn btn-outline">
+          <i class="fas fa-file-download"></i> Descargar CV
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section-bg-secondary">
+    <div class="container">
+      <div class="about-grid reveal">
+
+        <div class="about-text">
+          <h2 class="section-title text-left">Sobre Mí</h2>
+          <p>
+            Soy Desarrollador Full Stack y estudiante avanzado de la <strong>Licenciatura en Sistemas (UNLP)</strong>.
+            <br><br>
+            Mi enfoque combina la ingeniería de software con una visión comercial: no solo escribo código, creo herramientas que funcionan.
+            Me especializo en arquitecturas escalables (.NET) y experiencias de usuario fluidas, aplicando siempre buenas prácticas como <strong>SOLID</strong> y <strong>Clean Architecture</strong> para garantizar calidad y rendimiento.
+          </p>
+
+          <div class="social-links-hero" style="margin-top: 20px;">
+            <a data-bind-href="linkedin_url" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn">
+              <i class="fab fa-linkedin"></i>
             </a>
-            
-            <ul class="nav-links">
-                <li><a href="#about">Perfil</a></li>
-                <li><a href="#skills">Stack</a></li>
-                <li><a href="#portfolio">Proyectos</a></li>
-                <li><a href="#education">Formación</a></li>
-                <li><a href="#contact" class="btn-nav">Contactar</a></li>
+            <a data-bind-href="github_url" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="#" onclick="openModal(event)" class="social-icon" title="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+
+        <div id="skills" class="skills-wrapper">
+          <h3 class="skill-category-title" style="margin-top: 0;">Frontend</h3>
+          <div class="skills-container">
+            <span class="skill-badge">HTML5</span>
+            <span class="skill-badge">CSS3</span>
+            <span class="skill-badge">JavaScript</span>
+            <span class="skill-badge">Blazor</span>
+            <span class="skill-badge">Next.js</span>
+          </div>
+
+          <h3 class="skill-category-title" style="margin-top: 20px;">Backend & Core</h3>
+          <div class="skills-container">
+            <span class="skill-badge">.NET 8</span>
+            <span class="skill-badge">C#</span>
+            <span class="skill-badge">Java</span>
+            <span class="skill-badge">Spring Boot</span>
+            <span class="skill-badge">Clean Arch</span>
+          </div>
+
+          <h3 class="skill-category-title" style="margin-top: 20px;">Datos & Herramientas</h3>
+          <div class="skills-container">
+            <span class="skill-badge">SQL Server</span>
+            <span class="skill-badge">PostgreSQL</span>
+            <span class="skill-badge">Supabase</span>
+            <span class="skill-badge">EF Core</span>
+            <span class="skill-badge border-accent">Git / GitHub</span>
+            <span class="skill-badge">Figma</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="section">
+    <div class="container">
+      <h2 class="section-title center">Proyectos Destacados</h2>
+
+      <div class="projects-grid">
+
+        <article class="project-card reveal" onclick="openProjectModal(this)"
+                 data-title="Portfolio Personal (scdev)"
+                 data-result="Resultado: Identidad digital profesional y canal de ventas automatizado."
+                 data-desc="Diseño y desarrollo 'desde cero' enfocado en performance y conversión. SPA (Single Page Application) con modo oscuro, animaciones fluidas y formulario de contacto integrado."
+                 data-tags="HTML5, CSS3, JavaScript, Particles.js"
+                 data-repo="https://github.com/SantiagoC1/scdev"
+                 data-demo="https://scdev.com.ar/"
+                 data-image="images/Scdev.png">
+
+          <div class="card-image-cover">
+            <img src="images/Scdev.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Portfolio'" alt="Portfolio Cover">
+            <div class="card-overlay">
+              <i class="fas fa-plus"></i> Ver Detalles
+            </div>
+          </div>
+
+          <div class="card-mini-footer">
+            <h3>Portfolio Personal (scdev)</h3>
+            <span>Ver más <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+
+        <article class="project-card reveal" onclick="openProjectModal(this)"
+                 data-title="Adsum Pater - Misión Universitaria"
+                 data-result="Resultado: Centralización de información y comunidad activa."
+                 data-desc="Plataforma integral para la misión universitaria. Incluye gestión de contenidos, historia interactiva y un 'Muro de Intenciones' espiritual en tiempo real. Arquitectura limpia y escalable."
+                 data-tags=".NET 8, Blazor WebAssembly, Firebase, Clean Arch"
+                 data-repo="https://github.com/SantiagoC1/AdsumPater"
+                 data-demo="https://adsum-pater-web.web.app"
+                 data-image="images/AdsumPater.png">
+
+          <div class="card-image-cover">
+            <img src="images/AdsumPater.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Adsum+Pater'" alt="Adsum Pater">
+            <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+          </div>
+
+          <div class="card-mini-footer">
+            <h3>Adsum Pater (Web App)</h3>
+            <span>Ver más <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+
+        <article class="project-card reveal" onclick="openProjectModal(this)"
+                 data-title="CentroEventos (CampusFit)"
+                 data-desc="Sistema de gestión completo para centros deportivos. Manejo de roles, autenticación segura (SHA-256) y persistencia de datos optimizada."
+                 data-result="Resultado: Gestión eficiente de usuarios y actividades."
+                 data-tags=".NET 8, Blazor, SQLite, EF Core"
+                 data-repo="https://github.com/SantiCaceres1/CentroEventos"
+                 data-demo="#"
+                 data-image="images/campusfit.png">
+
+          <div class="card-image-cover">
+            <img src="images/campusfit.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=CampusFit'" alt="CampusFit">
+            <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+          </div>
+
+          <div class="card-mini-footer">
+            <h3>CentroEventos (CampusFit)</h3>
+            <span>Ver más <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+
+        <article class="project-card reveal" onclick="openProjectModal(this)"
+                 data-title="Landing Page Bplay"
+                 data-result="Resultado: Diseño de alto impacto visual."
+                 data-desc="Landing page promocional diseñada para captar la atención. Enfoque en velocidad de carga y estructura visual persuasiva."
+                 data-tags="HTML5, CSS3, JavaScript, Responsive"
+                 data-repo="https://github.com/SantiagoC1/bplay-landing-contact"
+                 data-demo="https://bplay-landing-contact.netlify.app/"
+                 data-image="images/bplay.png">
+
+          <div class="card-image-cover">
+            <img src="images/bplay.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Bplay'" alt="Bplay">
+            <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+          </div>
+
+          <div class="card-mini-footer">
+            <h3>Landing Bplay</h3>
+            <span>Ver más <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+
+        <article class="project-card reveal" onclick="openProjectModal(this)"
+                 data-title="Landing Page Easybet"
+                 data-result="Resultado: Experiencia móvil optimizada."
+                 data-desc="Maquetación moderna con enfoque 'Mobile First'. Garantiza una navegación perfecta en cualquier dispositivo."
+                 data-tags="HTML5, CSS3, UX/UI, Figma"
+                 data-repo="https://github.com/SantiagoC1/easybet-landing"
+                 data-demo="https://easybet-landing.netlify.app/"
+                 data-image="images/easybet.png">
+
+          <div class="card-image-cover">
+            <img src="images/easybet.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Easybet'" alt="Easybet">
+            <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+          </div>
+
+          <div class="card-mini-footer">
+            <h3>Landing Easybet</h3>
+            <span>Ver más <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="section-bg-secondary">
+    <div class="container">
+      <h2 class="section-title center">Servicios y Precios</h2>
+      <p class="center services-sub">
+        Soluciones claras para potenciar tu presencia digital. Sin letra chica.
+      </p>
+
+      <div class="services-grid reveal">
+
+        <div class="service-card">
+          <h3>Web Express</h3>
+          <p class="service-price">$<span data-bind="price_express"></span></p>
+          <p class="service-time">Entrega estimada: 7 días</p>
+          <ul class="service-list">
+            <li>• Landing Page (Sitio de una página)</li>
+            <li>• Botón directo a WhatsApp/Llamada</li>
+            <li>• Integración Google Maps</li>
+            <li>• SEO local básico</li>
+            <li>• Dominio incluido el 1er año</li>
+          </ul>
+
+          <a class="btn btn-primary btn-block"
+             data-wa-link
+             data-wa-text="Hola Santi! Me interesa el plan Web Express."
+             href="#" target="_blank" rel="noopener noreferrer">
+            Solicitar ahora
+          </a>
+        </div>
+
+        <div class="service-card featured">
+          <div class="badge">Más Elegido</div>
+          <h3>Web Profesional</h3>
+          <p class="service-price">$<span data-bind="price_pro"></span></p>
+          <p class="service-time">Entrega estimada: 14 días</p>
+          <ul class="service-list">
+            <li>• Hasta 5 secciones internas</li>
+            <li>• Galería de Proyectos/Trabajos</li>
+            <li>• Sección de Preguntas Frecuentes</li>
+            <li>• Configuración de Analíticas</li>
+            <li>• Dominio incluido el 1er año</li>
+          </ul>
+
+          <a class="btn btn-primary btn-block"
+             data-wa-link
+             data-wa-text="Hola Santi! Quiero una Web Profesional para mi negocio."
+             href="#" target="_blank" rel="noopener noreferrer">
+            Solicitar ahora
+          </a>
+        </div>
+
+        <div class="service-card">
+          <h3>Mantenimiento</h3>
+          <p class="service-price">$<span data-bind="price_maint"></span><span class="service-price-small">/mes</span></p>
+          <p class="service-time">Tranquilidad total para tu negocio</p>
+          <ul class="service-list">
+            <li>• Hosting de alta velocidad</li>
+            <li>• Certificado SSL (Candado verde)</li>
+            <li>• Copias de seguridad automáticas</li>
+            <li>• 1 actualización de contenido mensual</li>
+            <li>• Soporte técnico prioritario</li>
+          </ul>
+
+          <a class="btn btn-outline btn-block"
+             data-wa-link
+             data-wa-text="Hola Santi! Quiero saber más sobre el abono de mantenimiento."
+             href="#" target="_blank" rel="noopener noreferrer">
+            Consultar
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="section-bg-secondary">
+    <div class="container">
+      <h2 class="section-title center">Formación Académica</h2>
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2020 - Actualidad</span>
+            <h3>Licenciatura en Sistemas</h3>
+            <h4>Universidad Nacional de La Plata (UNLP)</h4>
+            <p>Formación sólida en algoritmos, bases de datos y arquitectura de software.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2021 - 2023</span>
+            <h3>Especializaciones Técnicas</h3>
+            <h4>Coder House & Autoformación</h4>
+            <ul class="cert-list">
+              <li>• Backend Avanzado con Java & C#</li>
+              <li>• Gestión de Bases de Datos SQL</li>
+              <li>• Desarrollo Frontend Moderno</li>
+              <li>• Diseño de Interfaces (UX/UI)</li>
             </ul>
+          </div>
         </div>
-    </nav>
 
-    <section id="hero" class="hero-section">
-        <div class="container hero-content">
-            <h1 class="hero-title">Hola, soy <span class="accent">Santiago Cáceres</span></h1>
-            <h2 class="hero-subtitle">Desarrollador <span class="typewriter"></span></h2>
-            <p class="hero-text">
-                Estudiante avanzado de Licenciatura en Sistemas (UNLP). Apasionado por crear soluciones escalables utilizando .NET y Java. 
-                Me especializo en Clean Architecture y desarrollo de APIs robustas.
-            </p>
-            <div class="hero-btns">
-                <a href="#portfolio" class="btn btn-primary">Ver Mis Proyectos</a>
-                <a href="https://github.com/SantiagoC1?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
-                <a href="assets/Santiago_Caceres_CV_ES.pdf" download="Santiago_Caceres_CV.pdf" class="btn btn-outline">
-                    <i class="fas fa-file-download"></i> Descargar CV
-                </a>    
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="section-bg-secondary">
-        <div class="container">
-            <div class="about-grid reveal">
-                
-                <div class="about-text">
-                    <h2 class="section-title text-left">Sobre Mí</h2>
-                    <p>
-                        Soy un desarrollador enfocado en el aprendizaje constante. Actualmente cursando la <strong>Licenciatura en Sistemas en la UNLP</strong> (2020-2026).
-                        <br><br>
-                        Tengo experiencia académica y personal liderando proyectos full stack, desde la base de datos hasta la interfaz de usuario. 
-                        Me destaco por fomentar el trabajo colaborativo y aplicar buenas prácticas como <strong>SOLID</strong> y <strong>Arquitectura Limpia</strong>.
-                    </p>
-                    <div class="social-links-hero" style="margin-top: 20px;">
-                        <a href="https://www.linkedin.com/in/santiago-caceres01/" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/SantiagoC1" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
-                        <a href="#" onclick="openModal(event)" class="social-icon" title="Email"><i class="fas fa-envelope"></i></a>
-                    </div>
-                </div>
-                
-                <div id="skills" class="skills-wrapper">
-                    <h3 class="skill-category-title" style="margin-top: 0;">Frontend</h3>
-                    <div class="skills-container">
-                        <span class="skill-badge">HTML5</span>
-                        <span class="skill-badge">CSS3</span>
-                        <span class="skill-badge">JavaScript</span>
-                        <span class="skill-badge">Blazor</span>
-                    </div>
-
-                    <h3 class="skill-category-title" style="margin-top: 20px;">Backend & Core</h3>
-                    <div class="skills-container">
-                        <span class="skill-badge">.NET 8</span>
-                        <span class="skill-badge">C#</span>
-                        <span class="skill-badge">Java</span>
-                        <span class="skill-badge">Spring Boot</span>
-                        <span class="skill-badge">Clean Arch</span>
-                    </div>
-
-                    <h3 class="skill-category-title" style="margin-top: 20px;">Datos & Herramientas</h3>
-                    <div class="skills-container">
-                        <span class="skill-badge">SQL Server</span>
-                        <span class="skill-badge">PostgreSQL</span>
-                        <span class="skill-badge">Supabase</span>
-                        <span class="skill-badge">EF Core</span>
-                        <span class="skill-badge border-accent">Git / GitHub</span>
-                        <span class="skill-badge">Figma</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="portfolio" class="section">
-        <div class="container">
-            <h2 class="section-title center">Proyectos Destacados</h2>
-            <div class="projects-grid">
-                
-                <article class="project-card reveal" onclick="openProjectModal(this)"
-                    data-title="Portfolio Personal (scdev)"
-                    data-desc="Mi carta de presentación digital. Diseñado desde cero con un enfoque en performance, interactividad y diseño UI moderno (Dark Mode). Incluye formulario de contacto funcional y animaciones."
-                    data-tags="HTML5, CSS3, JavaScript, Particles.js, Netlify"
-                    data-repo="https://github.com/SantiagoC1/scdev"
-                    data-demo="https://scdev.com.ar/" 
-                    data-image="images/Scdev.png"> 
-                    
-                    <div class="card-image-cover">
-                        <img src="images/Scdev.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Portfolio'" alt="Portfolio Cover">
-                        <div class="card-overlay">
-                            <i class="fas fa-plus"></i> Ver Detalles
-                        </div>
-                    </div>
-                    <div class="card-mini-footer">
-                        <h3>Portfolio Personal (scdev)</h3>
-                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </article>
-
-                <article class="project-card reveal" onclick="openProjectModal(this)"
-                    data-title="Adsum Pater - Misión Universitaria"
-                    data-desc="Plataforma digital para la misión universitaria 'Adsum Pater' (Schoenstatt La Plata). Incluye historia interactiva, información de localidades y un foro espiritual donde la comunidad puede subir intenciones y marcar 'Rezo por vos'. Gestionada con Clean Architecture."
-                    data-tags=".NET 8, Blazor WebAssembly, Firebase, Clean Arch"
-                    data-repo="https://github.com/SantiagoC1/AdsumPater"
-                    data-demo="https://adsum-pater-web.web.app" 
-                    data-image="images/AdsumPater.png"> 
-                    
-                    <div class="card-image-cover">
-                        <img src="images/AdsumPater.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Adsum+Pater'" alt="Adsum Pater">
-                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
-                    </div>
-                    <div class="card-mini-footer">
-                        <h3>Adsum Pater (Web App)</h3>
-                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </article>
-
-                <article class="project-card reveal" onclick="openProjectModal(this)"
-                    data-title="CentroEventos (CampusFit)"
-                    data-desc="Sistema de gestión para actividades deportivas universitarias. Implementa autenticación segura (SHA-256), gestión de roles y persistencia de datos."
-                    data-tags=".NET 8, Blazor, SQLite, EF Core"
-                    data-repo="https://github.com/SantiCaceres1/CentroEventos"
-                    data-demo="#" 
-                    data-image="images/campusfit.png"> 
-                    
-                    <div class="card-image-cover">
-                        <img src="images/campusfit.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=CampusFit'" alt="CampusFit">
-                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
-                    </div>
-                    <div class="card-mini-footer">
-                        <h3>CentroEventos (CampusFit)</h3>
-                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </article>
-
-                <article class="project-card reveal" onclick="openProjectModal(this)"
-                    data-title="Landing Page Bplay"
-                    data-desc="Desarrollo de landing page promocional de alta conversión para la plataforma de entretenimiento Bplay. Optimizada para velocidad de carga y SEO."
-                    data-tags="HTML5, CSS3, JavaScript, Responsive"
-                    data-repo="https://github.com/SantiagoC1/bplay-landing-contact"
-                    data-demo="https://bplay-landing-contact.netlify.app/" 
-                    data-image="images/bplay.png"> 
-                    
-                    <div class="card-image-cover">
-                        <img src="images/bplay.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Bplay'" alt="Bplay">
-                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
-                    </div>
-                    <div class="card-mini-footer">
-                        <h3>Landing Bplay</h3>
-                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </article>
-
-                <article class="project-card reveal" onclick="openProjectModal(this)"
-                    data-title="Landing Page Easybet"
-                    data-desc="Maquetación y diseño de interfaz para Easybet. Enfoque 'Mobile First' para asegurar la mejor experiencia en dispositivos móviles."
-                    data-tags="HTML5, CSS3, UX/UI, Figma"
-                    data-repo="https://github.com/SantiagoC1/easybet-landing"
-                    data-demo="https://easybet-landing.netlify.app/"
-                    data-image="images/easybet.png"> 
-                    
-                    <div class="card-image-cover">
-                        <img src="images/easybet.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Easybet'" alt="Easybet">
-                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
-                    </div>
-                    <div class="card-mini-footer">
-                        <h3>Landing Easybet</h3>
-                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </article>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="education" class="section-bg-secondary">
-        <div class="container">
-            <h2 class="section-title center">Formación Académica</h2>
-            <div class="timeline">
-                
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2020 - Presente</span>
-                        <h3>Licenciatura en Sistemas</h3>
-                        <h4>Universidad Nacional de La Plata (UNLP)</h4>
-                        <p>Promedio destacado. Enfoque en Ingeniería de Software, Estructuras de Datos y Bases de Datos.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2022 - 2023</span>
-                        <h3>Certificaciones Profesionales</h3>
-                        <h4>Coder House</h4>
-                        <ul class="cert-list">
-                            <li>• Programación con Java</li>
-                            <li>• SQL & Bases de Datos</li>
-                            <li>• Desarrollo Full Stack JavaScript</li>
-                            <li>• Diseño UX/UI</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="section">
-        <div class="container contact-wrapper reveal">
-            <div class="contact-info">
-                <h2 class="section-title text-left">Hablemos</h2>
-                <p class="contact-text">
-                    ¿Tenés una idea innovadora o necesitás escalar tu plataforma actual? 
-                    Estoy disponible para proyectos freelance y oportunidades full-time.
-                </p>
-                
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope accent"></i>
-                        <a href="#" onclick="openModal(event)" class="email-trigger">1caceres.santiago5@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-linkedin accent"></i>
-                        <a href="https://www.linkedin.com/in/santiago-caceres01/" target="_blank" rel="noopener noreferrer">/in/santiago-caceres01</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt accent"></i>
-                        <span>Ensenada, Buenos Aires</span>
-                    </div>
-                </div>
-            </div>
-
-            <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form">
-                <input type="hidden" name="_subject" value="Nuevo contacto desde Portfolio!">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-
-                <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input type="text" name="name" id="name" required placeholder="Tu Nombre">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" required placeholder="tu@email.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Mensaje</label>
-                    <textarea name="message" id="message" rows="4" required placeholder="Hola Santiago..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">Enviar Mensaje <i class="fas fa-paper-plane"></i></button>
-            </form>
-        </div>
-    </section>
-
-    <footer class="footer-pro">
-        <div class="container">
-            <div class="footer-grid">
-                
-                <div class="footer-col brand-col">
-                    <h2 class="footer-logo">scdev<span class="accent">.</span></h2>
-                    <p class="footer-tagline">
-                        Transformando lógica compleja en experiencias digitales fluidas.
-                        Especialista en el ecosistema .NET.
-                    </p>
-                    <div class="footer-location">
-                        <i class="fas fa-map-marker-alt accent"></i>
-                        <span>Ensenada, Buenos Aires, Argentina</span>
-                    </div>
-                </div>
-
-                <div class="footer-col links-col">
-                    <h3>Explorar</h3>
-                    <ul class="footer-menu">
-                        <li><a href="#about"><i class="fas fa-chevron-right accent"></i> Perfil</a></li>
-                        <li><a href="#portfolio"><i class="fas fa-chevron-right accent"></i> Proyectos</a></li>
-                        <li><a href="#skills"><i class="fas fa-chevron-right accent"></i> Stack</a></li>
-                        <li><a href="#contact"><i class="fas fa-chevron-right accent"></i> Contacto</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col social-col">
-                    <h3>Conectemos</h3>
-                    <div class="social-vertical">
-                        <a href="https://www.linkedin.com/in/santiago-caceres01/" target="_blank" rel="noopener noreferrer" class="social-link-item">
-                            <i class="fab fa-linkedin"></i> <span>LinkedIn</span>
-                        </a>
-                        <a href="https://github.com/SantiagoC1" target="_blank" rel="noopener noreferrer" class="social-link-item">
-                            <i class="fab fa-github"></i> <span>GitHub</span>
-                        </a>
-                        <a href="#" onclick="openModal(event)" class="social-link-item">
-                            <i class="fas fa-envelope"></i> <span>Email</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>© <span class="current-year">2026</span> Santiago Cáceres. Todos los derechos reservados.</p>
-                <p class="design-credit">Código & Diseño por <span class="accent">scdev</span></p>
-            </div>
-        </div>
-    </footer>
-
-    <div id="contactModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            
-            <h2 class="section-title center" style="margin-bottom: 10px;">Enviame un mensaje</h2>
-            <p class="center" style="margin-bottom: 20px; color: #A0A0A0; font-size: 0.9rem;">Te responderé a la brevedad.</p>
-
-            <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form modal-form">
-                <input type="hidden" name="_subject" value="Nuevo contacto desde el Modal!">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-
-                <div class="form-group">
-                    <label for="modal-name">Nombre</label>
-                    <input type="text" name="name" id="modal-name" required placeholder="Tu Nombre">
-                </div>
-
-                <div class="form-group">
-                    <label for="modal-email">Email</label>
-                    <input type="email" name="email" id="modal-email" required placeholder="tu@email.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="modal-message">Mensaje</label>
-                    <textarea name="message" id="modal-message" rows="3" required placeholder="Escribe tu consulta..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">Enviar Ahora <i class="fas fa-paper-plane"></i></button>
-            </form>
-        </div>
+      </div>
     </div>
+  </section>
 
-    <div id="projectModal" class="modal-overlay">
-        <div class="modal-content project-modal-content">
-            <button class="modal-close" onclick="closeProjectModal()">&times;</button>
-            
-            <div class="modal-img-container">
-                <img id="modal-img" src="" alt="Proyecto Cover">
-            </div>
+  <section id="contact" class="section">
+    <div class="container contact-wrapper reveal">
 
-            <div class="modal-body">
-                <h2 id="modal-title" class="section-title text-left" style="margin-bottom: 15px;">Titulo</h2>
-                
-                <div id="modal-tags" class="project-tags" style="margin-bottom: 20px;"></div>
+      <div class="contact-info">
+        <h2 class="section-title text-left">Empecemos tu proyecto</h2>
+        <p class="contact-text">
+          ¿Listo para digitalizar tu idea o negocio?
+          Contactame hoy y analizamos juntos la mejor solución.
+        </p>
 
-                <p id="modal-desc" style="margin-bottom: 30px; color: var(--text-muted);">Descripcion...</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <i class="fab fa-whatsapp accent"></i>
+            <a data-wa-link data-wa-text="Hola Santi! Quiero hacerte una consulta."
+               href="#" target="_blank" rel="noopener noreferrer">
+              Enviar WhatsApp
+            </a>
+          </div>
 
-                <div class="modal-buttons">
-                    <a id="modal-demo-btn" href="#" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-external-link-alt"></i> Ver Sitio Web
-                    </a>
-                    <a id="modal-repo-btn" href="#" target="_blank" class="btn btn-outline">
-                        <i class="fab fa-github"></i> Ver Código
-                    </a>
-                </div>
-            </div>
+          <div class="contact-item">
+            <i class="fab fa-linkedin accent"></i>
+            <a data-bind-href="linkedin_url" href="#" target="_blank" rel="noopener noreferrer">Perfil Profesional</a>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt accent"></i>
+            <span>Ensenada / La Plata, Buenos Aires</span>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope accent"></i>
+            <a href="#" onclick="openModal(event)">Enviar correo</a>
+          </div>
         </div>
+      </div>
+
+      <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form">
+        <input type="hidden" name="_subject" value="Nuevo contacto desde Portfolio!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" name="name" id="name" required placeholder="Tu Nombre">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required placeholder="tu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="message">Consulta</label>
+          <textarea name="message" id="message" rows="4" required placeholder="Contame brevemente qué necesitás..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Enviar Mensaje <i class="fas fa-paper-plane"></i></button>
+      </form>
+
     </div>
+  </section>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="script.js"></script>
+  <footer class="footer-pro">
+    <div class="container">
+      <div class="footer-grid">
 
+        <div class="footer-col brand-col">
+          <h2 class="footer-logo">scdev<span class="accent">.</span></h2>
+          <p class="footer-tagline">
+            Soluciones digitales que impulsan negocios.
+            Especialista en .NET y Desarrollo Web.
+          </p>
+          <div class="footer-location">
+            <i class="fas fa-map-marker-alt accent"></i>
+            <span>Ensenada, Buenos Aires, Argentina</span>
+          </div>
+        </div>
+
+        <div class="footer-col links-col">
+          <h3>Mapa del Sitio</h3>
+          <ul class="footer-menu">
+            <li><a href="#about"><i class="fas fa-chevron-right accent"></i> Perfil</a></li>
+            <li><a href="#portfolio"><i class="fas fa-chevron-right accent"></i> Proyectos</a></li>
+            <li><a href="#services"><i class="fas fa-chevron-right accent"></i> Servicios</a></li>
+            <li><a href="#skills"><i class="fas fa-chevron-right accent"></i> Tecnologías</a></li>
+            <li><a href="#contact"><i class="fas fa-chevron-right accent"></i> Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col social-col">
+          <h3>Redes</h3>
+          <div class="social-vertical">
+
+            <a class="social-link-item"
+               data-wa-link data-wa-text="Hola Santi!"
+               href="#" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-whatsapp"></i> <span>WhatsApp</span>
+            </a>
+
+            <a data-bind-href="linkedin_url" target="_blank" rel="noopener noreferrer" class="social-link-item">
+              <i class="fab fa-linkedin"></i> <span>LinkedIn</span>
+            </a>
+
+            <a data-bind-href="github_url" target="_blank" rel="noopener noreferrer" class="social-link-item">
+              <i class="fab fa-github"></i> <span>GitHub</span>
+            </a>
+
+            <a href="#" onclick="openModal(event)" class="social-link-item">
+              <i class="fas fa-envelope"></i> <span>Email</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span class="current-year">2026</span> Santiago Cáceres. Todos los derechos reservados.</p>
+        <p class="design-credit">Desarrollo: <span class="accent">scdev</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="contactModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+
+      <h2 class="section-title center" style="margin-bottom: 10px;">Enviame un mensaje</h2>
+      <p class="center" style="margin-bottom: 20px; color: #A0A0A0; font-size: 0.9rem;">Te responderé a la brevedad.</p>
+
+      <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form modal-form">
+        <input type="hidden" name="_subject" value="Nuevo contacto desde el Modal!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-group">
+          <label for="modal-name">Nombre</label>
+          <input type="text" name="name" id="modal-name" required placeholder="Tu Nombre">
+        </div>
+
+        <div class="form-group">
+          <label for="modal-email">Email</label>
+          <input type="email" name="email" id="modal-email" required placeholder="tu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="modal-message">Mensaje</label>
+          <textarea name="message" id="modal-message" rows="3" required placeholder="Escribe tu consulta..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Enviar Ahora <i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <div id="projectModal" class="modal-overlay">
+    <div class="modal-content project-modal-content">
+      <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+
+      <div class="modal-img-container">
+        <img id="modal-img" src="" alt="Proyecto Cover">
+      </div>
+
+      <div class="modal-body">
+        <h2 id="modal-title" class="section-title text-left" style="margin-bottom: 10px;">Titulo</h2>
+
+        <p id="modal-result" class="modal-result">Resultado...</p>
+
+        <div id="modal-tags" class="project-tags" style="margin-bottom: 20px;"></div>
+
+        <p id="modal-desc" style="margin-bottom: 30px; color: var(--text-muted);">Descripcion...</p>
+
+        <div class="modal-buttons">
+          <a id="modal-demo-btn" href="#" target="_blank" class="btn btn-primary">
+            <i class="fas fa-external-link-alt"></i> Ver Sitio Web
+          </a>
+          <a id="modal-repo-btn" href="#" target="_blank" class="btn btn-outline">
+            <i class="fab fa-github"></i> Ver Código
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
