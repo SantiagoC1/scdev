@@ -52,14 +52,12 @@
             <div class="hero-btns">
                 <a href="#portfolio" class="btn btn-primary">Ver Mis Proyectos</a>
                 <a href="https://github.com/SantiagoC1?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
-                <a href="Santiago_Caceres_CV_ES.pdf" download="Santiago_Caceres_CV.pdf" class="btn btn-outline">
+                <a href="assets/Santiago_Caceres_CV_ES.pdf" download="Santiago_Caceres_CV.pdf" class="btn btn-outline">
                     <i class="fas fa-file-download"></i> Descargar CV
                 </a>    
             </div>
         </div>
     </section>
-
-    
 
     <section id="about" class="section-bg-secondary">
         <div class="container">
@@ -81,34 +79,33 @@
                 </div>
                 
                 <div id="skills" class="skills-wrapper">
-    
-    <h3 class="skill-category-title" style="margin-top: 0;">Frontend</h3>
-    <div class="skills-container">
-        <span class="skill-badge">HTML5</span>
-        <span class="skill-badge">CSS3</span>
-        <span class="skill-badge">JavaScript</span>
-        <span class="skill-badge">Blazor</span>
-    </div>
+                    <h3 class="skill-category-title" style="margin-top: 0;">Frontend</h3>
+                    <div class="skills-container">
+                        <span class="skill-badge">HTML5</span>
+                        <span class="skill-badge">CSS3</span>
+                        <span class="skill-badge">JavaScript</span>
+                        <span class="skill-badge">Blazor</span>
+                    </div>
 
-    <h3 class="skill-category-title" style="margin-top: 20px;">Backend & Core</h3>
-    <div class="skills-container">
-        <span class="skill-badge">.NET 8</span>
-        <span class="skill-badge">C#</span>
-        <span class="skill-badge">Java</span>
-        <span class="skill-badge">Spring Boot</span>
-        <span class="skill-badge">Clean Arch</span>
-    </div>
+                    <h3 class="skill-category-title" style="margin-top: 20px;">Backend & Core</h3>
+                    <div class="skills-container">
+                        <span class="skill-badge">.NET 8</span>
+                        <span class="skill-badge">C#</span>
+                        <span class="skill-badge">Java</span>
+                        <span class="skill-badge">Spring Boot</span>
+                        <span class="skill-badge">Clean Arch</span>
+                    </div>
 
-    <h3 class="skill-category-title" style="margin-top: 20px;">Datos & Herramientas</h3>
-    <div class="skills-container">
-        <span class="skill-badge">SQL Server</span>
-        <span class="skill-badge">PostgreSQL</span>
-        <span class="skill-badge">Supabase</span>
-        <span class="skill-badge">EF Core</span>
-        <span class="skill-badge border-accent">Git / GitHub</span>
-        <span class="skill-badge">Figma</span>
-    </div>
-</div>
+                    <h3 class="skill-category-title" style="margin-top: 20px;">Datos & Herramientas</h3>
+                    <div class="skills-container">
+                        <span class="skill-badge">SQL Server</span>
+                        <span class="skill-badge">PostgreSQL</span>
+                        <span class="skill-badge">Supabase</span>
+                        <span class="skill-badge">EF Core</span>
+                        <span class="skill-badge border-accent">Git / GitHub</span>
+                        <span class="skill-badge">Figma</span>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -119,64 +116,96 @@
             <h2 class="section-title center">Proyectos Destacados</h2>
             <div class="projects-grid">
                 
-                <article class="project-card reveal">
-                    <div class="card-header">
-                        <div class="folder-icon">
-                            <i class="fas fa-dumbbell" style="font-size: 2rem; color: var(--accent);"></i>
-                        </div>
-                        <div class="card-links">
-                            <a href="https://github.com/SantiagoC1?tab=repositories" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Código</a>
+                <article class="project-card reveal" onclick="openProjectModal(this)"
+                    data-title="Portfolio Personal (scdev)"
+                    data-desc="Mi carta de presentación digital. Diseñado desde cero con un enfoque en performance, interactividad y diseño UI moderno (Dark Mode). Incluye formulario de contacto funcional y animaciones."
+                    data-tags="HTML5, CSS3, JavaScript, Particles.js, Netlify"
+                    data-repo="https://github.com/SantiagoC1/scdev"
+                    data-demo="https://scdev.com.ar/" 
+                    data-image="images/Scdev.png"> 
+                    
+                    <div class="card-image-cover">
+                        <img src="images/Scdev.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Portfolio'" alt="Portfolio Cover">
+                        <div class="card-overlay">
+                            <i class="fas fa-plus"></i> Ver Detalles
                         </div>
                     </div>
-                    <h3 class="project-title">CentroEventos (CampusFit)</h3>
-                    <p class="project-desc">
-                        Sistema de gestión para actividades deportivas universitarias. Implementa autenticación segura (SHA-256), gestión de roles y persistencia de datos.
-                    </p>
-                    <ul class="project-tags">
-                        <li>.NET 8</li>
-                        <li>Blazor</li>
-                        <li>SQLite</li>
-                        <li>EF Core</li>
-                    </ul>
+                    <div class="card-mini-footer">
+                        <h3>Portfolio Personal (scdev)</h3>
+                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </article>
 
-                <article class="project-card reveal">
-                    <div class="card-header">
-                        <div class="folder-icon">
-                            <i class="fas fa-shopping-cart" style="font-size: 2rem; color: var(--accent);"></i>
-                        </div>
-                        <div class="card-links">
-                            <a href="https://github.com/SantiagoC1?tab=repositories" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Código</a>
-                        </div>
+                <article class="project-card reveal" onclick="openProjectModal(this)"
+                    data-title="Adsum Pater - Misión Universitaria"
+                    data-desc="Plataforma digital para la misión universitaria 'Adsum Pater' (Schoenstatt La Plata). Incluye historia interactiva, información de localidades y un foro espiritual donde la comunidad puede subir intenciones y marcar 'Rezo por vos'. Gestionada con Clean Architecture."
+                    data-tags=".NET 8, Blazor WebAssembly, Firebase, Clean Arch"
+                    data-repo="https://github.com/SantiagoC1/AdsumPater"
+                    data-demo="https://adsum-pater-web.web.app" 
+                    data-image="images/AdsumPater.png"> 
+                    
+                    <div class="card-image-cover">
+                        <img src="images/AdsumPater.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Adsum+Pater'" alt="Adsum Pater">
+                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
                     </div>
-                    <h3 class="project-title">Sistema de Gestión E-commerce</h3>
-                    <p class="project-desc">
-                        API RESTful completa para gestión de productos y ventas. Incluye CRUD, facturación y manejo de carritos con persistencia relacional.
-                    </p>
-                    <ul class="project-tags">
-                        <li>Java</li>
-                        <li>Spring Boot</li>
-                        <li>JPA/Hibernate</li>
-                        <li>API REST</li>
-                    </ul>
+                    <div class="card-mini-footer">
+                        <h3>Adsum Pater (Web App)</h3>
+                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </article>
 
-                <article class="project-card reveal">
-                    <div class="card-header">
-                        <div class="folder-icon">
-                            <i class="fas fa-layer-group" style="font-size: 2rem; color: var(--accent);"></i>
-                        </div>
+                <article class="project-card reveal" onclick="openProjectModal(this)"
+                    data-title="CentroEventos (CampusFit)"
+                    data-desc="Sistema de gestión para actividades deportivas universitarias. Implementa autenticación segura (SHA-256), gestión de roles y persistencia de datos."
+                    data-tags=".NET 8, Blazor, SQLite, EF Core"
+                    data-repo="https://github.com/SantiCaceres1/CentroEventos"
+                    data-demo="#" 
+                    data-image="images/campusfit.png"> 
+                    
+                    <div class="card-image-cover">
+                        <img src="images/campusfit.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=CampusFit'" alt="CampusFit">
+                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
                     </div>
-                    <h3 class="project-title">Landing Pages Comerciales</h3>
-                    <p class="project-desc">
-                        Desarrollo de landing pages de alta conversión para plataformas de entretenimiento (Bplay/Easybet). Foco en SEO y Performance.
-                    </p>
-                    <ul class="project-tags">
-                        <li>HTML5</li>
-                        <li>CSS3</li>
-                        <li>Responsive</li>
-                        <li>UX/UI</li>
-                    </ul>
+                    <div class="card-mini-footer">
+                        <h3>CentroEventos (CampusFit)</h3>
+                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal" onclick="openProjectModal(this)"
+                    data-title="Landing Page Bplay"
+                    data-desc="Desarrollo de landing page promocional de alta conversión para la plataforma de entretenimiento Bplay. Optimizada para velocidad de carga y SEO."
+                    data-tags="HTML5, CSS3, JavaScript, Responsive"
+                    data-repo="https://github.com/SantiagoC1/bplay-landing-contact"
+                    data-demo="https://bplay-landing-contact.netlify.app/" 
+                    data-image="images/bplay.png"> 
+                    
+                    <div class="card-image-cover">
+                        <img src="images/bplay.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Bplay'" alt="Bplay">
+                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+                    </div>
+                    <div class="card-mini-footer">
+                        <h3>Landing Bplay</h3>
+                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal" onclick="openProjectModal(this)"
+                    data-title="Landing Page Easybet"
+                    data-desc="Maquetación y diseño de interfaz para Easybet. Enfoque 'Mobile First' para asegurar la mejor experiencia en dispositivos móviles."
+                    data-tags="HTML5, CSS3, UX/UI, Figma"
+                    data-repo="https://github.com/SantiagoC1/easybet-landing"
+                    data-demo="https://easybet-landing.netlify.app/"
+                    data-image="images/easybet.png"> 
+                    
+                    <div class="card-image-cover">
+                        <img src="images/easybet.png" onerror="this.src='https://placehold.co/600x400/171717/D32F2F?text=Easybet'" alt="Easybet">
+                        <div class="card-overlay"><i class="fas fa-plus"></i> Ver Detalles</div>
+                    </div>
+                    <div class="card-mini-footer">
+                        <h3>Landing Easybet</h3>
+                        <span>Ver más <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </article>
 
             </div>
@@ -233,7 +262,7 @@
                     </div>
                     <div class="contact-item">
                         <i class="fab fa-linkedin accent"></i>
-                        <a href="https://www.linkedin.com/in/santiago-caceres01/" target="_blank"rel="noopener noreferrer">/in/santiago-caceres01</a>
+                        <a href="https://www.linkedin.com/in/santiago-caceres01/" target="_blank" rel="noopener noreferrer">/in/santiago-caceres01</a>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt accent"></i>
@@ -345,6 +374,33 @@
 
                 <button type="submit" class="btn btn-primary btn-block">Enviar Ahora <i class="fas fa-paper-plane"></i></button>
             </form>
+        </div>
+    </div>
+
+    <div id="projectModal" class="modal-overlay">
+        <div class="modal-content project-modal-content">
+            <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+            
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="Proyecto Cover">
+            </div>
+
+            <div class="modal-body">
+                <h2 id="modal-title" class="section-title text-left" style="margin-bottom: 15px;">Titulo</h2>
+                
+                <div id="modal-tags" class="project-tags" style="margin-bottom: 20px;"></div>
+
+                <p id="modal-desc" style="margin-bottom: 30px; color: var(--text-muted);">Descripcion...</p>
+
+                <div class="modal-buttons">
+                    <a id="modal-demo-btn" href="#" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i> Ver Sitio Web
+                    </a>
+                    <a id="modal-repo-btn" href="#" target="_blank" class="btn btn-outline">
+                        <i class="fab fa-github"></i> Ver Código
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -1,5 +1,5 @@
 /* scdev | Interactive Script
-    Contiene: Configuración de Partículas, Efecto de Escritura, Modal, Formulario AJAX y Menú Inteligente
+    Contiene: Configuración de Partículas, Efecto de Escritura, Modales, Formulario AJAX y Menú Inteligente
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     typeEffect();
 
 
-    // --- 3. MANEJO DEL MODAL (POP-UP) ---
+    // --- 3. MANEJO DEL MODAL DE CONTACTO ---
     window.openModal = function(e) {
         if(e) e.preventDefault(); 
         const modal = document.getElementById('contactModal');
@@ -85,9 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto'; 
     }
 
-    const modalElement = document.getElementById('contactModal');
-    if (modalElement) {
-        modalElement.addEventListener('click', function(e) {
+    // Cerrar al hacer clic fuera del modal de contacto
+    const contactModalEl = document.getElementById('contactModal');
+    if (contactModalEl) {
+        contactModalEl.addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal();
             }
@@ -184,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function activeMenu() {
         let scrollPosition = window.scrollY + 200; 
 
-        // Iteramos sobre los links
         navLinks.forEach(link => {
             const sectionId = link.getAttribute('href');
             if (sectionId && sectionId.startsWith('#') && sectionId.length > 1) {
@@ -194,11 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
                     const sectionHeight = section.offsetHeight;
 
-                    // Si estamos dentro del área de la sección
                     if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                        // Quitamos la clase a todos
                         navLinks.forEach(l => l.classList.remove('active-link'));
-                        // Se la agregamos solo al actual
                         link.classList.add('active-link');
                     }
                 }
@@ -208,4 +205,66 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('scroll', activeMenu);
     activeMenu();
+
+    // --- 8. LÓGICA DEL MODAL DE PROYECTOS (NUEVO) ---
+    window.openProjectModal = function(card) {
+        const modal = document.getElementById('projectModal');
+        
+        // 1. Obtener datos
+        const title = card.getAttribute('data-title');
+        const desc = card.getAttribute('data-desc');
+        const tags = card.getAttribute('data-tags'); 
+        const repoLink = card.getAttribute('data-repo');
+        const demoLink = card.getAttribute('data-demo');
+        const imageSrc = card.getAttribute('data-image');
+
+        // 2. Inyectar datos
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-desc').textContent = desc;
+        document.getElementById('modal-img').src = imageSrc;
+        document.getElementById('modal-repo-btn').href = repoLink;
+        document.getElementById('modal-demo-btn').href = demoLink;
+
+        // 3. Generar badges de tags
+        const tagsContainer = document.getElementById('modal-tags');
+        tagsContainer.innerHTML = ''; 
+        
+        if(tags) {
+            const tagArray = tags.split(','); 
+            tagArray.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'skill-badge'; 
+                span.textContent = tag.trim();
+                // AQUÍ ELIMINÉ LA LÍNEA DEL MARGIN RIGHT PARA QUE FUNCIONE EL GAP
+                tagsContainer.appendChild(span);
+            });
+        }
+
+        // 4. Ocultar botón Demo si no hay link
+        const demoBtn = document.getElementById('modal-demo-btn');
+        if(demoLink === '#' || demoLink === '') {
+            demoBtn.style.display = 'none';
+        } else {
+            demoBtn.style.display = 'flex';
+        }
+
+        // 5. Mostrar Modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeProjectModal = function() {
+        const modal = document.getElementById('projectModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    const projectModalEl = document.getElementById('projectModal');
+    if (projectModalEl) {
+        projectModalEl.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProjectModal();
+            }
+        });
+    }
 });
