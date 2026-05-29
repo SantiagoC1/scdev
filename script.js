@@ -280,7 +280,18 @@ document.addEventListener('DOMContentLoaded', () => {
   yearElements.forEach(el => el.textContent = yearNow);
 
   // ==================================
-  // 8) SPY SCROLL MENU
+  // 8) NAVBAR SCROLL CLASS
+  // ==================================
+  const navbarEl = document.querySelector('.navbar');
+  function handleNavScroll() {
+    if (!navbarEl) return;
+    navbarEl.classList.toggle('scrolled', window.scrollY > 60);
+  }
+  window.addEventListener('scroll', handleNavScroll, { passive: true });
+  handleNavScroll();
+
+  // ==================================
+  // 8b) SPY SCROLL MENU
   // ==================================
   const navLinks = document.querySelectorAll('.nav-links a');
   function activeMenu() {
