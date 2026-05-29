@@ -63,7 +63,7 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="#hero" class="logo-link">
-        <img src="images/Idetidad_scdev(1).png" alt="scdev logo" class="nav-logo">
+        <img src="images/LogoCompletoHorizontalFN.png" alt="scdev logo" class="nav-logo">
       </a>
 
       <ul class="nav-links">
@@ -84,8 +84,15 @@
 
         <li><a href="#contact" class="btn-nav">Contactar</a></li>
       </ul>
+
+      <button class="hamburger" aria-label="Menú" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </nav>
+  <div class="nav-overlay"></div>
 
   <!-- ══════════════════════════════ HERO ══════════════════════════════ -->
   <section id="hero" class="hero-section">
@@ -141,6 +148,9 @@
             </a>
             <a data-bind-href="github_url" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
               <i class="fab fa-github"></i>
+            </a>
+            <a data-bind-href="instagram_url" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">
+              <i class="fab fa-instagram"></i>
             </a>
             <a href="#" onclick="openModal(event)" class="social-icon" title="Email">
               <i class="fas fa-envelope"></i>
@@ -198,7 +208,7 @@
                  data-desc="Sitio web para Balance, agencia de comunicación y marketing para marcas y líderes. Desarrollado con React 19 + TypeScript + Tailwind CSS v4 y Framer Motion para animaciones fluidas. Integración con Google Apps Script para captura y gestión de leads directamente en Google Sheets. Diseño elegante y adaptable a todos los dispositivos."
                  data-tags="React 19, TypeScript, Tailwind CSS v4, Framer Motion, Vite"
                  data-repo="https://github.com/SantiagoC1/BalanceAgenciaDeMarketing"
-                 data-demo="#"
+                 data-demo="https://somosbalance.com.ar/"
                  data-image="images/balance.png">
 
           <div class="card-image-cover">
@@ -261,7 +271,7 @@
                  data-desc="Plataforma integral para la misión universitaria. Incluye gestión de contenidos, historia interactiva y un 'Muro de Intenciones' espiritual en tiempo real. Arquitectura limpia y escalable."
                  data-tags=".NET 8, Blazor WebAssembly, Firebase, Clean Arch"
                  data-repo="https://github.com/SantiagoC1/AdsumPater"
-                 data-demo="https://adsum-pater-web.web.app"
+                 data-demo="https://adsumpater.com.ar/"
                  data-image="images/AdsumPater.png">
 
           <div class="card-image-cover">
@@ -527,27 +537,51 @@
         </div>
       </div>
 
-      <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form">
-        <input type="hidden" name="_subject" value="Nuevo contacto desde Portfolio!">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
+      <form class="contact-form" id="main-contact-form">
+        <!-- Honeypot anti-spam -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
-        <div class="form-group">
-          <label for="name">Nombre</label>
-          <input type="text" name="name" id="name" required placeholder="Tu Nombre">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-name">Nombre *</label>
+            <input type="text" name="nombre" id="contact-name" required
+                   placeholder="Tu nombre completo" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Email *</label>
+            <input type="email" name="email" id="contact-email" required
+                   placeholder="tu@email.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-phone">Teléfono / WhatsApp</label>
+            <input type="tel" name="telefono" id="contact-phone"
+                   placeholder="+54 9 221 XXX-XXXX" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="contact-service">Servicio de interés</label>
+            <select name="servicio" id="contact-service">
+              <option value="">Seleccioná una opción...</option>
+              <option value="Landing Page">Landing Page</option>
+              <option value="Sitio Web Profesional">Sitio Web Profesional</option>
+              <option value="Mantenimiento Web">Mantenimiento Web</option>
+              <option value="Sistema a medida">Sistema a medida</option>
+              <option value="Otro">Otro / Consulta general</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" required placeholder="tu@email.com">
+          <label for="contact-message">Mensaje *</label>
+          <textarea name="mensaje" id="contact-message" rows="5" required
+                    placeholder="Contame sobre tu proyecto..."></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="message">Consulta</label>
-          <textarea name="message" id="message" rows="4" required placeholder="Contame brevemente qué necesitás..."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block">Enviar Mensaje <i class="fas fa-paper-plane"></i></button>
+        <button type="submit" class="btn btn-primary btn-block">
+          Enviar Mensaje <i class="fas fa-paper-plane"></i>
+        </button>
       </form>
 
     </div>
@@ -599,6 +633,10 @@
               <i class="fab fa-github"></i> <span>GitHub</span>
             </a>
 
+            <a data-bind-href="instagram_url" target="_blank" rel="noopener noreferrer" class="social-link-item">
+              <i class="fab fa-instagram"></i> <span>Instagram</span>
+            </a>
+
             <a href="#" onclick="openModal(event)" class="social-link-item">
               <i class="fas fa-envelope"></i> <span>Email</span>
             </a>
@@ -622,24 +660,42 @@
       <h2 class="section-title center" style="margin-bottom: 10px;">Enviame un mensaje</h2>
       <p class="center" style="margin-bottom: 20px; color: #A0A0A0; font-size: 0.9rem;">Te responderé a la brevedad.</p>
 
-      <form action="https://formsubmit.co/889135591323ee4f20b730740038eb4e" method="POST" class="contact-form modal-form">
-        <input type="hidden" name="_subject" value="Nuevo contacto desde el Modal!">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
+      <form class="contact-form modal-form">
+        <!-- Honeypot anti-spam -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
-        <div class="form-group">
-          <label for="modal-name">Nombre</label>
-          <input type="text" name="name" id="modal-name" required placeholder="Tu Nombre">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-name">Nombre *</label>
+            <input type="text" name="nombre" id="modal-name" required placeholder="Tu nombre completo" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="modal-email">Email *</label>
+            <input type="email" name="email" id="modal-email" required placeholder="tu@email.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modal-phone">Teléfono / WhatsApp</label>
+            <input type="tel" name="telefono" id="modal-phone" placeholder="+54 9 221 XXX-XXXX" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="modal-service">Servicio de interés</label>
+            <select name="servicio" id="modal-service">
+              <option value="">Seleccioná una opción...</option>
+              <option value="Landing Page">Landing Page</option>
+              <option value="Sitio Web Profesional">Sitio Web Profesional</option>
+              <option value="Mantenimiento Web">Mantenimiento Web</option>
+              <option value="Sistema a medida">Sistema a medida</option>
+              <option value="Otro">Otro / Consulta general</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="modal-email">Email</label>
-          <input type="email" name="email" id="modal-email" required placeholder="tu@email.com">
-        </div>
-
-        <div class="form-group">
-          <label for="modal-message">Mensaje</label>
-          <textarea name="message" id="modal-message" rows="3" required placeholder="Escribe tu consulta..."></textarea>
+          <label for="modal-message">Mensaje *</label>
+          <textarea name="mensaje" id="modal-message" rows="3" required placeholder="Escribe tu consulta..."></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Enviar Ahora <i class="fas fa-paper-plane"></i></button>
@@ -666,10 +722,10 @@
         <p id="modal-desc" style="margin-bottom: 30px; color: var(--text-muted);">Descripcion...</p>
 
         <div class="modal-buttons">
-          <a id="modal-demo-btn" href="#" target="_blank" class="btn btn-primary">
+          <a id="modal-demo-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
             <i class="fas fa-external-link-alt"></i> Ver Sitio Web
           </a>
-          <a id="modal-repo-btn" href="#" target="_blank" class="btn btn-outline">
+          <a id="modal-repo-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
             <i class="fab fa-github"></i> Ver Código
           </a>
         </div>

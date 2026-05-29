@@ -14,11 +14,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==================================
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSe21mBG9BnOIEktHHV47_nyirWIiJXTfTqpZ2bDqSHV9hKU5vXlNFKXAvEU7bnlwZgfnB7xtvXhMRE/pub?gid=0&single=true&output=csv";
 
+  // URL del Apps Script Web App (formulario de contacto + config JSON)
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyKDvZD-ci0BEHoCcWeFG4NxkalKO8NEGGpAidSKQ_RSyev5IpQiz0v_QN0H4wtSBe/exec";
+
   async function loadConfigFromSheet() {
-    const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("No se pudo cargar config del Sheet");
-    const csvText = await res.text();
-    return parseSimpleKeyValueCSV(csvText);
+    const controller = new AbortController();
+    const timeoutId  = setTimeout(() => controller.abort(), 6000);
+
+    try {
+      // Intentar primero el endpoint JSON del Apps Script
+      if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("PEGAR_URL")) {
+        const res = await fetch(APPS_SCRIPT_URL, { cache: "no-store", signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.ok && json.config) {
+            console.log("[SCdev] Config cargada via JSON (Apps Script)");
+            return json.config;
+          }
+        }
+      }
+    } catch (e) {
+      clearTimeout(timeoutId);
+      console.warn("[SCdev] JSON fallback al CSV:", e.message);
+    }
+
+    // Fallback: CSV directo del Sheet publicado
+    const controller2 = new AbortController();
+    const timeoutId2  = setTimeout(() => controller2.abort(), 5000);
+    try {
+      const res = await fetch(SHEET_CSV_URL, { cache: "no-store", signal: controller2.signal });
+      clearTimeout(timeoutId2);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const csvText = await res.text();
+      console.log("[SCdev] Config cargada via CSV");
+      return parseSimpleKeyValueCSV(csvText);
+    } catch (err) {
+      clearTimeout(timeoutId2);
+      throw err;
+    }
   }
 
   function parseSimpleKeyValueCSV(csvText) {
@@ -65,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
       else el.textContent = val;
     });
 
-    // 2) data-bind-href -> href (linkedin, github, etc.)
+    // 2) data-bind-href -> href (linkedin, github, etc.) — ocultar si el valor está vacío
     document.querySelectorAll("[data-bind-href]").forEach(el => {
       const key = el.getAttribute("data-bind-href");
       const val = cfg[key];
-      if (!val) return;
+      if (!val) { el.style.display = 'none'; return; }
+      el.style.display = '';
       el.setAttribute("href", val);
     });
 
@@ -94,21 +129,33 @@ document.addEventListener('DOMContentLoaded', () => {
   // Carga config y aplica
   (async () => {
     try {
+      console.log("[SCdev] Cargando config desde Google Sheets...");
       const cfg = await loadConfigFromSheet();
+      console.log("[SCdev] Config cargada:", cfg);
       applyConfig(cfg);
+      console.log("[SCdev] Config aplicada correctamente.");
     } catch (err) {
-      console.warn("Config dinámica no disponible:", err);
-      // Si falla, la web igual funciona con tus links hardcodeados (si dejaste alguno)
+      console.error("[SCdev] Config dinámica no disponible:", err.message, err);
+      // Fallback: aplicar links críticos hardcodeados
+      const fallbackCfg = {
+        github_url: "https://github.com/SantiagoC1",
+      };
+      document.querySelectorAll("[data-bind-href]").forEach(el => {
+        const key = el.getAttribute("data-bind-href");
+        if (fallbackCfg[key]) el.setAttribute("href", fallbackCfg[key]);
+      });
     }
   })();
 
   // ==================================
   // 2) PARTICLES.JS
   // ==================================
+  const isMobile = window.innerWidth <= 768;
+
   if (document.getElementById('particles-js')) {
     particlesJS("particles-js", {
       "particles": {
-        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+        "number": { "value": isMobile ? 30 : 60, "density": { "enable": true, "value_area": 800 } },
         "color": { "value": "#ffffff" },
         "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
         "opacity": { "value": 0.3, "random": false },
@@ -200,60 +247,168 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==================================
-  // 5) FORM SUBMIT (AJAX)
+  // 5) FORMULARIO → Apps Script + Sheets
   // ==================================
-  const forms = document.querySelectorAll('.contact-form');
-  forms.forEach(form => {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+  function initContactForm() {
+    const ALLOWED_SERVICIOS = ["", "Landing Page", "Sitio Web Profesional", "Mantenimiento Web", "Sistema a medida", "Otro"];
 
-      const formData = new FormData(this);
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.innerHTML;
+    function showFieldError(fieldEl, msg) {
+      fieldEl.classList.add('invalid');
+      let errEl = fieldEl.parentElement.querySelector('.field-error');
+      if (!errEl) {
+        errEl = document.createElement('span');
+        errEl.className = 'field-error';
+        fieldEl.parentElement.appendChild(errEl);
+      }
+      errEl.textContent = msg;
+    }
 
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = "0.7";
+    function clearFieldError(fieldEl) {
+      fieldEl.classList.remove('invalid');
+      const errEl = fieldEl.parentElement.querySelector('.field-error');
+      if (errEl) errEl.textContent = '';
+    }
 
-      fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      })
-        .then(response => {
-          if (response.ok) {
-            closeModal();
-            Swal.fire({
-              title: '¡Mensaje Enviado!',
-              text: 'Gracias por escribirme. Te responderé pronto.',
-              icon: 'success',
-              background: '#1E1E1E',
-              color: '#F3EDED',
-              confirmButtonColor: '#D32F2F',
-              confirmButtonText: 'Genial'
-            });
-            form.reset();
-          } else {
-            throw new Error('Error en el servidor');
-          }
-        })
-        .catch(() => {
-          Swal.fire({
-            title: 'Error',
-            text: 'No se pudo enviar el mensaje. Intenta de nuevo.',
-            icon: 'error',
-            background: '#1E1E1E',
-            color: '#F3EDED',
-            confirmButtonColor: '#D32F2F'
+    document.querySelectorAll('.contact-form, .modal-form').forEach(form => {
+      // Limpiar error al hacer focus
+      form.querySelectorAll('input, textarea, select').forEach(field => {
+        field.addEventListener('focus', () => clearFieldError(field));
+      });
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const submitBtn  = this.querySelector('[type="submit"]');
+        const originalHTML = submitBtn.innerHTML;
+
+        const formData = new FormData(this);
+        const payload  = Object.fromEntries(formData.entries());
+
+        // Honeypot silencioso
+        if (payload._honey) return;
+
+        const body = {
+          nombre:   (payload.nombre   || payload.name    || "").trim(),
+          email:    (payload.email                       || "").trim(),
+          telefono: (payload.telefono || payload.phone   || "").trim(),
+          servicio: (payload.servicio || payload.service || "").trim(),
+          mensaje:  (payload.mensaje  || payload.message || "").trim(),
+        };
+
+        // ── Validaciones inline ──────────────────────────────────────
+        let hasError = false;
+        const nombreEl  = this.querySelector('[name="nombre"]');
+        const emailEl   = this.querySelector('[name="email"]');
+        const telEl     = this.querySelector('[name="telefono"]');
+        const servEl    = this.querySelector('[name="servicio"]');
+        const mensajeEl = this.querySelector('[name="mensaje"]');
+
+        if (nombreEl) {
+          if (!body.nombre || body.nombre.length < 2)
+            { showFieldError(nombreEl, 'Ingresá tu nombre (mínimo 2 caracteres).'); hasError = true; }
+          else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-]{2,60}$/.test(body.nombre))
+            { showFieldError(nombreEl, 'Solo letras, espacios y guiones (máx. 60).'); hasError = true; }
+          else clearFieldError(nombreEl);
+        }
+
+        if (emailEl) {
+          if (!body.email)
+            { showFieldError(emailEl, 'Ingresá tu email.'); hasError = true; }
+          else if (body.email.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email))
+            { showFieldError(emailEl, 'Email inválido.'); hasError = true; }
+          else clearFieldError(emailEl);
+        }
+
+        if (telEl) {
+          if (body.telefono && !/^[\d\s\+\-\(\)]{6,20}$/.test(body.telefono))
+            { showFieldError(telEl, 'Formato inválido. Ej: +54 9 221 XXX-XXXX'); hasError = true; }
+          else clearFieldError(telEl);
+        }
+
+        if (servEl) {
+          if (!ALLOWED_SERVICIOS.includes(body.servicio))
+            { showFieldError(servEl, 'Seleccioná una opción válida.'); hasError = true; }
+          else clearFieldError(servEl);
+        }
+
+        if (mensajeEl) {
+          if (!body.mensaje || body.mensaje.length < 10)
+            { showFieldError(mensajeEl, 'El mensaje debe tener al menos 10 caracteres.'); hasError = true; }
+          else if (body.mensaje.length > 1000)
+            { showFieldError(mensajeEl, `Mensaje demasiado largo (${body.mensaje.length}/1000 caracteres).`); hasError = true; }
+          else clearFieldError(mensajeEl);
+        }
+
+        if (hasError) return;
+
+        // ── Rate limiting (30 s entre envíos) ────────────────────────
+        const lastSent = sessionStorage.getItem('scdev_last_sent');
+        if (lastSent && Date.now() - parseInt(lastSent) < 30000) {
+          if (mensajeEl) showFieldError(mensajeEl, 'Esperá unos segundos antes de volver a enviar.');
+          return;
+        }
+
+        // ── Envío ────────────────────────────────────────────────────
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        submitBtn.disabled  = true;
+
+        try {
+          const params = new URLSearchParams();
+          Object.entries(body).forEach(([k, v]) => params.append(k, v));
+
+          await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            mode:   "no-cors",
+            body:   params,
           });
-        })
-        .finally(() => {
-          submitBtn.innerHTML = originalBtnText;
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = "1";
-        });
+
+          sessionStorage.setItem('scdev_last_sent', Date.now().toString());
+
+          // no-cors no devuelve respuesta legible, asumir éxito si no lanza excepción
+          submitBtn.innerHTML = '<i class="fas fa-check"></i> ¡Enviado!';
+          submitBtn.style.background = "#2e7d32";
+          this.reset();
+
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              icon: "success",
+              title: "¡Mensaje enviado!",
+              text: "Te respondo a la brevedad 🚀",
+              confirmButtonColor: "#D32F2F",
+              background: "#1a1a1a",
+              color: "#fff",
+            });
+          }
+
+          if (this.closest('#contactModal')) {
+            setTimeout(() => closeModal(), 1500);
+          }
+
+        } catch (err) {
+          console.error("[SCdev] Error enviando formulario:", err);
+          submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error, reintentá';
+          submitBtn.style.background = "#c62828";
+
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              icon: "error",
+              title: "Error al enviar",
+              text: "Intentá de nuevo o escribime directo por WhatsApp.",
+              confirmButtonColor: "#D32F2F",
+              background: "#1a1a1a",
+              color: "#fff",
+            });
+          }
+        } finally {
+          setTimeout(() => {
+            submitBtn.innerHTML  = originalHTML;
+            submitBtn.disabled   = false;
+            submitBtn.style.background = "";
+          }, 3000);
+        }
+      });
     });
-  });
+  }
 
   // ==================================
   // 6) SCROLL REVEAL
@@ -317,6 +472,41 @@ document.addEventListener('DOMContentLoaded', () => {
   activeMenu();
 
   // ==================================
+  // 8c) HAMBURGER MENU
+  // ==================================
+  const hamburgerBtn  = document.querySelector('.hamburger');
+  const navLinksMenu  = document.querySelector('.nav-links');
+  const navOverlayEl  = document.querySelector('.nav-overlay');
+
+  function openHamburger() {
+    navLinksMenu.classList.add('open');
+    hamburgerBtn.classList.add('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    if (navOverlayEl) navOverlayEl.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeHamburger() {
+    if (!navLinksMenu.classList.contains('open')) return;
+    navLinksMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    if (navOverlayEl) navOverlayEl.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', () => {
+      navLinksMenu.classList.contains('open') ? closeHamburger() : openHamburger();
+    });
+  }
+  if (navOverlayEl) navOverlayEl.addEventListener('click', closeHamburger);
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', closeHamburger);
+  });
+
+  // ==================================
   // 9) MODAL PROYECTOS
   // ==================================
   window.openProjectModal = function (card) {
@@ -359,6 +549,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (demoBtn) demoBtn.style.display = (demoLink === '#' || demoLink === '') ? 'none' : 'flex';
 
+    // Reiniciar animación de entrada en cada apertura
+    const modalContent = modal.querySelector('.project-modal-content');
+    if (modalContent) {
+      modalContent.style.animation = 'none';
+      void modalContent.offsetWidth;
+      modalContent.style.animation = '';
+    }
+
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     setWaFloatVisible(false);
@@ -377,4 +575,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === this) closeProjectModal();
     });
   }
+
+  // ==================================
+  // 10) INICIALIZAR FORMULARIO
+  // ==================================
+  initContactForm();
 });
