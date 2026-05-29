@@ -1,13 +1,13 @@
 # scdev | Santiago Cáceres - Full Stack Developer Portfolio
 
-![scdev Portfolio Preview](images/screenshot.png)
+![scdev Portfolio Preview](images/Scdev.png)
 
 > **Portfolio Personal** diseñado para mostrar proyectos, habilidades y trayectoria académica. Desarrollado con un enfoque en diseño moderno (Dark Mode), interactividad y experiencia de usuario fluida.
 
 ---
 
 ## 🚀 Demo
-Podés ver el sitio en vivo aquí: https://scdev-portfolio.netlify.app/
+Podés ver el sitio en vivo aquí: https://scdev.com.ar/
 
 ---
 
