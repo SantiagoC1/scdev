@@ -9,6 +9,7 @@ export default function Footer() {
   const { openContact } = useModal()
   const year = new Date().getFullYear()
 //locura esto
+
   return (
     <footer className="bg-[#0a0a0a] border-t border-white/5 py-12">
       <div className="max-w-6xl mx-auto px-6">
