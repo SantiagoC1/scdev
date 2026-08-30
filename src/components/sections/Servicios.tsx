@@ -58,7 +58,6 @@ export default function Servicios() {
   return (
     <section id="servicios" className="py-24 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto px-6">
-        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -104,7 +103,6 @@ export default function Servicios() {
           className="mt-24"
         >
           <div className="text-center mb-12">
-            
             <h3 className="text-2xl md:text-4xl font-bold mb-3">Planes de Mantenimiento</h3>
             <p className="text-white/50 max-w-xl mx-auto">
               Mantenemos tu sitio activo, seguro y actualizado. Vos te enfocás en tu negocio.

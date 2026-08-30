@@ -13,7 +13,6 @@ export default function Clientes() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          
           <h2 className="text-3xl md:text-5xl font-bold">Nuestros Clientes</h2>
           <p className="text-white/50 mt-3 text-sm">
             Trabajamos con negocios reales que hoy están en producción.

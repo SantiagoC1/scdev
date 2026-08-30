@@ -147,7 +147,6 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
       <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl">
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 bg-[#111] border-b border-white/10">
           <div>
-            
             <h2 className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
           </div>
           <button
