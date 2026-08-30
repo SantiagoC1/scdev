@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -16,18 +16,35 @@ const NAV_LINKS = [
 
 const NAV_HEIGHT = 80
 
+function scrollToId(id: string) {
+  const el = document.getElementById(id)
+  if (!el) return
+  const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT
+  window.scrollTo({ top, behavior: 'smooth' })
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const config = useConfig()
   const waLink = buildWALink(config.whatsapp_number, config.whatsapp_default_text)
   const { openContact } = useModal()
+  const { pathname, hash } = useLocation()
+  const navigate = useNavigate()
+  const isHome = pathname === '/'
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handler)
     return () => window.removeEventListener('scroll', handler)
   }, [])
+
+  // Al llegar a "/" con hash (venimos de otra ruta), scrollea una vez montado Home
+  useEffect(() => {
+    if (!isHome || !hash) return
+    const timeout = setTimeout(() => scrollToId(hash.slice(1)), 150)
+    return () => clearTimeout(timeout)
+  }, [isHome, hash])
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false)
@@ -36,13 +53,14 @@ export default function Navbar() {
 
     const id = href.replace('/#', '').replace('#', '')
 
-    setTimeout(() => {
-      const el = document.getElementById(id)
-      if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT
-        window.scrollTo({ top, behavior: 'smooth' })
-      }
-    }, 150)
+    // Fuera de "/" el ancla no existe en el DOM: navegamos y deja que el
+    // efecto de arriba scrollee cuando Home ya esta renderizado.
+    if (!isHome) {
+      navigate(`/#${id}`)
+      return
+    }
+
+    setTimeout(() => scrollToId(id), 150)
   }
 
   return (
