@@ -8,7 +8,6 @@ export default function Footer() {
   const waLink = buildWALink(config.whatsapp_number, config.whatsapp_default_text)
   const { openContact } = useModal()
   const year = new Date().getFullYear()
-//locura esto
 
   return (
     <footer className="bg-[#0a0a0a] border-t border-white/5 py-12">
@@ -16,7 +15,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <Link to="/">
-              <img src="/images/LogoCompletoHorizontalFN.png" alt="SCdev" className="h-18 mb-24" />
+              <img src="/images/LogoCompletoHorizontalFN.png" alt="SCdev" className="h-18 mb-4" />
             </Link>
             <p className="text-white/40 text-sm">
               Agencia de desarrollo web en La Plata, Argentina.
