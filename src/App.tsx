@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import { useSheetConfig } from './hooks/useSheetConfig'
 
+const NosotrosPage = lazy(() => import('./pages/NosotrosPage'))
 const PresenciaWebEsencial = lazy(() => import('./pages/servicios/PresenciaWebEsencial'))
 const LandingPageProfesional = lazy(() => import('./pages/servicios/LandingPageProfesional'))
 const SitioWebCorporativo = lazy(() => import('./pages/servicios/SitioWebCorporativo'))
@@ -29,6 +30,7 @@ function AppContent() {
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/nosotros" element={<NosotrosPage />} />
             <Route path="/servicios/presencia-web-esencial" element={<PresenciaWebEsencial />} />
             <Route path="/servicios/landing-page-profesional" element={<LandingPageProfesional />} />
             <Route path="/servicios/sitio-web-corporativo" element={<SitioWebCorporativo />} />

@@ -8,7 +8,7 @@ import { NAV_HEIGHT } from '../../constants'
 
 const NAV_LINKS = [
   { label: 'Inicio', href: '/#hero' },
-  { label: 'Nosotros', href: '/#nosotros' },
+  { label: 'Nosotros', href: '/nosotros' },
   { label: 'Servicios', href: '/#servicios' },
   { label: 'Clientes', href: '/#clientes' },
   { label: 'Proyectos', href: '/#portfolio' },
