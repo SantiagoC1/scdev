@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Proyecto } from '../../data/portfolio'
 
 interface Props {
@@ -5,16 +6,28 @@ interface Props {
 }
 
 export default function PortfolioCard({ proyecto }: Props) {
+  const [imgError, setImgError] = useState(false)
+  const sinImagen = !proyecto.imagen || imgError
+
   return (
     <div className="flex-none w-[85vw] sm:w-72 md:w-80 h-[380px] flex flex-col bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300 group">
       <div className="h-48 flex-shrink-0 overflow-hidden bg-black/20">
-        <img
-          src={proyecto.imagen}
-          alt={proyecto.nombre}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-        />
+        {sinImagen ? (
+          <div className="w-full h-full flex items-center justify-center bg-[#2D2D2D] px-5">
+            <span className="font-display font-bold text-sm text-white/70 text-center leading-tight">
+              {proyecto.nombre}
+            </span>
+          </div>
+        ) : (
+          <img
+            src={proyecto.imagen}
+            alt={proyecto.nombre}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+          />
+        )}
       </div>
       <div className="flex-1 flex flex-col p-5 gap-3">
         <h4 className="font-bold text-sm leading-tight">{proyecto.nombre}</h4>

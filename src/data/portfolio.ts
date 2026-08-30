@@ -4,9 +4,23 @@ export interface Proyecto {
   imagen: string
   tags: string[]
   url: string | null
+  descripcion?: string
+  categoria?: string
+  repo?: string
 }
 
 export const PROYECTOS: Proyecto[] = [
+  {
+    id: 'unidos-construimos',
+    nombre: 'Unidos Construimos',
+    descripcion:
+      'Plataforma de gestión de consultas ciudadanas para el equipo del Diputado Provincial José Corral (Santa Fe). Los vecinos registran pedidos y reclamos, el equipo los gestiona y el portal de transparencia muestra las estadísticas públicas sin datos personales. Cumple Ley 25.326.',
+    tags: ['Next.js 16', 'Supabase', 'TypeScript', 'Tailwind CSS v4', 'Resend', 'Vercel'],
+    url: 'https://www.unidosconstruimos.com.ar',
+    repo: 'https://github.com/scdevok-sudo/Ticketera',
+    imagen: '/images/unidosconstruimos.png',
+    categoria: 'Plataforma / Sistema a medida',
+  },
   {
     id: 'balance',
     nombre: 'Balance — Agencia de Marketing',
