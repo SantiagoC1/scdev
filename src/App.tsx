@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import { useSheetConfig } from './hooks/useSheetConfig'
@@ -47,8 +48,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ModalProvider>
-      <AppContent />
-    </ModalProvider>
+    <HelmetProvider>
+      <ModalProvider>
+        <AppContent />
+      </ModalProvider>
+    </HelmetProvider>
   )
 }
