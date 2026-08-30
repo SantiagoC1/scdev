@@ -50,7 +50,7 @@ export default function ServicePage({ servicio }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pt-16 md:pt-20">
+      <main className="pt-24 md:pt-26">
         {/* Hero */}
         <section className="pt-16 pb-16 md:pt-24 md:pb-24 bg-[#0a0a0a] relative overflow-hidden">
           <div

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
+import { NAV_HEIGHT } from '../../constants'
 
 const NAV_LINKS = [
   { label: 'Inicio', href: '/#hero' },
@@ -13,8 +14,6 @@ const NAV_LINKS = [
   { label: 'Proyectos', href: '/#portfolio' },
   { label: 'Contacto', href: '/#cta' },
 ]
-
-const NAV_HEIGHT = 80
 
 function scrollToId(id: string) {
   const el = document.getElementById(id)
