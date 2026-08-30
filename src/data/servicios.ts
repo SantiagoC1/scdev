@@ -1,7 +1,6 @@
 export interface Servicio {
   id: string
   slug: string
-  icon: string
   iconName: string
   nombre: string
   descripcion: string
@@ -24,7 +23,6 @@ export const SERVICIOS: Servicio[] = [
   {
     id: 'presencia-web-esencial',
     slug: '/servicios/presencia-web-esencial',
-    icon: '🌐',
     iconName: 'Globe',
     nombre: 'Presencia Web Esencial',
     descripcion: 'Para gasistas, electricistas, dentistas, peluquerías — el primer paso online.',
@@ -78,7 +76,6 @@ export const SERVICIOS: Servicio[] = [
   {
     id: 'landing-page-profesional',
     slug: '/servicios/landing-page-profesional',
-    icon: '🚀',
     iconName: 'Rocket',
     nombre: 'Landing Page Profesional',
     descripcion: 'Para comercios, profesionales y emprendimientos con identidad cuidada.',
@@ -132,7 +129,6 @@ export const SERVICIOS: Servicio[] = [
   {
     id: 'sitio-web-corporativo',
     slug: '/servicios/sitio-web-corporativo',
-    icon: '🏢',
     iconName: 'Building2',
     nombre: 'Sitio Web Corporativo',
     descripcion: 'Para empresas con múltiples servicios, equipo o blog.',
@@ -184,7 +180,6 @@ export const SERVICIOS: Servicio[] = [
   {
     id: 'sistema-a-medida',
     slug: '/servicios/sistema-a-medida',
-    icon: '⚙️',
     iconName: 'Settings',
     nombre: 'Sistema / Plataforma a Medida',
     descripcion: 'Gestión de turnos, sistemas internos, plataformas con lógica de negocio real.',
@@ -236,7 +231,6 @@ export const SERVICIOS: Servicio[] = [
   {
     id: 'automatizacion-whatsapp',
     slug: '/servicios/automatizacion-whatsapp',
-    icon: '🤖',
     iconName: 'Bot',
     nombre: 'Automatización e IA / WhatsApp',
     descripcion: 'Bots de WhatsApp, automatización de procesos, pipelines con Python.',
