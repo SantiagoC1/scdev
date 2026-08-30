@@ -12,9 +12,15 @@ const DEVICON_LABELS: Record<string, string> = {
   javascript: 'JavaScript',
   html5: 'HTML5',
   css3: 'CSS3',
+  tailwindcss: 'Tailwind CSS',
+  docker: 'Docker',
+  nextjs: 'Next.js',
+  git: 'Git',
+  n8n: 'n8n',
 }
 
-const MAX_STACK_VISIBLE = 6
+// n8n no tiene devicon oficial: usamos el avatar del org en GitHub
+const N8N_ICON = 'https://avatars.githubusercontent.com/u/45487711?s=200&v=4'
 
 const deviconUrl = (nombre: string) =>
   `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${nombre}/${nombre}-original.svg`
@@ -39,71 +45,92 @@ export const equipoCardVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
-export default function EquipoCard({ integrante }: { integrante: Integrante }) {
-  const enConstruccion = integrante.stack.length === 0
-  const stackVisible = integrante.stack.slice(0, MAX_STACK_VISIBLE)
-  const restantes = integrante.stack.length - stackVisible.length
-
+function StackIcon({ tech }: { tech: string }) {
+  const label = DEVICON_LABELS[tech] ?? tech
   return (
-    <motion.div
-      variants={equipoCardVariants}
-      className="flex gap-5 bg-white/[0.03] border border-white/[0.08] rounded-2xl p-6 hover:border-[#D32F2F]/30 transition-all duration-300"
+    <div
+      title={label}
+      className="w-7 h-7 flex items-center justify-center"
     >
-      <div className="flex-shrink-0">
-        {integrante.foto ? (
-          <img
-            src={integrante.foto}
-            alt={integrante.nombre}
-            loading="lazy"
-            decoding="async"
-            width={80}
-            height={80}
-            className="w-20 h-20 rounded-full object-cover object-top bg-[#2D2D2D]"
-          />
-        ) : (
-          <div className="w-20 h-20 rounded-full bg-[#2D2D2D] flex items-center justify-center">
-            <span className="font-display font-bold text-lg text-white">
-              {iniciales(integrante.nombre)}
+      <img
+        src={tech === 'n8n' ? N8N_ICON : deviconUrl(tech)}
+        alt={label}
+        loading="lazy"
+        decoding="async"
+        width={28}
+        height={28}
+        className={`w-full h-full object-contain${tech === 'n8n' ? ' rounded' : ''}`}
+      />
+    </div>
+  )
+}
+
+export default function EquipoCard({ integrante }: { integrante: Integrante }) {
+  const { foto, linkedin, nombre, rol, stack } = integrante
+
+  const contenido = (
+    <>
+      {foto ? (
+        <img
+          src={foto}
+          alt={nombre}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"
+        />
+      ) : (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1e1e1e] to-[#2d2d2d]" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span
+              className="font-display font-bold text-white/25 leading-none"
+              style={{ fontSize: '3rem' }}
+            >
+              {iniciales(nombre)}
             </span>
           </div>
-        )}
-      </div>
+          <span className="absolute top-3 right-3 rounded-full bg-[#D32F2F] text-white text-[10px] font-medium px-2.5 py-1 leading-none">
+            Próximamente
+          </span>
+        </>
+      )}
 
-      <div className="flex flex-col gap-2 min-w-0">
-        <div>
-          <h3 className="font-display font-bold text-white leading-tight">{integrante.nombre}</h3>
-          <p className="text-sm text-[#D32F2F]">{integrante.rol}</p>
+      {/* Overlay para legibilidad del texto */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#000000e6] via-[#00000090] to-transparent" />
+
+      <div className="absolute inset-x-0 bottom-0 p-4">
+        <h3 className="font-display font-bold text-white leading-tight">{nombre}</h3>
+        <p className="text-xs text-[#D32F2F] mt-0.5">{rol}</p>
+      </div>
+    </>
+  )
+
+  const claseCard =
+    'group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1e1e1e] border border-white/[0.08]'
+
+  return (
+    <motion.div variants={equipoCardVariants} className="flex flex-col gap-3">
+      {linkedin ? (
+        <a
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`LinkedIn de ${nombre}`}
+          className={`${claseCard} cursor-pointer`}
+        >
+          {contenido}
+        </a>
+      ) : (
+        <div className={claseCard}>{contenido}</div>
+      )}
+
+      {stack.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2.5 px-1">
+          {stack.map((tech) => (
+            <StackIcon key={tech} tech={tech} />
+          ))}
         </div>
-
-        {enConstruccion ? (
-          <span className="text-xs text-white/30">Perfil en construcción</span>
-        ) : (
-          <p className="text-white/50 text-sm leading-relaxed">{integrante.descripcion}</p>
-        )}
-
-        {stackVisible.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 mt-1">
-            {stackVisible.map((tech) => (
-              <div
-                key={tech}
-                title={DEVICON_LABELS[tech] ?? tech}
-                className="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg p-1.5"
-              >
-                <img
-                  src={deviconUrl(tech)}
-                  alt={DEVICON_LABELS[tech] ?? tech}
-                  loading="lazy"
-                  decoding="async"
-                  width={20}
-                  height={20}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            ))}
-            {restantes > 0 && <span className="text-xs text-white/30">+{restantes}</span>}
-          </div>
-        )}
-      </div>
+      )}
     </motion.div>
   )
 }

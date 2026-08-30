@@ -178,7 +178,7 @@ export default function NosotrosPage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {EQUIPO.map((integrante) => (
                 <EquipoCard key={integrante.id} integrante={integrante} />
