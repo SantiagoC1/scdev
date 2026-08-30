@@ -13,7 +13,7 @@ export const CLIENTES: Cliente[] = [
     id: 'balance',
     nombre: 'Balance Agency',
     rubro: 'Agencia de Marketing',
-    logo: '/images/balanceLogo.png',
+    logo: '/images/BalanceLogo.png',
     url: 'https://somosbalance.com.ar',
     desc: 'Sitio web institucional con React, Vite y Framer Motion. Backend en Google Sheets para captura de leads.',
   },
