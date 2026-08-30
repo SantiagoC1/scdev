@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { APPS_SCRIPT_URL } from '../../constants'
 import { sanitizeInput, sanitizeEmail, sanitizeTel } from '../../utils/sanitize'
@@ -41,6 +41,8 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
   const [form, setForm] = useState<FormState>({ ...EMPTY_FORM, servicio: servicioPreseleccionado })
   const [submitting, setSubmitting] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const nombreRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (servicioPreseleccionado) {
@@ -59,7 +61,22 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
 
+  // Timers de handleSubmit: se cancelan si el componente se desmonta antes
+  useEffect(() => () => {
+    timers.current.forEach(clearTimeout)
+    timers.current = []
+  }, [])
+
+  // Al abrir, el foco va al primer campo (no es un focus trap completo)
+  useEffect(() => {
+    if (isOpen) nombreRef.current?.focus()
+  }, [isOpen])
+
   if (!isOpen) return null
+
+  const schedule = (fn: () => void, ms: number) => {
+    timers.current.push(setTimeout(fn, ms))
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -121,7 +138,7 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
       setStatus('error')
     } finally {
       setSubmitting(false)
-      setTimeout(() => setStatus('idle'), 4000)
+      schedule(() => setStatus('idle'), 4000)
     }
 
     if (!enviado) return
@@ -137,20 +154,33 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
 
     setStatus('success')
     setForm(EMPTY_FORM)
-    setTimeout(onClose, 2500)
+    schedule(onClose, 2500)
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label="Cerrar"
+        onClick={onClose}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === 'Escape') onClose() }}
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+      />
 
-      <div className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-modal-title"
+        className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl"
+      >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 bg-[#111] border-b border-white/10">
           <div>
-            <h2 className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
+            <h2 id="contact-modal-title" className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
           </div>
           <button
             onClick={onClose}
+            aria-label="Cerrar"
             className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-all"
           >
             <X size={16} />
@@ -162,7 +192,7 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
 
           <div>
             <label className="block text-xs text-white/50 mb-1.5">Nombre *</label>
-            <input type="text" name="nombre" required placeholder="Tu nombre completo"
+            <input ref={nombreRef} type="text" name="nombre" required placeholder="Tu nombre completo"
               value={form.nombre} onChange={handleChange} maxLength={100} className={INPUT_CLASS} />
           </div>
 
