@@ -100,6 +100,8 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
     console.log('[SCdev] Enviando lead a:', APPS_SCRIPT_URL)
     console.log('[SCdev] Payload:', payload)
 
+    let enviado = false
+
     try {
       const formData = new FormData()
       Object.entries(payload).forEach(([key, value]) => {
@@ -113,9 +115,7 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
       })
 
       console.log('[SCdev] Fetch completado (no-cors, asumimos éxito)')
-      setStatus('success')
-      setForm(EMPTY_FORM)
-      setTimeout(onClose, 2500)
+      enviado = true
     } catch (err) {
       console.error('[SCdev] Error en fetch:', err)
       setStatus('error')
@@ -123,6 +123,21 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
       setSubmitting(false)
       setTimeout(() => setStatus('idle'), 4000)
     }
+
+    if (!enviado) return
+
+    // GTM — evento de conversión
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'form_submission',
+        form_name: 'contacto_scdev',
+        servicio: form.servicio,
+      })
+    }
+
+    setStatus('success')
+    setForm(EMPTY_FORM)
+    setTimeout(onClose, 2500)
   }
 
   return (
