@@ -18,7 +18,7 @@ export const PROYECTOS: Proyecto[] = [
     tags: ['Next.js 16', 'Supabase', 'TypeScript', 'Tailwind CSS v4', 'Resend', 'Vercel'],
     url: 'https://www.unidosconstruimos.com.ar',
     repo: 'https://github.com/scdevok-sudo/Ticketera',
-    imagen: '/images/unidosconstruimos.png',
+    imagen: '/images/UnidosConstruimos.png',
     categoria: 'Plataforma / Sistema a medida',
   },
   {

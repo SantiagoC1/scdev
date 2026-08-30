@@ -35,7 +35,7 @@ export const EQUIPO: Integrante[] = [
     rol: 'Developer',
     descripcion: 'Colaborador de SCdev. Estudiante de Informática en UNLP.',
     stack: [],
-    // foto: se agrega cuando esté disponible
+    foto: '/images/lucasFernandez.jpeg',
   },
   {
     id: 'ezequiel',
