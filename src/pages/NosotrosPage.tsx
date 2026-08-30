@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, FileText, Handshake, Code, CheckCircle } from 'lucide-react'
+import { MessageCircle, FileText, Handshake, Code2, PackageCheck } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
@@ -20,7 +20,7 @@ const STATS = [
 
 const PROCESO: { icono: LucideIcon; titulo: string; desc: string }[] = [
   {
-    icono: MessageSquare,
+    icono: MessageCircle,
     titulo: 'Primera reunión',
     desc: 'Escuchamos qué necesitás y qué querés lograr. Sin apuro y sin tecnicismos.',
   },
@@ -35,12 +35,12 @@ const PROCESO: { icono: LucideIcon; titulo: string; desc: string }[] = [
     desc: 'Afinamos detalles, acordamos el alcance y arrancamos.',
   },
   {
-    icono: Code,
+    icono: Code2,
     titulo: 'Desarrollo con avances',
     desc: 'Trabajamos por etapas y cada etapa tiene su reunión de revisión, así siempre sabés cómo viene tu proyecto.',
   },
   {
-    icono: CheckCircle,
+    icono: PackageCheck,
     titulo: 'Entrega',
     desc: 'Reunión final: te mostramos el resultado terminado y te entregamos el software.',
   },
@@ -130,15 +130,21 @@ export default function NosotrosPage() {
 
         {/* 3 — El proceso */}
         <section className="bg-[#1a1a1a] py-24">
-          <div className="max-w-4xl mx-auto px-6">
+          <div className="max-w-6xl mx-auto px-6">
             <motion.div {...fadeInUp} className="mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3">El proceso</h2>
               <p className="text-white/50">Sin sorpresas. Así trabajamos con cada cliente.</p>
             </motion.div>
 
-            <div className="flex flex-col gap-4">
+            {/* Mobile: fila con scroll snap · Desktop: grilla 3+2 sobre 6 columnas */}
+            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
               {PROCESO.map((paso, i) => {
                 const Icono = paso.icono
+                // en la grilla de 6 columnas cada card ocupa 2: 3 arriba, 2 centradas abajo
+                const colSpan = i === 3 ? 'lg:col-span-2 lg:col-start-2' : 'lg:col-span-2'
+                // conector solo entre cards de la misma fila
+                const conector = i === 0 || i === 1 || i === 3
+
                 return (
                   <motion.div
                     key={paso.titulo}
@@ -146,20 +152,30 @@ export default function NosotrosPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: i * 0.08 }}
-                    className="flex gap-5 bg-white/[0.03] border border-white/[0.08] rounded-2xl p-6"
+                    className={`relative snap-start shrink-0 w-[270px] lg:w-auto lg:shrink ${colSpan}`}
                   >
-                    <div className="flex-shrink-0 flex flex-col items-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-[#D32F2F]/10 border border-[#D32F2F]/20 flex items-center justify-center">
-                        <Icono size={20} className="text-[#D32F2F]" strokeWidth={1.5} />
-                      </div>
-                      <span className="font-mono text-xs text-white/25">
-                        {String(i + 1).padStart(2, '0')}
+                    <div className="group relative h-full overflow-hidden rounded-2xl bg-[#111111] border border-white/[0.08] p-6 text-center transition-colors duration-300 hover:border-[#D32F2F]/25">
+                      {/* Numero watermark */}
+                      <span
+                        className="pointer-events-none select-none absolute -top-2 right-2 font-display font-black leading-none text-white/[0.03]"
+                        style={{ fontSize: '5rem' }}
+                      >
+                        {i + 1}
                       </span>
+
+                      <div className="relative flex flex-col items-center gap-3">
+                        <Icono size={28} className="text-[#D32F2F]" strokeWidth={1.5} />
+                        <h3 className="font-display font-bold text-white">{paso.titulo}</h3>
+                        <p className="text-white/50 text-sm leading-relaxed">{paso.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-display font-bold text-white mb-2">{paso.titulo}</h3>
-                      <p className="text-white/50 text-sm leading-relaxed">{paso.desc}</p>
-                    </div>
+
+                    {conector && (
+                      <span
+                        aria-hidden
+                        className="hidden lg:block absolute top-1/2 left-full w-6 border-t border-dashed border-white/15"
+                      />
+                    )}
                   </motion.div>
                 )
               })}
