@@ -17,7 +17,7 @@ export const EQUIPO: Integrante[] = [
     rol: 'Founder & Dev Lead',
     descripcion: 'Desarrollador full-stack y fundador de SCdev. Especializado en React, FastAPI y automatizaciones para PyMEs locales.',
     stack: ['react', 'python', 'fastapi', 'typescript', 'postgresql', 'supabase'],
-    foto: '/images/SantaigoCaceres.png',
+    foto: '/images/SantaigoCaceres.webp',
     github: 'https://github.com/scdevok-sudo',
   },
   {
@@ -26,7 +26,7 @@ export const EQUIPO: Integrante[] = [
     rol: 'Full-Stack Developer',
     descripcion: 'Estudiante de Licenciatura en Sistemas en UNLP. Trabaja con Python, FastAPI, Java y bases de datos SQL. Interesado en análisis de requerimientos, incorporación de IA al desarrollo y automatización de tareas.',
     stack: ['python', 'fastapi', 'java', 'javascript', 'html5', 'css3', 'supabase'],
-    foto: '/images/AgustinMazzoni.png',
+    foto: '/images/AgustinMazzoni.webp',
     email: 'mazzoni.agustine@gmail.com',
   },
   {
