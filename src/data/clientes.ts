@@ -34,4 +34,12 @@ export const CLIENTES: Cliente[] = [
     url: 'https://adsumpater.com.ar',
     desc: 'Web app con .NET 8, Blazor WebAssembly y Firebase. Muro de intenciones en tiempo real.',
   },
+  {
+    id: 'unidos-construimos',
+    nombre: 'Unidos Construimos',
+    rubro: 'Gestión Ciudadana',
+    logo: '/images/UnidosLogoCliente.webp',
+    url: 'https://www.unidosconstruimos.com.ar',
+    desc: 'Sistema para la gestión de pedidos de los ciudadanos de Santa Fe. El vecino crea un pedido en minutos y lo sigue en tiempo real. El equipo del Diputado José Corral tiene todo unificado en un solo panel.',
+  },
 ]

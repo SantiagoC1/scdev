@@ -84,6 +84,14 @@ for (const { src, threshold, quitarFondo } of fotos) {
   console.log(`✓ ${out}`)
 }
 
+// Logo de cliente: se muestra chico y sobre fondo oscuro, asi que va con
+// contain (no recortar la marca) y fondo transparente.
+await sharp('public/images/UnidosConstruimosLogo.png')
+  .resize(200, 200, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  .webp({ quality: 90 })
+  .toFile('public/images/UnidosLogoCliente.webp')
+console.log('✓ public/images/UnidosLogoCliente.webp')
+
 // Imagen del portfolio: la card la renderiza a 320x192, o sea 640x384 en retina
 await sharp('public/images/UnidosConstruimos.png')
   .resize(640, 384, { fit: 'cover', position: 'center' })
