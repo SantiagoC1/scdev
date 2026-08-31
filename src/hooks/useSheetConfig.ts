@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { APPS_SCRIPT_URL } from '../constants'
+import { APPS_SCRIPT_URL, WA_NUMBER } from '../constants'
 
 export interface SheetConfig {
   whatsapp_number: string
@@ -27,7 +27,7 @@ export interface SheetConfig {
 }
 
 export const CONFIG_FALLBACK: SheetConfig = {
-  whatsapp_number: '5492212029129',
+  whatsapp_number: WA_NUMBER,
   whatsapp_default_text: 'Hola Santi! Quiero cotizar una solución digital.',
   linkedin_url: 'https://www.linkedin.com/in/santiago-caceres01/',
   github_url: 'https://github.com/SantiagoC1',

@@ -32,7 +32,7 @@ export const EQUIPO: Integrante[] = [
       'git',
     ],
     foto: '/images/SantaigoCaceres.webp',
-    linkedin: 'https://www.linkedin.com/in/santiago-caceres-dev/',
+    linkedin: 'https://www.linkedin.com/in/santiago-caceres01/',
   },
   {
     id: 'agustin',
@@ -42,6 +42,7 @@ export const EQUIPO: Integrante[] = [
     stack: ['python', 'fastapi', 'java', 'javascript', 'html5', 'css3', 'supabase'],
     foto: '/images/AgustinMazzoni.webp',
     email: 'mazzoni.agustine@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/agustin-mazzoni-48044b30b/',
   },
   {
     id: 'lucas',
@@ -50,6 +51,7 @@ export const EQUIPO: Integrante[] = [
     descripcion: 'Colaborador de SCdev. Estudiante de Informática en UNLP.',
     stack: [],
     foto: '/images/lucasFernandez.webp',
+    linkedin: 'https://www.linkedin.com/in/',
   },
   {
     id: 'ezequiel',
@@ -58,5 +60,6 @@ export const EQUIPO: Integrante[] = [
     descripcion: 'Colaborador de SCdev. Estudiante de Informática en UNLP.',
     stack: [],
     foto: '/images/EzequielWeber.webp',
+    linkedin: 'https://www.linkedin.com/in/ezequiel-weber-2b621a415/',
   },
 ]
