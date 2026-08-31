@@ -17,6 +17,7 @@ const DEVICON_LABELS: Record<string, string> = {
   nextjs: 'Next.js',
   git: 'Git',
   n8n: 'n8n',
+  node: 'nodejs'
 }
 
 // n8n no tiene devicon oficial: usamos el avatar del org en GitHub
