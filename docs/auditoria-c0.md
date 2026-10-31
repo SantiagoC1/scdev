@@ -46,3 +46,32 @@ Peso total de la home en móvil: 2.382 KiB. Nota: el preview local no pasa por l
 ## Cambios en el repo en C0
 
 Solo herramientas: `playwright`, `lighthouse`, `@axe-core/playwright` y `chrome-launcher` como `devDependencies`, y `scripts/medir.mjs` (se reutiliza en C6). No se tocó código del sitio.
+
+## Perfil de Performance en móvil (anexo, traza de Lighthouse)
+
+### Elemento LCP
+
+| Ruta | Elemento LCP | Desglose observado | LCP reportado |
+|---|---|---|---|
+| `/` | `h1` del hero (`main > section#hero h1`), texto | TTFB 21 ms, **retraso de render 2.327 ms** | 11,0 s |
+| `/servicios/landing-page-profesional` | `p.text-white/60.text-xl` del hero de la página | TTFB 9 ms, retraso de render 946 ms | 10,1 s |
+
+Conclusión: el LCP **no es una imagen**. Es texto que tarda en pintarse porque el hero espera a que cargue y ejecute el JS (el `h1` entra con `opacity`/`transform` de Framer Motion) y porque el hilo principal está ocupado. Optimizar imágenes (C1) baja el peso total pero **casi no mueve el LCP**; lo mueven la entrada del hero con CSS (C3), sacar el script bloqueante de partículas y reducir el JS inicial. Nota: el valor de 11 s es el simulado con throttling móvil de Lighthouse; el retraso observado sin simulación es el de la columna del medio.
+
+### Tareas largas que explican el TBT (~2 s en `/`)
+
+| Duración | Cuándo | Origen |
+|---|---|---|
+| 1.066 ms | 9,5 s | GTM/GA: `gtag/destination?id=G-X1DLK1FW6F` |
+| 717 ms | 3,8 s | `index-*.js` propio (hidratación/montaje de la home) |
+| 414 ms y 119 ms | 4,5 s y 3,7 s | `index-*.js` propio |
+| 576, 573 y 527 ms | 0,8 s, 1,9 s y 1,4 s | Sin atribución (layout, estilos y animaciones: "Style & Layout" suma 1.214 ms) |
+| 323 y 138 ms | 5,0 s y 5,3 s | GTM `gtm.js` |
+
+Tiempo de ejecución por script: `index-*.js` propio 3.044 ms (2.029 ms de script), `particles.min.js` 1.475 ms (483 ms de script, sincrónico en el `<head>`), GTM/GA ~1.600 ms entre `gtag/destination` y `gtm.js`. Por categoría: Script Evaluation 3,9 s, Other 3,3 s, Style & Layout 1,2 s.
+
+En `/servicios/landing-page-profesional` el patrón es el mismo pero más chico: 873 ms de GTM, ~1,6 s de tareas sin atribución y el JS propio con tareas de menos de 180 ms.
+
+Lectura: el TBT se reparte en tres. (1) JS propio de la home (un solo chunk, con todas las secciones y animaciones de Framer corriendo al montar). (2) GTM/GA, que está fuera de nuestro control pero se puede retrasar. (3) Partículas y animaciones continuas (marquee, `whileInView`) que fuerzan layout y estilos. Los puntos (1) y (3) se atacan en C1/C3/C4; GTM queda como límite parcial (hay que explicarlo en `auditoria-c6.md` si el TBT no llega a 200 ms).
+
+Nota sobre el prompt: `PROMPT_CLAUDE_CODE_V3.md` se movió a `docs/`. La versión en disco es byte a byte la misma que leí antes (misma fecha de modificación, 206 líneas); no detecté cambios en la Parte B respecto de lo que ya tenía.
