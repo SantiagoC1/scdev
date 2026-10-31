@@ -39,7 +39,7 @@ function StackIcon({ tech }: { tech: string }) {
   return (
     <div
       title={label}
-      className="w-7 h-7 flex items-center justify-center"
+      className="w-5 h-5 sm:w-7 sm:h-7 flex-none flex items-center justify-center"
     >
       <img
         src={tech === 'n8n' ? N8N_ICON : deviconUrl(tech)}
@@ -89,8 +89,8 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
       {/* Overlay para legibilidad del texto */}
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#000000e6] via-[#00000090] to-transparent" />
 
-      <div className="absolute inset-x-0 bottom-0 p-4">
-        <h3 className="font-display font-bold text-white leading-tight">{nombre}</h3>
+      <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
+        <h3 className="font-display font-bold text-white leading-tight text-sm md:text-base">{nombre}</h3>
         <p className="text-xs text-white/70 mt-0.5">{rol}</p>
       </div>
     </>
@@ -116,8 +116,8 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
       )}
 
       {stack.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2.5 px-1">
-          {stack.map((tech) => (
+        <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2.5 px-1">
+          {stack.slice(0, 6).map((tech) => (
             <StackIcon key={tech} tech={tech} />
           ))}
         </div>

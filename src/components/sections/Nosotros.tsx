@@ -56,17 +56,15 @@ export default function Nosotros() {
           </Link>
         </div>
 
-        <div className="group relative aspect-[3/4] w-full max-w-xs mx-auto lg:mx-0 overflow-hidden rounded-2xl border border-white/10 bg-[#1e1e1e]">
-          <img
-            src="/images/SantaigoCaceres.webp"
-            alt="Santiago Cáceres, fundador de SCdev"
-            width={480}
-            height={640}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"
-          />
-        </div>
+        <img
+          src="/images/SantaigoCaceres.webp"
+          alt="Santiago Cáceres, fundador de SCdev"
+          width={480}
+          height={640}
+          loading="lazy"
+          decoding="async"
+          className="w-full max-w-xs mx-auto lg:mx-0 h-auto grayscale hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"
+        />
       </div>
     </section>
   )

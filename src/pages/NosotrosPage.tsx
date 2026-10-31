@@ -11,12 +11,6 @@ import { useConfig } from '../context/ConfigContext'
 import { useModal } from '../context/ModalContext'
 import { buildWALink } from '../hooks/useSheetConfig'
 
-const STATS = [
-  { unidad: 'proyectos', valor: '10', label: 'de experiencia total' },
-  { unidad: 'clientes', valor: '6', label: 'activos hoy' },
-  { unidad: 'personas', valor: '4', label: 'en el equipo' },
-]
-
 const PROCESO: { icono: LucideIcon; titulo: string; desc: string }[] = [
   {
     icono: MessageCircle,
@@ -57,44 +51,49 @@ export default function NosotrosPage() {
   return (
     <>
       <PageMeta
-        title="Nosotros — SCdev"
+        title="Nosotros | SCdev"
         description="Conocé al equipo de SCdev: cuatro personas en La Plata que construyen sitios web y sistemas a medida para negocios argentinos, con un proceso claro de punta a punta."
         canonical={`${SITE_URL}/nosotros`}
       />
       <Navbar />
       <main id="contenido" tabIndex={-1} className="pt-24 md:pt-26">
         {/* 1 — Hero */}
-        <section className="bg-[#121212] py-24 md:py-32">
-          <div className="max-w-4xl mx-auto px-6">
+        <section className="bg-[#121212] pt-12 pb-10 md:pt-14 md:pb-12">
+          <div className="max-w-6xl mx-auto px-6">
             <div>
-              <p className="text-sm text-white/60 mb-4">Sobre nosotros</p>
+              <p className="text-sm text-white/60 mb-3">Sobre nosotros</p>
               <h1
-                className="font-bold leading-[1.05] mb-6"
-                style={{ fontSize: 'clamp(2.4rem, 6vw, 4.5rem)' }}
+                className="font-bold leading-[1.1] mb-4"
+                style={{ fontSize: 'clamp(1.9rem, 4.2vw, 3rem)' }}
               >
                 Código que funciona.
                 <span className="block">Equipo que responde.</span>
               </h1>
-              <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
+              <p className="text-white/70 text-base md:text-lg max-w-2xl leading-relaxed">
                 Somos una agencia chica de La Plata. Tomamos pocos proyectos a la vez porque
                 preferimos hacer bien cada uno antes que entregar muchos a medias.
               </p>
-
-              <div className="flex flex-wrap gap-10 md:gap-16 mt-14">
-                {STATS.map((stat) => (
-                  <div key={stat.unidad}>
-                    <div className="font-display font-bold text-3xl md:text-4xl text-white">
-                      {stat.valor} <span className="text-white/60">{stat.unidad}</span>
-                    </div>
-                    <div className="text-white/60 text-sm mt-1">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </section>
 
-        {/* 2 — La historia */}
+        {/* 2 — El equipo */}
+        <section className="bg-[#121212] pb-16 md:pb-20">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">
+              El equipo
+            </h2>
+            <div
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
+            >
+              {EQUIPO.map((integrante) => (
+                <EquipoCard key={integrante.id} integrante={integrante} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 3 — La historia */}
         <section className="bg-[#0a0a0a] py-24">
           <div className="max-w-3xl mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-8">
@@ -120,7 +119,7 @@ export default function NosotrosPage() {
           </div>
         </section>
 
-        {/* 3 — El proceso */}
+        {/* 4 — El proceso */}
         <section className="bg-[#1a1a1a] py-24">
           <div className="max-w-6xl mx-auto px-6">
             <div className="mb-14">
@@ -129,7 +128,7 @@ export default function NosotrosPage() {
             </div>
 
             {/* Mobile: fila con scroll snap · Desktop: grilla 3+2 sobre 6 columnas */}
-            <div tabIndex={0} role="region" aria-label="Integrantes del equipo" className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
+            <div tabIndex={0} role="region" aria-label="Pasos del proceso" className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
               {PROCESO.map((paso, i) => {
                 const Icono = paso.icono
                 // en la grilla de 6 columnas cada card ocupa 2: 3 arriba, 2 centradas abajo
@@ -167,22 +166,6 @@ export default function NosotrosPage() {
                   </div>
                 )
               })}
-            </div>
-          </div>
-        </section>
-
-        {/* 4 — El equipo */}
-        <section className="bg-[#121212] py-24">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold mb-14">
-              El equipo
-            </h2>
-            <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {EQUIPO.map((integrante) => (
-                <EquipoCard key={integrante.id} integrante={integrante} />
-              ))}
             </div>
           </div>
         </section>
