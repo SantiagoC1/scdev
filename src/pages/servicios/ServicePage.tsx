@@ -73,7 +73,7 @@ export default function ServicePage({ servicio }: Props) {
                 const HeroIcon = INCLUDE_ICON_MAP[servicio.iconName]
                 return HeroIcon ? (
                   <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-[#D32F2F]/10 border border-[#D32F2F]/20 mb-6">
-                    <HeroIcon size={28} className="text-accent-text" strokeWidth={1.5} />
+                    <HeroIcon size={28} className="text-white/70" strokeWidth={1.5} />
                   </div>
                 ) : null
               })()}
@@ -122,7 +122,7 @@ export default function ServicePage({ servicio }: Props) {
                   {(() => {
                     const IncludeIcon = INCLUDE_ICON_MAP[item.iconName]
                     return IncludeIcon ? (
-                      <IncludeIcon size={24} className="text-accent-text mb-3" strokeWidth={1.5} />
+                      <IncludeIcon size={24} className="text-white/70 mb-3" strokeWidth={1.5} />
                     ) : null
                   })()}
                   <h3 className="font-bold mb-2">{item.titulo}</h3>
@@ -143,7 +143,7 @@ export default function ServicePage({ servicio }: Props) {
                 <ul className="space-y-3">
                   {servicio.paraQuien.map((item) => (
                     <li key={item} className="flex items-start gap-3 text-white/60">
-                      <span className="text-accent-text mt-1 flex-shrink-0">✓</span>
+                      <span className="text-white/70 mt-1 flex-shrink-0">✓</span>
                       {item}
                     </li>
                   ))}
@@ -181,7 +181,7 @@ export default function ServicePage({ servicio }: Props) {
                 <div
                   key={paso.num}
                 >
-                  <div className="text-5xl font-mono font-bold text-accent-text/70 mb-3">
+                  <div className="text-5xl font-mono font-bold text-white/70 mb-3">
                     {paso.num}
                   </div>
                   <h3 className="font-bold mb-2">{paso.titulo}</h3>
@@ -232,7 +232,7 @@ export default function ServicePage({ servicio }: Props) {
                 >
                   <summary className="px-6 py-4 cursor-pointer font-semibold text-sm list-none flex items-center justify-between hover:bg-white/5 transition-colors">
                     {item.pregunta}
-                    <span className="text-accent-text ml-4 flex-shrink-0">↓</span>
+                    <span className="text-white/70 ml-4 flex-shrink-0">↓</span>
                   </summary>
                   <div className="px-6 pb-4 text-white/60 text-sm leading-relaxed">
                     {item.respuesta}

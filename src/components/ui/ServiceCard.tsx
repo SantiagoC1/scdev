@@ -41,7 +41,7 @@ export default function ServiceCard({ servicio }: Props) {
           className={`absolute top-4 right-4 text-xs font-medium px-2 py-1 rounded-lg ${
             servicio.badge.tipo === 'popular'
               ? 'bg-[#D32F2F] text-white'
-              : 'bg-[#D32F2F]/10 text-accent-text border border-[#D32F2F]/30'
+              : 'bg-white/5 text-white/70 border border-white/15'
           }`}
         >
           {servicio.badge.texto}
@@ -49,7 +49,7 @@ export default function ServiceCard({ servicio }: Props) {
       )}
 
       {CardIcon && (
-        <CardIcon size={28} className="text-accent-text mb-3" strokeWidth={1.5} />
+        <CardIcon size={28} className="text-white/70 mb-3" strokeWidth={1.5} />
       )}
 
       <h3 className="text-lg font-bold mb-2">{servicio.nombre}</h3>

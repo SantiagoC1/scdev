@@ -91,7 +91,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
 
       <div className="absolute inset-x-0 bottom-0 p-4">
         <h3 className="font-display font-bold text-white leading-tight">{nombre}</h3>
-        <p className="text-xs text-accent-text mt-0.5">{rol}</p>
+        <p className="text-xs text-white/70 mt-0.5">{rol}</p>
       </div>
     </>
   )

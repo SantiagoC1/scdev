@@ -152,7 +152,7 @@ export default function NosotrosPage() {
                       </span>
 
                       <div className="relative flex flex-col items-center gap-3">
-                        <Icono size={28} className="text-accent-text" strokeWidth={1.5} />
+                        <Icono size={28} className="text-white/70" strokeWidth={1.5} />
                         <h3 className="font-display font-bold text-white">{paso.titulo}</h3>
                         <p className="text-white/50 text-sm leading-relaxed">{paso.desc}</p>
                       </div>

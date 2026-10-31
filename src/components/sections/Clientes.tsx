@@ -56,7 +56,7 @@ function ClienteMarqueeCard({ cliente }: { cliente: Cliente }) {
       </div>
 
       <h3 className="font-bold text-sm text-white mb-1 leading-tight">{cliente.nombre}</h3>
-      <span className="inline-block text-xs font-medium text-accent-text bg-[#D32F2F]/10 border border-[#D32F2F]/20 rounded-lg px-2 py-0.5 mb-3">
+      <span className="inline-block text-xs font-medium text-white/70 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5 mb-3">
         {cliente.rubro}
       </span>
       <p className="text-xs text-white/60 leading-relaxed line-clamp-3">{cliente.desc}</p>
