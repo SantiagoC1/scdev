@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { track } from '../../utils/track'
 import { X } from 'lucide-react'
 import { APPS_SCRIPT_URL } from '../../constants'
 import { sanitizeInput, sanitizeEmail, sanitizeTel } from '../../utils/sanitize'
@@ -320,7 +321,7 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           {status === 'error' && (
             <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
               ✗ Error al enviar.{' '}
-              <a href={waLink} target="_blank" rel="noopener noreferrer" className="underline">
+              <a href={waLink} onClick={() => track({ event: 'cta_whatsapp_click', location: 'modal' })} target="_blank" rel="noopener noreferrer" className="underline">
                 Escribime por WhatsApp
               </a>
             </div>

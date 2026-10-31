@@ -1,4 +1,5 @@
 import { m } from 'framer-motion'
+import { track } from '../../utils/track'
 import { useModal } from '../../context/ModalContext'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -49,6 +50,7 @@ export default function CtaFinal() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               href={waLink}
+              onClick={() => track({ event: 'cta_whatsapp_click', location: 'cta_final' })}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto text-center px-10 py-4 border border-white/15 text-white/70 font-display font-semibold text-lg rounded-lg hover:border-white/30 hover:text-white transition-all duration-300"

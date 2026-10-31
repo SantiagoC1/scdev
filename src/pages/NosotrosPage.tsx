@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { track } from '../utils/track'
 import { MessageCircle, FileText, Handshake, Code2, PackageCheck } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
@@ -183,6 +184,7 @@ export default function NosotrosPage() {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
                   href={waLink}
+                  onClick={() => track({ event: 'cta_whatsapp_click', location: 'nosotros' })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-white text-[#B71C1C] px-8 py-4 rounded-lg font-semibold hover:bg-white/90 transition-all"

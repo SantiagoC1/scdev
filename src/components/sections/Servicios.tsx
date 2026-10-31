@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react'
 import { SERVICIOS } from '../../data/servicios'
 import type { Servicio } from '../../data/servicios'
 import { PRICE_MAP } from '../../data/precios'
+import { track } from '../../utils/track'
 import { PLANES, BENEFICIOS } from '../../data/mantenimiento'
 import { useConfig } from '../../context/ConfigContext'
 import { formatPrice, buildWALink } from '../../hooks/useSheetConfig'
@@ -200,6 +201,7 @@ export default function Servicios() {
               href={buildWALink(config.whatsapp_number, 'Hola Santi! Me interesa un plan de mantenimiento mensual.')}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track({ event: 'cta_whatsapp_click', location: 'mantenimiento' })}
               className={`inline-block px-6 py-3 rounded-lg font-semibold ${focoBoton}`}
             >
               Consultar planes

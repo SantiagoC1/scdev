@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { track } from '../../utils/track'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
@@ -37,7 +38,7 @@ export default function Footer() {
             <h5 className="font-semibold mb-4 text-sm">Contacto</h5>
             <ul className="space-y-2 text-white/60 text-sm">
               <li>
-                <a href={waLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                <a href={waLink} onClick={() => track({ event: 'cta_whatsapp_click', location: 'footer' })} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                   WhatsApp
                 </a>
               </li>

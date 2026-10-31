@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { track } from '../../utils/track'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
 import { useConfig } from '../../context/ConfigContext'
@@ -130,6 +131,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={waLink}
+              onClick={() => track({ event: 'cta_whatsapp_click', location: 'navbar' })}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-accent-text border border-[#D32F2F]/30 px-4 py-2 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
@@ -191,7 +193,10 @@ export default function Navbar() {
                     href={waLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      track({ event: 'cta_whatsapp_click', location: 'navbar' })
+                      setMenuOpen(false)
+                    }}
                     className="block text-center text-sm bg-[#D32F2F] text-white px-4 py-3 rounded-lg"
                   >
                     Cotizar por WhatsApp
