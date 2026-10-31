@@ -31,6 +31,16 @@ Datos en `src/data/portfolio.ts` (carrusel) y `src/data/clientes.ts` (franja "Co
 - Tábano: sitio verificado online. Descripción tal como la definiste (sin nombres de personas ni tarifa).
 - Grafía de "Consultorio Dr. Padejimas": TODO(santi) confirmar la grafía correcta (el archivo del logo se llama `DrPadegimas`). Hasta entonces queda como está.
 
+## Punto (Parte A)
+
+Hechos de la sección 4 de `docs/punto/punto-asistente-web.md` que **no** van al prompt de Punto hasta que se confirmen. Mientras tanto Punto dice "las condiciones de pago y de hosting las confirma el equipo" y manda a WhatsApp:
+
+- TODO(santi): "el hosting va incluido en el valor del proyecto" (hoy el sitio dice que el dominio es costo aparte).
+- TODO(santi): "se arranca con 50% de anticipo y el resto a la entrega" (ya figura en Cómo trabajamos y en el FAQ de pago, pero no estaba escrito en ningún texto previo del repo).
+- TODO(santi): "los presupuestos tienen validez de 30 días".
+- TODO(santi): "SCdev no gestiona redes sociales de clientes".
+- Servicios que el documento lista y el sitio no muestra (no se incluyen en Punto): "Bot de WhatsApp $500.000" y "Diagnóstico digital $150.000".
+
 ## Perfil de Empresa de Google (`index.html`)
 
 TODO(santi): URL del Perfil de Empresa ("SCdev|Desarrollo Web Profesional") para sumarla a `sameAs` del `LocalBusiness`.
