@@ -1,61 +1,71 @@
 import { Link } from 'react-router-dom'
 
-const STATS = [
-  { valor: 10, label: 'proyectos entregados' },
-  { valor: 6, label: 'clientes activos' },
-  { valor: 4, label: 'personas en el equipo' },
-]
+const DATOS = ['Lic. en Sistemas, UNLP', 'La Plata y Ensenada', 'Proyectos en producción']
 
-function StatCard({ valor, label }: { valor: number; label: string }) {
-  return (
-    <div className="bg-[#1e1e1e] border border-white/[0.08] rounded-2xl px-6 py-5">
-      <div className="font-display font-bold text-4xl text-white leading-none">{valor}</div>
-      <div className="text-white/60 text-sm mt-2">{label}</div>
-    </div>
-  )
-}
+// Una sola fila, máximo 8 íconos.
+const STACK = [
+  ['react', 'React'],
+  ['typescript', 'TypeScript'],
+  ['python', 'Python'],
+  ['fastapi', 'FastAPI'],
+  ['javascript', 'JavaScript'],
+  ['postgresql', 'PostgreSQL'],
+  ['supabase', 'Supabase'],
+  ['tailwindcss', 'Tailwind CSS'],
+] as const
+
+const icono = (n: string) => `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${n}/${n}-original.svg`
 
 export default function Nosotros() {
   return (
-    <section id="nosotros" className="py-24 bg-[#111111]">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <p className="text-sm text-white/60 mb-3">Nosotros</p>
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
-              Una agencia que arrancó con ganas y no paró.
-            </h2>
-
-            <div className="flex flex-col gap-4 text-white/60 leading-relaxed">
-              <p>
-                SCdev nació para que cada cliente reciba un servicio de calidad real y no un
-                template genérico. Arrancar costó, porque había miedo e incertidumbre, pero fue
-                lo mejor que nos pasó.
-              </p>
-              <p>
-                Hoy somos cuatro personas en La Plata con un proceso claro de punta a punta.
-                Trabajamos por etapas y con reuniones de avance, así siempre sabés cómo viene
-                tu proyecto.
-              </p>
-            </div>
-
-            <Link
-              to="/nosotros"
-              className="inline-block mt-8 text-sm text-accent-text border border-[#D32F2F]/30 px-6 py-3 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
-            >
-              Conocé al equipo →
-            </Link>
+    <section id="nosotros" className="py-24 bg-[#0a0a0a]">
+      <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-[1fr_20rem] gap-12 lg:gap-20 items-center">
+        <div>
+          <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
+            Una agencia que arrancó con ganas y no paró.
+          </h2>
+          <div className="flex flex-col gap-4 text-white/70 leading-relaxed max-w-xl">
+            <p>
+              SCdev nació para que cada cliente reciba un servicio de calidad real y no un
+              template genérico. Arrancar costó, porque había miedo e incertidumbre, pero fue
+              lo mejor que nos pasó.
+            </p>
+            <p>
+              Hoy somos cuatro personas en La Plata con un proceso claro de punta a punta.
+              Trabajamos por etapas y con reuniones de avance, así siempre sabés cómo viene
+              tu proyecto.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-4">
-            {STATS.map((stat) => (
-              <StatCard
-                key={stat.label}
-                valor={stat.valor}
-                label={stat.label}
-              />
+          <ul className="flex flex-wrap gap-2 mt-8">
+            {DATOS.map((d) => (
+              <li key={d} className="text-sm text-white/80 border border-white/15 rounded-lg px-3 py-1.5">{d}</li>
             ))}
-          </div>
+          </ul>
+
+          <ul className="flex items-center gap-3 sm:gap-4 mt-8" aria-label="Tecnologías que usamos">
+            {STACK.map(([n, label]) => (
+              <li key={n}>
+                <img src={icono(n)} alt={label} title={label} width={28} height={28} loading="lazy" decoding="async" className="w-7 h-7 flex-none object-contain" />
+              </li>
+            ))}
+          </ul>
+
+          <Link to="/nosotros" className="inline-block mt-8 text-white underline underline-offset-4 hover:text-white/80">
+            Conocer al equipo →
+          </Link>
+        </div>
+
+        <div className="group relative aspect-[3/4] w-full max-w-xs mx-auto lg:mx-0 overflow-hidden rounded-2xl border border-white/10 bg-[#1e1e1e]">
+          <img
+            src="/images/SantaigoCaceres.webp"
+            alt="Santiago Cáceres, fundador de SCdev"
+            width={480}
+            height={640}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"
+          />
         </div>
       </div>
     </section>
