@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Globe, Rocket, Building2, Settings, Bot } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Servicio } from '../../data/servicios'
@@ -32,7 +32,7 @@ export default function ServiceCard({ servicio }: Props) {
     : servicio.precio
 
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -4 }}
       className="relative bg-white/[0.03] border border-white/[0.08] rounded-2xl p-6 hover:border-[#D32F2F]/30 transition-all duration-300 flex flex-col h-full"
     >
@@ -80,6 +80,6 @@ export default function ServiceCard({ servicio }: Props) {
           Ver más →
         </Link>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

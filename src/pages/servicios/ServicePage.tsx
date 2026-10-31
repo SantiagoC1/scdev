@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   Palette, Smartphone, MessageCircle, FileText, Rocket, Zap,
   Sparkles, BarChart2, Search, TrendingUp, Database, Settings,
@@ -68,7 +68,7 @@ export default function ServicePage({ servicio }: Props) {
               ← Volver al inicio
             </Link>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -105,24 +105,24 @@ export default function ServicePage({ servicio }: Props) {
                   Formulario de contacto
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </section>
 
         {/* Incluye */}
         <section className="py-24 bg-[#111111]">
           <div className="max-w-6xl mx-auto px-6">
-            <motion.h2
+            <m.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl font-bold mb-12"
             >
               ¿Qué incluye?
-            </motion.h2>
+            </m.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {servicio.incluye.map((item, i) => (
-                <motion.div
+                <m.div
                   key={item.titulo}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -138,7 +138,7 @@ export default function ServicePage({ servicio }: Props) {
                   })()}
                   <h3 className="font-bold mb-2">{item.titulo}</h3>
                   <p className="text-white/50 text-sm">{item.desc}</p>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function ServicePage({ servicio }: Props) {
         <section className="py-24 bg-[#0a0a0a]">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -162,9 +162,9 @@ export default function ServicePage({ servicio }: Props) {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </m.div>
 
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -180,7 +180,7 @@ export default function ServicePage({ servicio }: Props) {
                     ))}
                   </ul>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </section>
@@ -188,17 +188,17 @@ export default function ServicePage({ servicio }: Props) {
         {/* Proceso */}
         <section className="py-24 bg-[#111111]">
           <div className="max-w-6xl mx-auto px-6">
-            <motion.h2
+            <m.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl font-bold mb-12"
             >
               Cómo trabajamos
-            </motion.h2>
+            </m.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {servicio.proceso.map((paso, i) => (
-                <motion.div
+                <m.div
                   key={paso.num}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -210,7 +210,7 @@ export default function ServicePage({ servicio }: Props) {
                   </div>
                   <h3 className="font-bold mb-2">{paso.titulo}</h3>
                   <p className="text-white/50 text-sm">{paso.desc}</p>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -219,17 +219,17 @@ export default function ServicePage({ servicio }: Props) {
         {/* Stack */}
         <section className="py-24 bg-[#0a0a0a]">
           <div className="max-w-6xl mx-auto px-6">
-            <motion.h2
+            <m.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl font-bold mb-12"
             >
               Tecnologías
-            </motion.h2>
+            </m.h2>
             <div className="flex flex-wrap gap-8">
               {servicio.stack.map((tech, i) => (
-                <motion.div
+                <m.div
                   key={tech.nombre}
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -242,7 +242,7 @@ export default function ServicePage({ servicio }: Props) {
                     <img src={tech.icono} alt={tech.nombre} loading="lazy" decoding="async" width={40} height={40} className="w-full h-full object-contain" />
                   </div>
                   <span className="text-xs text-white/60">{tech.nombre}</span>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -251,17 +251,17 @@ export default function ServicePage({ servicio }: Props) {
         {/* FAQ */}
         <section className="py-24 bg-[#111111]">
           <div className="max-w-4xl mx-auto px-6">
-            <motion.h2
+            <m.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl font-bold mb-12"
             >
               Preguntas frecuentes
-            </motion.h2>
+            </m.h2>
             <div className="space-y-4">
               {servicio.faq.map((item, i) => (
-                <motion.details
+                <m.details
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -276,7 +276,7 @@ export default function ServicePage({ servicio }: Props) {
                   <div className="px-6 pb-4 text-white/60 text-sm leading-relaxed">
                     {item.respuesta}
                   </div>
-                </motion.details>
+                </m.details>
               ))}
             </div>
           </div>
@@ -285,7 +285,7 @@ export default function ServicePage({ servicio }: Props) {
         {/* CTA Final */}
         <section className="py-24 bg-[#0a0a0a]">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -310,7 +310,7 @@ export default function ServicePage({ servicio }: Props) {
                   Ir al formulario
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </section>
       </main>

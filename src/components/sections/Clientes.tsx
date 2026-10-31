@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { CLIENTES } from '../../data/clientes'
 import type { Cliente } from '../../data/clientes'
 
@@ -8,7 +8,7 @@ export default function Clientes() {
   return (
     <section id="clientes" className="py-24 bg-[#0a0a0a] overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 mb-12">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -17,7 +17,7 @@ export default function Clientes() {
           <p className="text-white/50 mt-3 text-sm">
             Trabajamos con negocios reales que hoy están en producción.
           </p>
-        </motion.div>
+        </m.div>
       </div>
 
       <div className="relative">

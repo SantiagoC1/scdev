@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 
 const STATS = [
   { valor: 10, label: 'proyectos entregados' },
@@ -52,13 +52,13 @@ function StatCard({ valor, label, activo }: { valor: number; label: string; acti
   const actual = useContador(valor, activo)
 
   return (
-    <motion.div
+    <m.div
       variants={statCard}
       className="bg-[#1e1e1e] border border-white/[0.08] rounded-2xl px-6 py-5"
     >
       <div className="font-display font-bold text-4xl text-accent-text leading-none">{actual}</div>
       <div className="text-white/60 text-sm mt-2">{label}</div>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -70,7 +70,7 @@ export default function Nosotros() {
     <section id="nosotros" className="py-24 bg-[#111111]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <motion.div
+          <m.div
             variants={columnaIzq}
             initial="hidden"
             whileInView="show"
@@ -100,9 +100,9 @@ export default function Nosotros() {
             >
               Conocé al equipo →
             </Link>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             ref={statsRef}
             variants={columnaDer}
             initial="hidden"
@@ -118,7 +118,7 @@ export default function Nosotros() {
                 activo={statsVisible}
               />
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import ParticlesBackground from '../ui/ParticlesBackground'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -51,7 +51,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-16">
 
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -60,9 +60,9 @@ export default function Hero() {
         >
           Transformamos tu negocio en{' '}
           <span className="text-accent-text">presencia digital</span>
-        </motion.h1>
+        </m.h1>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -70,9 +70,9 @@ export default function Hero() {
         >
           <span className="text-accent-text">&gt;</span> {displayText}
           <span className="animate-pulse">|</span>
-        </motion.div>
+        </m.div>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -81,9 +81,9 @@ export default function Hero() {
           Somos <strong className="text-white">SCdev</strong>, agencia de desarrollo web en{' '}
           <strong className="text-white">La Plata</strong>. Diseñamos y programamos soluciones
           digitales para profesionales, comercios y empresas en Argentina.
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -109,22 +109,22 @@ export default function Hero() {
           >
             Ver Trabajos
           </a>
-        </motion.div>
+        </m.div>
       </div>
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60"
       >
         <span className="text-xs font-mono">scroll</span>
-        <motion.div
+        <m.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
           className="w-0.5 h-8 bg-gradient-to-b from-white/30 to-transparent"
         />
-      </motion.div>
+      </m.div>
     </section>
   )
 }

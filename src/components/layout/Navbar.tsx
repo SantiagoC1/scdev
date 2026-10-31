@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
@@ -150,7 +150,7 @@ export default function Navbar() {
         {/* Menú mobile */}
         <AnimatePresence>
           {menuOpen && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -189,7 +189,7 @@ export default function Navbar() {
                   </a>
                 </li>
               </ul>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </nav>

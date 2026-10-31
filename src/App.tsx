@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
+import { LazyMotion, MotionConfig, domAnimation } from 'framer-motion'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import { useSheetConfig } from './hooks/useSheetConfig'
@@ -51,9 +52,13 @@ function AppContent() {
 export default function App() {
   return (
     <HelmetProvider>
-      <ModalProvider>
-        <AppContent />
-      </ModalProvider>
+      <LazyMotion features={domAnimation} strict>
+        <MotionConfig reducedMotion="user">
+          <ModalProvider>
+            <AppContent />
+          </ModalProvider>
+        </MotionConfig>
+      </LazyMotion>
     </HelmetProvider>
   )
 }

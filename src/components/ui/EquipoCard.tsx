@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { Integrante } from '../../data/equipo'
 
 const DEVICON_LABELS: Record<string, string> = {
@@ -112,7 +112,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
     'group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1e1e1e] border border-white/[0.08]'
 
   return (
-    <motion.div variants={equipoCardVariants} className="flex flex-col gap-3">
+    <m.div variants={equipoCardVariants} className="flex flex-col gap-3">
       {linkedin ? (
         <a
           href={linkedin}
@@ -134,6 +134,6 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
           ))}
         </div>
       )}
-    </motion.div>
+    </m.div>
   )
 }

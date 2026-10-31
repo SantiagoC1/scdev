@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import ServiceCard from '../ui/ServiceCard'
 import MantenimientoTier from '../ui/MantenimientoTier'
 import { SERVICIOS } from '../../data/servicios'
@@ -58,7 +58,7 @@ export default function Servicios() {
   return (
     <section id="servicios" className="py-24 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -66,11 +66,11 @@ export default function Servicios() {
           className="mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mt-3">Servicios</h2>
-        </motion.div>
+        </m.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {first4.map((s, i) => (
-            <motion.div
+            <m.div
               key={s.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -78,13 +78,13 @@ export default function Servicios() {
               transition={{ delay: i * 0.08 }}
             >
               <ServiceCard servicio={s} />
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         <div className="flex justify-center">
           {last1.map((s) => (
-            <motion.div
+            <m.div
               key={s.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -92,11 +92,11 @@ export default function Servicios() {
               className="w-full max-w-xl"
             >
               <ServiceCard servicio={s} />
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -136,7 +136,7 @@ export default function Servicios() {
               Consultar planes →
             </a>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

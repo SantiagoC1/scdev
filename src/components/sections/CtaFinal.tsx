@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useModal } from '../../context/ModalContext'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -23,7 +23,7 @@ export default function CtaFinal() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -46,16 +46,16 @@ export default function CtaFinal() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <motion.button
+            <m.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => openContact()}
               className="w-full sm:w-auto px-10 py-4 bg-[#D32F2F] text-white font-display font-bold text-lg rounded-full shadow-[0_0_40px_rgba(211,47,47,0.4)] hover:shadow-[0_0_60px_rgba(211,47,47,0.6)] transition-all duration-300"
             >
               Empezar proyecto →
-            </motion.button>
+            </m.button>
 
-            <motion.a
+            <m.a
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               href={waLink}
@@ -64,7 +64,7 @@ export default function CtaFinal() {
               className="w-full sm:w-auto text-center px-10 py-4 border border-white/15 text-white/70 font-display font-semibold text-lg rounded-full hover:border-white/30 hover:text-white transition-all duration-300"
             >
               Escribir por WhatsApp
-            </motion.a>
+            </m.a>
           </div>
 
           <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-white/60">
@@ -89,7 +89,7 @@ export default function CtaFinal() {
               </a>
             )}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )
