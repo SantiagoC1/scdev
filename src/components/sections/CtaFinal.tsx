@@ -23,22 +23,12 @@ export default function CtaFinal() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="font-mono text-accent-text text-xs tracking-widest uppercase mb-8">
-            — Hablemos
-          </p>
-
+        <div>
           <h2
             className="font-display font-black leading-[0.95] mb-10 text-white"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 6rem)' }}
           >
-            ¿Listo para{' '}
-            <span className="block text-accent-text">digitalizar tu negocio?</span>
+            ¿Listo para <span className="block">digitalizar tu negocio?</span>
           </h2>
 
           <p className="text-white/60 text-base mb-12 max-w-md mx-auto">
@@ -50,7 +40,7 @@ export default function CtaFinal() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => openContact()}
-              className="w-full sm:w-auto px-10 py-4 bg-[#D32F2F] text-white font-display font-bold text-lg rounded-full shadow-[0_0_40px_rgba(211,47,47,0.4)] hover:shadow-[0_0_60px_rgba(211,47,47,0.6)] transition-all duration-300"
+              className="w-full sm:w-auto px-10 py-4 bg-[#D32F2F] text-white font-display font-bold text-lg rounded-lg hover:bg-[#B71C1C] transition-colors duration-200"
             >
               Empezar proyecto →
             </m.button>
@@ -61,7 +51,7 @@ export default function CtaFinal() {
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto text-center px-10 py-4 border border-white/15 text-white/70 font-display font-semibold text-lg rounded-full hover:border-white/30 hover:text-white transition-all duration-300"
+              className="w-full sm:w-auto text-center px-10 py-4 border border-white/15 text-white/70 font-display font-semibold text-lg rounded-lg hover:border-white/30 hover:text-white transition-all duration-300"
             >
               Escribir por WhatsApp
             </m.a>
@@ -71,7 +61,7 @@ export default function CtaFinal() {
             {config.email && (
               <a
                 href={`mailto:${config.email}`}
-                className="hover:text-white/60 transition-colors flex items-center gap-2"
+                className="hover:text-white transition-colors flex items-center gap-2"
               >
                 <span className="w-1 h-1 rounded-full bg-[#D32F2F]" />
                 {config.email}
@@ -82,14 +72,14 @@ export default function CtaFinal() {
                 href={config.instagram_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white/60 transition-colors flex items-center gap-2"
+                className="hover:text-white transition-colors flex items-center gap-2"
               >
                 <span className="w-1 h-1 rounded-full bg-[#D32F2F]" />
                 @scdev.ar
               </a>
             )}
           </div>
-        </m.div>
+        </div>
       </div>
     </section>
   )

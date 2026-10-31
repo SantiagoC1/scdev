@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
-import { m } from 'framer-motion'
 import { MessageCircle, FileText, Handshake, Code2, PackageCheck } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import PageMeta from '../components/ui/PageMeta'
-import EquipoCard, { equipoGridVariants } from '../components/ui/EquipoCard'
+import EquipoCard from '../components/ui/EquipoCard'
 import { EQUIPO } from '../data/equipo'
 import { SITE_URL } from '../constants'
 import { useConfig } from '../context/ConfigContext'
@@ -46,13 +45,6 @@ const PROCESO: { icono: LucideIcon; titulo: string; desc: string }[] = [
   },
 ]
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.5 },
-}
-
 export default function NosotrosPage() {
   const config = useConfig()
   const { openContact } = useModal()
@@ -74,7 +66,7 @@ export default function NosotrosPage() {
         {/* 1 — Hero */}
         <section className="bg-[#121212] py-24 md:py-32">
           <div className="max-w-4xl mx-auto px-6">
-            <m.div {...fadeInUp}>
+            <div>
               <p className="font-mono text-accent-text text-sm mb-4">Sobre nosotros</p>
               <h1
                 className="font-bold leading-[1.05] mb-6"
@@ -98,17 +90,17 @@ export default function NosotrosPage() {
                   </div>
                 ))}
               </div>
-            </m.div>
+            </div>
           </div>
         </section>
 
         {/* 2 — La historia */}
         <section className="bg-[#0a0a0a] py-24">
           <div className="max-w-3xl mx-auto px-6">
-            <m.h2 {...fadeInUp} className="text-3xl md:text-4xl font-bold mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">
               Por qué existe SCdev
-            </m.h2>
-            <m.div {...fadeInUp} className="flex flex-col gap-5 text-white/60 leading-relaxed">
+            </h2>
+            <div className="flex flex-col gap-5 text-white/60 leading-relaxed">
               <p>
                 SCdev nació por una idea bastante simple: que cada cliente reciba un servicio de
                 calidad real y no un template con el logo cambiado. Suena obvio, pero es
@@ -124,17 +116,17 @@ export default function NosotrosPage() {
                 construimos experiencia de verdad. Una agencia chica que trabaja en serio, con
                 clientes reales y proyectos andando en producción.
               </p>
-            </m.div>
+            </div>
           </div>
         </section>
 
         {/* 3 — El proceso */}
         <section className="bg-[#1a1a1a] py-24">
           <div className="max-w-6xl mx-auto px-6">
-            <m.div {...fadeInUp} className="mb-14">
+            <div className="mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3">El proceso</h2>
               <p className="text-white/50">Sin sorpresas. Así trabajamos con cada cliente.</p>
-            </m.div>
+            </div>
 
             {/* Mobile: fila con scroll snap · Desktop: grilla 3+2 sobre 6 columnas */}
             <div tabIndex={0} role="region" aria-label="Integrantes del equipo" className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
@@ -146,12 +138,8 @@ export default function NosotrosPage() {
                 const conector = i === 0 || i === 1 || i === 3
 
                 return (
-                  <m.div
+                  <div
                     key={paso.titulo}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
                     className={`relative snap-start shrink-0 w-[270px] lg:w-auto lg:shrink ${colSpan}`}
                   >
                     <div className="group relative h-full overflow-hidden rounded-2xl bg-[#111111] border border-white/[0.08] p-6 text-center transition-colors duration-300 hover:border-[#D32F2F]/25">
@@ -176,7 +164,7 @@ export default function NosotrosPage() {
                         className="hidden lg:block absolute top-1/2 left-full w-6 border-t border-dashed border-white/15"
                       />
                     )}
-                  </m.div>
+                  </div>
                 )
               })}
             </div>
@@ -186,27 +174,23 @@ export default function NosotrosPage() {
         {/* 4 — El equipo */}
         <section className="bg-[#121212] py-24">
           <div className="max-w-6xl mx-auto px-6">
-            <m.h2 {...fadeInUp} className="text-3xl md:text-4xl font-bold mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-14">
               El equipo
-            </m.h2>
-            <m.div
-              variants={equipoGridVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
+            </h2>
+            <div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {EQUIPO.map((integrante) => (
                 <EquipoCard key={integrante.id} integrante={integrante} />
               ))}
-            </m.div>
+            </div>
           </div>
         </section>
 
         {/* 5 — CTA final */}
         <section className="bg-[#D32F2F] py-24">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <m.div {...fadeInUp}>
+            <div>
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">
                 ¿Tenés un proyecto en mente?
               </h2>
@@ -229,7 +213,7 @@ export default function NosotrosPage() {
                   Formulario de contacto
                 </button>
               </div>
-            </m.div>
+            </div>
           </div>
         </section>
       </main>

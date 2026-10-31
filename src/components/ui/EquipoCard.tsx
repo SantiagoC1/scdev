@@ -1,4 +1,3 @@
-import { m } from 'framer-motion'
 import type { Integrante } from '../../data/equipo'
 
 const DEVICON_LABELS: Record<string, string> = {
@@ -34,17 +33,6 @@ const iniciales = (nombre: string) =>
     .map((parte) => parte[0])
     .join('')
     .toUpperCase()
-
-// Variants compartidos: el contenedor va en la seccion que renderiza el grid
-export const equipoGridVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-}
-
-export const equipoCardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-}
 
 function StackIcon({ tech }: { tech: string }) {
   const label = DEVICON_LABELS[tech] ?? tech
@@ -112,7 +100,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
     'group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1e1e1e] border border-white/[0.08]'
 
   return (
-    <m.div variants={equipoCardVariants} className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {linkedin ? (
         <a
           href={linkedin}
@@ -134,6 +122,6 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
           ))}
         </div>
       )}
-    </m.div>
+    </div>
   )
 }
