@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react'
 import { SERVICIOS } from '../../data/servicios'
 import type { Servicio } from '../../data/servicios'
 import { PRICE_MAP } from '../../data/precios'
+import { PLANES, BENEFICIOS } from '../../data/mantenimiento'
 import { useConfig } from '../../context/ConfigContext'
 import { formatPrice, buildWALink } from '../../hooks/useSheetConfig'
 import type { SheetConfig } from '../../hooks/useSheetConfig'
@@ -16,24 +17,6 @@ const MANT_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig 
   estandar: { min: 'price_mant_estandar_min', max: 'price_mant_estandar_max' },
   pro:      { min: 'price_mant_pro_min',      max: 'price_mant_pro_max' },
 }
-
-const PLANES = [
-  { id: 'basico', nombre: 'Básico', para: 'Para sitios simples' },
-  { id: 'estandar', nombre: 'Estándar', para: 'Recomendado', destacado: true },
-  { id: 'pro', nombre: 'Pro', para: 'Para negocios activos' },
-]
-
-// true = incluido, false = no incluido, string = valor puntual
-const BENEFICIOS: { texto: string; valores: (boolean | string)[] }[] = [
-  { texto: 'Hosting y SSL activos', valores: [true, true, true] },
-  { texto: 'Actualizaciones de seguridad', valores: [true, true, true] },
-  { texto: 'Soporte por WhatsApp', valores: [true, true, true] },
-  { texto: 'Cambios de contenido', valores: [false, '2 por mes', 'Ilimitados'] },
-  { texto: 'Reporte mensual de analytics', valores: [false, true, true] },
-  { texto: 'Backup mensual', valores: [false, true, true] },
-  { texto: 'Prioridad en soporte', valores: [false, false, true] },
-  { texto: 'Auditoría SEO trimestral', valores: [false, false, true] },
-]
 
 function useDesde(s: Servicio) {
   const config = useConfig()
@@ -123,7 +106,7 @@ function TablaMantenimiento() {
 
   return (
     <div className="relative">
-    <div ref={cont} onScroll={actualizar} role="region" aria-label="Planes de mantenimiento, desplazable" tabIndex={0} className="overflow-x-auto rounded-2xl">
+    <div ref={cont} onScroll={actualizar} role="region" aria-label="Planes de mantenimiento, desplazable" tabIndex={0} className="relative overflow-x-auto rounded-2xl">
       <table className="w-full min-w-[34rem] border-separate border-spacing-0 text-sm">
         <caption className="sr-only">Comparación de planes de mantenimiento mensual</caption>
         <thead>

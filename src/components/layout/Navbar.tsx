@@ -7,17 +7,20 @@ import { useModal } from '../../context/ModalContext'
 import { NAV_HEIGHT } from '../../constants'
 
 const NAV_LINKS = [
-  { label: 'Inicio', href: '/#hero' },
-  { label: 'Nosotros', href: '/nosotros' },
   { label: 'Servicios', href: '/#servicios' },
-  { label: 'Clientes', href: '/#clientes' },
-  { label: 'Proyectos', href: '/#portfolio' },
+  { label: 'Trabajos', href: '/#trabajos' },
+  { label: 'Nosotros', href: '/#nosotros' },
+  { label: 'Preguntas', href: '/#preguntas' },
   { label: 'Contacto', href: '/#cta' },
 ]
 
-function scrollToId(id: string) {
+// Las secciones de la home cargan con lazy(): si el ancla todavía no existe, reintenta unos segundos.
+function scrollToId(id: string, intentos = 40) {
   const el = document.getElementById(id)
-  if (!el) return
+  if (!el) {
+    if (intentos > 0) setTimeout(() => scrollToId(id, intentos - 1), 100)
+    return
+  }
   const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT
   window.scrollTo({ top, behavior: 'smooth' })
 }
