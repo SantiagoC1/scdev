@@ -75,8 +75,21 @@ main:focus { outline: none; }
 .modal-enter { animation: modal-in 180ms ease-out; }
 .modal-overlay-enter { animation: overlay-in 180ms ease-out; }
 
-/* Servicios va sobre superficie clara: el foco usa un rojo con contraste sobre #F3F4F6. */
-.seccion-clara :where(a, [tabindex]):focus-visible { outline-color: #B71C1C; }
+/* Sección comercial (Servicios): superficie clara, todos los colores salen de estas variables. */
+.seccion-comercial {
+  --s-bg: #E3E5E9;
+  --s-card: #EEF0F2;
+  --s-head: #DDE0E5;
+  --s-border: #CBD0D6;
+  --s-fg: #0a0a0a;
+  --s-muted: #4B5563;
+  --s-price: #B71C1C;
+  --s-accent: #D32F2F;
+  --s-btn: #D32F2F;
+  --s-btn-hover: #B71C1C;
+  --s-focus: #B71C1C;
+}
+.seccion-comercial :where(a, [tabindex]):focus-visible { outline-color: var(--s-focus); }
 
 /* Entrada del hero: solo CSS, escalonada 80 ms. backwards => sin JS el contenido se ve igual. */
 @keyframes hero-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
