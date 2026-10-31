@@ -4,7 +4,7 @@ import { RUBROS } from '../../data/rubros'
 import { SERVICIOS } from '../../data/servicios'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink, formatPrice } from '../../hooks/useSheetConfig'
-import { PRICE_MAP } from './ServiceCard'
+import { PRICE_MAP } from '../../data/precios'
 import { track } from '../../utils/track'
 
 export default function HeroSelector() {
