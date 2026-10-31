@@ -12,21 +12,16 @@ import Footer from '../../components/layout/Footer'
 import type { Servicio } from '../../data/servicios'
 import { useConfig } from '../../context/ConfigContext'
 import { formatPrice, buildWALink } from '../../hooks/useSheetConfig'
-import type { SheetConfig } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
+import PageMeta from '../../components/ui/PageMeta'
+import { PRICE_MAP } from '../../data/precios'
+import { SITE_URL } from '../../constants'
+import { track } from '../../utils/track'
 const INCLUDE_ICON_MAP: Record<string, LucideIcon> = {
   Palette, Smartphone, MessageCircle, FileText, Rocket, Zap,
   Sparkles, BarChart2, Search, TrendingUp, Database, Settings,
   Monitor, BookOpen, ClipboardList, File, RefreshCw, Mail, GraduationCap,
   Globe, Building2, Bot,
-}
-
-const PRICE_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
-  'presencia-web-esencial':   { min: 'price_esencial_min',       max: 'price_esencial_max' },
-  'landing-page-profesional': { min: 'price_landing_min',        max: 'price_landing_max' },
-  'sitio-web-corporativo':    { min: 'price_corporativo_min',    max: 'price_corporativo_max' },
-  'sistema-a-medida':         { min: 'price_sistema_min',        max: 'price_sistema_max' },
-  'automatizacion-whatsapp':  { min: 'price_automatizacion_min', max: 'price_automatizacion_max' },
 }
 
 interface Props {
@@ -46,8 +41,59 @@ export default function ServicePage({ servicio }: Props) {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
+  const url = `${SITE_URL}${servicio.slug}`
+  const minimo = keys ? config[keys.min].replace(/\D/g, '') : ''
+  const maximo = keys ? config[keys.max].replace(/\D/g, '') : ''
+  const descripcion = `${servicio.nombre} en La Plata y toda Argentina. ${servicio.descripcion.replace(/\.$/, '')}. Entrega en ${servicio.tiempo}.`
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        '@id': `${url}#servicio`,
+        name: servicio.nombre,
+        serviceType: servicio.nombre,
+        description: descripcion,
+        url,
+        provider: { '@id': `${SITE_URL}/#business` },
+        areaServed: { '@type': 'Country', name: 'Argentina' },
+        ...(minimo && {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'ARS',
+            price: minimo,
+            priceSpecification: { '@type': 'PriceSpecification', priceCurrency: 'ARS', minPrice: minimo, ...(maximo && { maxPrice: maximo }) },
+            url,
+          },
+        }),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: servicio.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.pregunta,
+          acceptedAnswer: { '@type': 'Answer', text: f.respuesta },
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Servicios', item: `${SITE_URL}/#servicios` },
+          { '@type': 'ListItem', position: 3, name: servicio.nombre, item: url },
+        ],
+      },
+    ],
+  }
+
   return (
     <>
+      <PageMeta
+        title={`${servicio.nombre} | SCdev`}
+        description={descripcion}
+        canonical={url}
+        jsonLd={jsonLd}
+      />
       <Navbar />
       <main id="contenido" tabIndex={-1} className="pt-24 md:pt-26">
         {/* Hero */}
@@ -88,6 +134,7 @@ export default function ServicePage({ servicio }: Props) {
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
                   href={waLink}
+                  onClick={() => track({ event: 'cta_whatsapp_click', location: 'servicio' })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#B71C1C] transition-all"
@@ -255,6 +302,7 @@ export default function ServicePage({ servicio }: Props) {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
                   href={waLink}
+                  onClick={() => track({ event: 'cta_whatsapp_click', location: 'servicio' })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#B71C1C] transition-all"
