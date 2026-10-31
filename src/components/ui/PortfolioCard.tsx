@@ -14,7 +14,7 @@ export default function PortfolioCard({ proyecto }: Props) {
       <div className="relative aspect-[16/10] flex-shrink-0 overflow-hidden bg-black/20">
         {proyecto.tipo === 'demo' && (
           <span className="absolute top-3 left-3 z-10 text-xs font-medium px-2 py-1 rounded-lg bg-black/70 text-white border border-white/20">
-            Demo
+            {proyecto.chip ?? 'Demo'}
           </span>
         )}
         {sinImagen ? (
@@ -37,8 +37,14 @@ export default function PortfolioCard({ proyecto }: Props) {
         )}
       </div>
       <div className="flex-1 flex flex-col p-5 gap-3">
-        <h4 className="font-bold text-sm leading-tight">{proyecto.nombre}</h4>
-        <div className="flex flex-wrap gap-1.5">
+        <div>
+          <h4 className="font-bold text-sm leading-tight">{proyecto.nombre}</h4>
+          {proyecto.rubro && <p className="text-xs text-white/60 mt-1">{proyecto.rubro}</p>}
+        </div>
+        {proyecto.descripcion && (
+          <p className="text-sm text-white/70 leading-relaxed line-clamp-3">{proyecto.descripcion}</p>
+        )}
+        <div className="flex flex-wrap gap-1.5 empty:hidden">
           {proyecto.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
@@ -56,7 +62,7 @@ export default function PortfolioCard({ proyecto }: Props) {
               rel="noopener noreferrer"
               className="text-xs text-accent-text hover:text-white transition-colors"
             >
-              {proyecto.tipo === 'demo' ? 'Ver demo' : 'Ver más'} →
+              {proyecto.tipo === 'demo' ? 'Ver demo' : 'Ver sitio'} →
             </a>
           )}
         </div>

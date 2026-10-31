@@ -55,4 +55,24 @@ export const CLIENTES: Cliente[] = [
     url: 'https://www.unidosconstruimos.com.ar',
     desc: 'Sistema para la gestión de pedidos de los ciudadanos de Santa Fe. El vecino crea un pedido en minutos y lo sigue en tiempo real. El equipo del Diputado José Corral tiene todo unificado en un solo panel.',
   },
+  {
+    id: 'tabano',
+    nombre: 'Tábano · Cultura y Vida Cristiana',
+    rubro: 'Institucional, educación',
+    iniciales: 'TB',
+    tipo: 'cliente',
+    url: 'https://tabanocultura.org/',
+    desc: 'Sitio institucional de una asociación civil de educación y cultura. Mantenimiento mensual de contenido.',
+  },
+  {
+    id: 'diputados-bonaerenses',
+    // TODO(santi): confirmar con Juan Manuel Negri que podemos mostrar el sitio.
+    visible: false,
+    nombre: 'Diputados Bonaerenses',
+    rubro: 'Medio de noticias',
+    iniciales: 'DB',
+    tipo: 'cliente',
+    url: 'https://diputadosbsas.com.ar/',
+    desc: 'Portal de noticias sobre la Legislatura bonaerense. Mantenimiento y corrección de errores.',
+  },
 ]
