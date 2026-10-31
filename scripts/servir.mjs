@@ -1,4 +1,4 @@
-// Servidor estático que imita a Netlify: archivo exacto, luego <ruta>/index.html y, si no hay nada, /200.html.
+// Servidor estático que imita a Netlify: archivo exacto, luego <ruta>/index.html y, si no hay nada, /404.html con estado 404.
 // Sirve para probar el prerender (vite preview siempre devuelve /index.html). Uso: node scripts/servir.mjs [puerto]
 import http from 'node:http'
 import fs from 'node:fs'
@@ -17,7 +17,7 @@ http
     const candidatos = [base, path.join(base, 'index.html')]
     let archivo = candidatos.find((c) => c.startsWith(dist) && esArchivo(c))
     let estado = 200
-    if (!archivo) archivo = path.join(dist, '200.html') // rewrite 200 de _redirects
+    if (!archivo) { archivo = path.join(dist, '404.html'); estado = 404 } // regla /* -> /404.html 404 de netlify.toml
     const cuerpo = fs.readFileSync(archivo)
     res.writeHead(estado, { 'Content-Type': tipos[path.extname(archivo)] ?? 'application/octet-stream' })
     res.end(cuerpo)
