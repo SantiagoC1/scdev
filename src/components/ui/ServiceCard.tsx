@@ -11,7 +11,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Globe, Rocket, Building2, Settings, Bot,
 }
 
-const PRICE_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
+export const PRICE_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
   'presencia-web-esencial':   { min: 'price_esencial_min',       max: 'price_esencial_max' },
   'landing-page-profesional': { min: 'price_landing_min',        max: 'price_landing_max' },
   'sitio-web-corporativo':    { min: 'price_corporativo_min',    max: 'price_corporativo_max' },
