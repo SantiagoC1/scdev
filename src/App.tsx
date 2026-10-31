@@ -10,6 +10,7 @@ import type { SheetConfig } from './hooks/useSheetConfig'
 import { ConfigContext } from './context/ConfigContext'
 import { ModalProvider, useModal } from './context/ModalContext'
 import ContactModal from './components/ui/ContactModal'
+import PuntoMount from './components/punto/PuntoMount'
 
 const NosotrosPage = lazy(() => import('./pages/NosotrosPage'))
 const PresenciaWebEsencial = lazy(() => import('./pages/servicios/PresenciaWebEsencial'))
@@ -100,6 +101,7 @@ export default function App() {
       router={
         <BrowserRouter>
           <Rutas />
+          <PuntoMount />
         </BrowserRouter>
       }
     />

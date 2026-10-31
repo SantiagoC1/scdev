@@ -77,6 +77,27 @@ main:focus { outline: none; }
 .modal-enter { animation: modal-in 180ms ease-out; }
 .modal-overlay-enter { animation: overlay-in 180ms ease-out; }
 
+/* Punto (asistente): solo transform y opacity. */
+@keyframes punto-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes punto-blink { 0%, 94%, 100% { transform: scaleY(1); } 96.5% { transform: scaleY(0.1); } }
+@keyframes punto-jump {
+  0% { transform: translateY(0) scale(1, 1); }
+  15% { transform: translateY(0) scale(1.06, 0.8); }
+  45% { transform: translateY(-14px) scale(0.96, 1.1); }
+  75% { transform: translateY(0) scale(1.05, 0.88); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes punto-wave { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
+@keyframes punto-spin { to { transform: rotate(360deg); } }
+.punto-float { animation: punto-float 3s ease-in-out infinite; }
+.punto-blink { transform-origin: 60px 52px; animation: punto-blink 4s infinite; }
+.punto-jump { animation: punto-jump 0.8s ease-in-out; }
+.punto-wave { transform-origin: 95px 46px; animation: punto-wave 0.55s ease-in-out 3; }
+.punto-spin { transform-origin: 60px 58px; animation: punto-spin 10s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .punto-float, .punto-blink, .punto-jump, .punto-wave, .punto-spin { animation: none !important; }
+}
+
 /* Sección comercial (Servicios): superficie clara, todos los colores salen de estas variables. */
 .seccion-comercial {
   --s-bg: #E3E5E9;
