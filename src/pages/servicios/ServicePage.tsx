@@ -63,7 +63,7 @@ export default function ServicePage({ servicio }: Props) {
           <div className="max-w-4xl mx-auto px-6 relative z-10">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-white/40 text-sm hover:text-white mb-8 transition-colors"
+              className="inline-flex items-center gap-2 text-white/60 text-sm hover:text-white mb-8 transition-colors"
             >
               ← Volver al inicio
             </Link>
@@ -86,7 +86,7 @@ export default function ServicePage({ servicio }: Props) {
 
               <div className="inline-flex flex-col gap-1 bg-[#D32F2F]/10 border border-[#D32F2F]/30 px-6 py-4 rounded-2xl mb-8">
                 <span className="text-2xl font-bold">{precio}</span>
-                <span className="text-white/40 text-sm">{servicio.precioTipo}</span>
+                <span className="text-white/60 text-sm">{servicio.precioTipo}</span>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
@@ -174,7 +174,7 @@ export default function ServicePage({ servicio }: Props) {
                   <ul className="space-y-3">
                     {servicio.noIncluye.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-white/50 text-sm">
-                        <span className="text-white/30 mt-1 flex-shrink-0">✕</span>
+                        <span className="text-white/60 mt-1 flex-shrink-0">✕</span>
                         {item}
                       </li>
                     ))}
@@ -241,7 +241,7 @@ export default function ServicePage({ servicio }: Props) {
                   <div className="w-16 h-16 bg-white/5 rounded-2xl p-3 flex items-center justify-center">
                     <img src={tech.icono} alt={tech.nombre} loading="lazy" decoding="async" width={40} height={40} className="w-full h-full object-contain" />
                   </div>
-                  <span className="text-xs text-white/40">{tech.nombre}</span>
+                  <span className="text-xs text-white/60">{tech.nombre}</span>
                 </motion.div>
               ))}
             </div>

@@ -227,14 +227,14 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           </div>
 
           <div>
-            <label htmlFor="cm-telefono" className={LABEL_CLASS}>Teléfono / WhatsApp <span className="text-white/25">(opcional)</span>
+            <label htmlFor="cm-telefono" className={LABEL_CLASS}>Teléfono / WhatsApp <span className="text-white/60">(opcional)</span>
             </label>
             <input type="tel" id="cm-telefono" name="telefono" placeholder="+54 9 221 XXX-XXXX"
               value={form.telefono} onChange={handleChange} maxLength={20} className={INPUT_CLASS} />
           </div>
 
           <div>
-            <label htmlFor="cm-empresa" className={LABEL_CLASS}>Empresa / Negocio <span className="text-white/25">(opcional)</span>
+            <label htmlFor="cm-empresa" className={LABEL_CLASS}>Empresa / Negocio <span className="text-white/60">(opcional)</span>
             </label>
             <input type="text" id="cm-empresa" name="empresa" placeholder="Ej: Ferretería El Tornillo..."
               value={form.empresa} onChange={handleChange} maxLength={200} className={INPUT_CLASS} />

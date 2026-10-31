@@ -57,7 +57,7 @@ function StatCard({ valor, label, activo }: { valor: number; label: string; acti
       className="bg-[#1e1e1e] border border-white/[0.08] rounded-2xl px-6 py-5"
     >
       <div className="font-display font-bold text-4xl text-accent-text leading-none">{actual}</div>
-      <div className="text-white/40 text-sm mt-2">{label}</div>
+      <div className="text-white/60 text-sm mt-2">{label}</div>
     </motion.div>
   )
 }

@@ -43,7 +43,7 @@ export default function Portfolio() {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 mt-4">
-        <p className="text-white/20 text-xs font-mono">← arrastrá para ver más</p>
+        <p className="text-white/60 text-xs font-mono">← arrastrá para ver más</p>
       </div>
     </section>
   )

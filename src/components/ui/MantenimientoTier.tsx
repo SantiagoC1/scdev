@@ -26,7 +26,7 @@ export default function MantenimientoTier({
           ★ MÁS ELEGIDO
         </span>
       )}
-      <div className="text-sm font-mono text-white/40 mb-1">{nombre}</div>
+      <div className="text-sm font-mono text-white/60 mb-1">{nombre}</div>
       <div className="text-2xl font-bold mb-1">{precio}</div>
       <div className="text-white/50 text-sm mb-4">{descripcion}</div>
       <ul className="space-y-2">

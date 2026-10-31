@@ -41,7 +41,7 @@ export default function CtaFinal() {
             <span className="block text-accent-text">digitalizar tu negocio?</span>
           </h2>
 
-          <p className="text-white/40 text-base mb-12 max-w-md mx-auto">
+          <p className="text-white/60 text-base mb-12 max-w-md mx-auto">
             Respondemos en menos de 24 horas hábiles.
           </p>
 
@@ -67,7 +67,7 @@ export default function CtaFinal() {
             </motion.a>
           </div>
 
-          <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-white/30">
+          <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-white/60">
             {config.email && (
               <a
                 href={`mailto:${config.email}`}

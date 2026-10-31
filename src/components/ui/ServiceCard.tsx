@@ -57,7 +57,7 @@ export default function ServiceCard({ servicio }: Props) {
 
       <div className="mb-4">
         <div className="text-xl font-bold text-white">{precio}</div>
-        <div className="text-xs text-white/40">{servicio.precioTipo}</div>
+        <div className="text-xs text-white/60">{servicio.precioTipo}</div>
       </div>
 
       <div className="flex flex-wrap gap-1.5 mb-6">
@@ -72,7 +72,7 @@ export default function ServiceCard({ servicio }: Props) {
       </div>
 
       <div className="flex items-center justify-between mt-auto">
-        <span className="text-xs text-white/30">⏱ {servicio.tiempo}</span>
+        <span className="text-xs text-white/60">⏱ {servicio.tiempo}</span>
         <Link
           to={servicio.slug}
           className="text-sm text-accent-text hover:text-white border border-[#D32F2F]/30 hover:bg-[#D32F2F] px-4 py-2 rounded-lg transition-all duration-200"

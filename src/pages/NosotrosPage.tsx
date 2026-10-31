@@ -94,7 +94,7 @@ export default function NosotrosPage() {
                     <div className="font-display font-bold text-3xl md:text-4xl text-white">
                       {stat.valor} <span className="text-accent-text">{stat.unidad}</span>
                     </div>
-                    <div className="text-white/40 text-sm mt-1">{stat.label}</div>
+                    <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -137,7 +137,7 @@ export default function NosotrosPage() {
             </motion.div>
 
             {/* Mobile: fila con scroll snap · Desktop: grilla 3+2 sobre 6 columnas */}
-            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
+            <div tabIndex={0} role="region" aria-label="Integrantes del equipo" className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible lg:grid lg:grid-cols-6 lg:gap-6">
               {PROCESO.map((paso, i) => {
                 const Icono = paso.icono
                 // en la grilla de 6 columnas cada card ocupa 2: 3 arriba, 2 centradas abajo

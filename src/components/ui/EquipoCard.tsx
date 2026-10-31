@@ -86,7 +86,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
           <div className="absolute inset-0 bg-gradient-to-br from-[#1e1e1e] to-[#2d2d2d]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span
-              className="font-display font-bold text-white/25 leading-none"
+              className="font-display font-bold text-white/50 leading-none"
               style={{ fontSize: '3rem' }}
             >
               {iniciales(nombre)}
