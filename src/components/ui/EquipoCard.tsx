@@ -75,6 +75,8 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
         <img
           src={foto}
           alt={nombre}
+          width={480}
+          height={640}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"

@@ -46,7 +46,8 @@ function ClienteMarqueeCard({ cliente }: { cliente: Cliente }) {
             <img
               src={cliente.logo}
               alt={cliente.nombre}
-              loading="lazy"
+              width={48}
+              height={48}
               decoding="async"
               className="w-full h-full object-contain"
             />

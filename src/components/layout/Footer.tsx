@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <Link to="/">
-              <img src="/images/LogoCompletoHorizontalFN.png" alt="SCdev" className="h-18 mb-4" />
+              <img src="/images/LogoCompletoHorizontalFN.webp" alt="SCdev" width={512} height={288} className="h-18 w-auto mb-4" />
             </Link>
             <p className="text-white/40 text-sm">
               Agencia de desarrollo web en La Plata, Argentina.

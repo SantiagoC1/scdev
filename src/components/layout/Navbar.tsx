@@ -86,9 +86,11 @@ export default function Navbar() {
             className="flex-shrink-0"
           >
             <img
-              src="/images/LogoCompletoHorizontalFN.png"
+              src="/images/LogoCompletoHorizontalFN.webp"
               alt="SCdev"
-              className="h-14 md:h-18"
+              width={512}
+              height={288}
+              className="h-14 md:h-18 w-auto"
             />
           </Link>
 

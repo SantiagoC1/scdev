@@ -22,6 +22,8 @@ export default function PortfolioCard({ proyecto }: Props) {
           <img
             src={proyecto.imagen}
             alt={proyecto.nombre}
+            width={320}
+            height={192}
             loading="lazy"
             decoding="async"
             onError={() => setImgError(true)}
