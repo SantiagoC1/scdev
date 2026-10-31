@@ -1,0 +1,23 @@
+# SCdev
+
+> SCdev es una agencia de desarrollo web de La Plata, Buenos Aires, Argentina. Hace sitios web, sistemas a medida y automatización con WhatsApp e IA para profesionales, comercios y empresas de todo el país. Los precios están publicados en cada página de servicio.
+
+## Servicios
+
+- [Presencia Web Esencial](https://scdev.com.ar/servicios/presencia-web-esencial): página simple para oficios y comercios chicos que necesitan ser encontrados online.
+- [Landing Page Profesional](https://scdev.com.ar/servicios/landing-page-profesional): sitio a medida con animaciones, formulario conectado a Google Sheets y SEO básico.
+- [Sitio Web Corporativo](https://scdev.com.ar/servicios/sitio-web-corporativo): hasta 6 páginas para empresas con varios servicios, con contenido editable sin código.
+- [Sistema / Plataforma a Medida](https://scdev.com.ar/servicios/sistema-a-medida): sistemas con base de datos, usuarios y roles para reemplazar planillas o procesos manuales.
+- [Automatización e IA / WhatsApp](https://scdev.com.ar/servicios/automatizacion-whatsapp): bots de WhatsApp, turnos y flujos automáticos.
+
+## Más información
+
+- [Inicio](https://scdev.com.ar/): servicios, forma de trabajo, trabajos realizados y preguntas frecuentes.
+- [Nosotros](https://scdev.com.ar/nosotros): el equipo y cómo trabajamos.
+
+## Contacto
+
+- Web: https://scdev.com.ar
+- Email: scdev.ok@gmail.com
+- Instagram: https://www.instagram.com/scdev.ar/
+- Ubicación: La Plata, Buenos Aires, Argentina
