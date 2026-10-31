@@ -13,7 +13,7 @@ const SIN_TARJETA = CLIENTES.filter((c) => !VISIBLES.some((p) => p.id === c.id))
 function ClienteLogo({ cliente }: { cliente: Cliente }) {
   return (
     <li className="flex items-center gap-3 group">
-      <div className="w-12 h-12 flex-none rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+      <div className="w-12 h-12 flex-none rounded-lg bg-white border border-white/10 flex items-center justify-center overflow-hidden">
         {cliente.logo ? (
           <img
             src={cliente.logo}
