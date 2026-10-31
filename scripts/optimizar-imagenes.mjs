@@ -13,6 +13,7 @@ const LOGOS = ['BalanceLogo.png', 'DrPadegimas.png', 'LogoAdsum-Claro.png', 'Log
 
 async function aWebp(archivo, ancho) {
   const src = path.join(DIR, archivo)
+  if (!fs.existsSync(src)) return console.log(`${archivo}: ya convertido, se omite`)
   const out = src.replace(/\.\w+$/, '.webp')
   let calidad = 82
   let info
@@ -27,9 +28,9 @@ async function aWebp(archivo, ancho) {
 for (const f of CAPTURAS) await aWebp(f, 1600)
 for (const f of LOGOS) await aWebp(f, 512)
 
-// Favicon: se exporta desde el original y el PNG pesado queda solo como fuente.
+// Favicon: se exporta desde scripts/fuentes/LogoChicoFN.png (fuera de public/).
 for (const t of [32, 180, 512]) {
   const out = path.join(DIR, `favicon-${t}.png`)
-  const info = await sharp(path.join(DIR, 'LogoChicoFN.png')).resize(t, t, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png({ compressionLevel: 9 }).toFile(out)
+  const info = await sharp(path.join('scripts/fuentes', 'LogoChicoFN.png')).resize(t, t, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png({ compressionLevel: 9 }).toFile(out)
   console.log(`favicon-${t}.png ${(info.size / 1024).toFixed(1)} KB`)
 }

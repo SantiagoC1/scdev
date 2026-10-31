@@ -6,7 +6,7 @@ import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const raiz = process.cwd()
-const logo = await sharp(path.join(raiz, 'public/images/LogoCompletoFN.png')).trim().resize({ width: 360 }).png().toBuffer()
+const logo = await sharp(path.join(raiz, 'scripts/fuentes/LogoCompletoFN.png')).trim().resize({ width: 360 }).png().toBuffer()
 const fuente = pathToFileURL(path.join(raiz, 'node_modules/@fontsource/syne/files/syne-latin-800-normal.woff2')).href
 const fuenteBody = pathToFileURL(path.join(raiz, 'node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2')).href
 
