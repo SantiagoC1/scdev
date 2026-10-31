@@ -21,6 +21,16 @@ TODO(santi): confirmar o corregir cada lista.
 
 TODO(santi): pasar el logo real (idealmente con fondo transparente y legible sobre fondo oscuro), generar el WebP liviano y volver a poner `logo` y `logoSize` en la entrada `padejimas`.
 
+## Trabajos (Parte B)
+
+Datos en `src/data/portfolio.ts` (carrusel) y `src/data/clientes.ts` (franja "Confían en SCdev"). Los demos nunca cuentan como clientes: la franja solo toma `tipo === 'cliente'` y `visible !== false`.
+
+- TODO(santi): pedir permiso a Juan Sequeira para mostrar SGI (`deca-sgi`, `visible: false`). Cuando se publique: nombre "SGI · Sistema de gestión integral", chip "Demo con datos de ejemplo", sin logo ni nombre de Deca salvo que lo autorices.
+- TODO(santi): confirmar con Juan Manuel Negri que podemos mostrar Diputados Bonaerenses (`diputados-bonaerenses`, `visible: false` en los dos archivos). La captura tiene que ser recortada del encabezado y la grilla de titulares, sin la nota principal con fotos de rostros.
+- Capturas que faltan (las cards muestran el nombre hasta que estén): `tabano`, `deca-sgi`, `florencia-inveninato`, `diputados-bonaerenses`. Dejarlas en `docs/clientes-nuevos/` (`tabano.png`, `deca.png`, `flor.png`, `diputados.png`), pasarlas por `scripts/optimizar-imagenes.mjs` a WebP y poner la ruta en `imagen`. Se pueden mostrar en 16:10 (la card recorta).
+- Tábano: sitio verificado online. Descripción tal como la definiste (sin nombres de personas ni tarifa).
+- Grafía de "Consultorio Dr. Padejimas": TODO(santi) confirmar la grafía correcta (el archivo del logo se llama `DrPadegimas`). Hasta entonces queda como está.
+
 ## Perfil de Empresa de Google (`index.html`)
 
 TODO(santi): URL del Perfil de Empresa ("SCdev|Desarrollo Web Profesional") para sumarla a `sameAs` del `LocalBusiness`.
