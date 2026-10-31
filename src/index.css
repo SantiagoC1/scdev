@@ -93,8 +93,9 @@ main:focus { outline: none; }
 }
 .seccion-comercial :where(a, [tabindex]):focus-visible { outline-color: var(--s-focus); }
 
-/* Entrada del hero: solo CSS, escalonada 80 ms. backwards => sin JS el contenido se ve igual. */
-@keyframes hero-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* Entrada del hero: solo CSS, escalonada 80 ms. Solo se mueve (translateY): el texto nunca parte de opacity 0,
+   así el HTML prerenderizado se pinta enseguida y el LCP no espera a la hidratación. */
+@keyframes hero-in { from { transform: translateY(12px); } to { transform: none; } }
 @keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
 .hero-in { animation: hero-in 450ms ease-out backwards; animation-delay: calc(var(--i, 0) * 80ms); }
 .hero-fade { animation: hero-fade 200ms ease-out; }
