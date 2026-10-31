@@ -58,8 +58,7 @@ export default function Hero() {
           className="font-bold leading-tight mb-4"
           style={{ fontSize: 'clamp(2rem, 7vw, 5rem)' }}
         >
-          Transformamos tu negocio en{' '}
-          <span className="text-accent-text">presencia digital</span>
+          Transformamos tu negocio en presencia digital
         </m.h1>
 
         <m.div
@@ -68,7 +67,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-xl md:text-2xl text-white/60 font-mono mb-6 h-8"
         >
-          <span className="text-accent-text">&gt;</span> {displayText}
+          {displayText}
           <span className="animate-pulse">|</span>
         </m.div>
 
@@ -93,19 +92,19 @@ export default function Hero() {
             href={waLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#B71C1C] transition-all duration-200 shadow-[0_4px_30px_rgba(211,47,47,0.4)] hover:shadow-[0_4px_40px_rgba(211,47,47,0.5)]"
+            className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#B71C1C] transition-all duration-200"
           >
             Cotizar por WhatsApp
           </a>
           <a
             href="#servicios"
-            className="w-full sm:w-auto text-center border border-white/20 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/5 transition-all duration-200"
+            className="w-full sm:w-auto text-center border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/5 transition-all duration-200"
           >
             Ver Servicios
           </a>
           <a
             href="#portfolio"
-            className="w-full sm:w-auto text-center border border-white/20 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/5 transition-all duration-200"
+            className="w-full sm:w-auto text-center border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/5 transition-all duration-200"
           >
             Ver Trabajos
           </a>

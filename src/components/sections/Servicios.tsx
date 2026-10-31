@@ -116,9 +116,9 @@ export default function Servicios() {
               href={buildWALink(config.whatsapp_number, 'Hola Santi! Me interesa un plan de mantenimiento mensual.')}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block text-sm text-accent-text border border-[#D32F2F]/30 px-6 py-3 rounded-xl hover:bg-[#D32F2F]/10 transition-all duration-200"
+              className="inline-block text-sm text-accent-text border border-[#D32F2F]/30 px-6 py-3 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
             >
-              Consultar planes →
+              Consultar planes
             </a>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Home() {
         ogDescription="Sitios web profesionales, sistemas a medida y automatización para negocios argentinos. Precios visibles, entrega rápida."
       />
       <Navbar />
-      <main>
+      <main id="contenido" tabIndex={-1}>
         <Hero />
         <Nosotros />
         <Servicios />

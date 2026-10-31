@@ -79,6 +79,12 @@ export default function Navbar() {
             : 'bg-transparent'
         }`}
       >
+      <a
+        href="#contenido"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] bg-[#D32F2F] text-white px-4 py-2 rounded-lg font-semibold"
+      >
+        Saltar al contenido
+      </a>
         <div className="max-w-6xl mx-auto px-6 h-24 md:h-26 flex items-center justify-between">
           <Link
             to="/"
@@ -129,7 +135,7 @@ export default function Navbar() {
             </a>
             <button
               onClick={() => openContact()}
-              className="text-sm bg-[#D32F2F] text-white px-4 py-2 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+              className="text-sm bg-[#D32F2F] text-white px-4 py-2 rounded-lg hover:bg-[#B71C1C] transition-all duration-200"
             >
               Formulario
             </button>

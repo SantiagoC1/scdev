@@ -35,7 +35,7 @@ export default function Clientes() {
 
 function ClienteMarqueeCard({ cliente }: { cliente: Cliente }) {
   return (
-    <div className="flex-shrink-0 w-56 bg-white/[0.03] border border-white/[0.08] rounded-xl p-5 hover:border-[#D32F2F]/30 transition-all duration-300 hover:-translate-y-1">
+    <div className="flex-shrink-0 w-56 bg-white/[0.03] border border-white/[0.08] rounded-2xl p-5 hover:border-[#D32F2F]/30 transition-all duration-300 hover:-translate-y-1">
       <div className="w-12 h-12 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
         {cliente.logo ? (
           <div className="w-full h-full bg-white/5 flex items-center justify-center p-1">
@@ -56,7 +56,7 @@ function ClienteMarqueeCard({ cliente }: { cliente: Cliente }) {
       </div>
 
       <h3 className="font-bold text-sm text-white mb-1 leading-tight">{cliente.nombre}</h3>
-      <span className="inline-block text-xs font-medium text-accent-text bg-[#D32F2F]/10 border border-[#D32F2F]/20 rounded-full px-2 py-0.5 mb-3">
+      <span className="inline-block text-xs font-medium text-accent-text bg-[#D32F2F]/10 border border-[#D32F2F]/20 rounded-lg px-2 py-0.5 mb-3">
         {cliente.rubro}
       </span>
       <p className="text-xs text-white/60 leading-relaxed line-clamp-3">{cliente.desc}</p>

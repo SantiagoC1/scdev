@@ -62,18 +62,18 @@ export default function NosotrosPage() {
         canonical={`${SITE_URL}/nosotros`}
       />
       <Navbar />
-      <main className="pt-24 md:pt-26">
+      <main id="contenido" tabIndex={-1} className="pt-24 md:pt-26">
         {/* 1 — Hero */}
         <section className="bg-[#121212] py-24 md:py-32">
           <div className="max-w-4xl mx-auto px-6">
             <div>
-              <p className="font-mono text-accent-text text-sm mb-4">Sobre nosotros</p>
+              <p className="text-sm text-white/60 mb-4">Sobre nosotros</p>
               <h1
                 className="font-bold leading-[1.05] mb-6"
                 style={{ fontSize: 'clamp(2.4rem, 6vw, 4.5rem)' }}
               >
                 Código que funciona.
-                <span className="block text-accent-text">Equipo que responde.</span>
+                <span className="block">Equipo que responde.</span>
               </h1>
               <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
                 Somos una agencia chica de La Plata. Tomamos pocos proyectos a la vez porque
@@ -84,7 +84,7 @@ export default function NosotrosPage() {
                 {STATS.map((stat) => (
                   <div key={stat.unidad}>
                     <div className="font-display font-bold text-3xl md:text-4xl text-white">
-                      {stat.valor} <span className="text-accent-text">{stat.unidad}</span>
+                      {stat.valor} <span className="text-white/60">{stat.unidad}</span>
                     </div>
                     <div className="text-white/60 text-sm mt-1">{stat.label}</div>
                   </div>
@@ -202,13 +202,13 @@ export default function NosotrosPage() {
                   href={waLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto text-center bg-white text-[#B71C1C] px-8 py-4 rounded-xl font-semibold hover:bg-white/90 transition-all"
+                  className="w-full sm:w-auto text-center bg-white text-[#B71C1C] px-8 py-4 rounded-lg font-semibold hover:bg-white/90 transition-all"
                 >
                   Escribinos por WhatsApp
                 </a>
                 <button
                   onClick={() => openContact()}
-                  className="w-full sm:w-auto border border-white/50 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all"
+                  className="w-full sm:w-auto border border-white/50 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-all"
                 >
                   Formulario de contacto
                 </button>

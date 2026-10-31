@@ -49,7 +49,7 @@ export default function ServicePage({ servicio }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pt-24 md:pt-26">
+      <main id="contenido" tabIndex={-1} className="pt-24 md:pt-26">
         {/* Hero */}
         <section className="pt-16 pb-16 md:pt-24 md:pb-24 bg-[#0a0a0a] relative overflow-hidden">
           <div
@@ -72,7 +72,7 @@ export default function ServicePage({ servicio }: Props) {
               {(() => {
                 const HeroIcon = INCLUDE_ICON_MAP[servicio.iconName]
                 return HeroIcon ? (
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-[#D32F2F]/10 border border-[#D32F2F]/20 mb-6">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-[#D32F2F]/10 border border-[#D32F2F]/20 mb-6">
                     <HeroIcon size={28} className="text-accent-text" strokeWidth={1.5} />
                   </div>
                 ) : null
@@ -81,7 +81,7 @@ export default function ServicePage({ servicio }: Props) {
               <p className="text-white/60 text-xl mb-8">{servicio.descripcion}</p>
 
               <div className="inline-flex flex-col gap-1 bg-[#D32F2F]/10 border border-[#D32F2F]/30 px-6 py-4 rounded-2xl mb-8">
-                <span className="text-2xl font-bold">{precio}</span>
+                <span className="text-2xl font-bold text-accent-text">{precio}</span>
                 <span className="text-white/60 text-sm">{servicio.precioTipo}</span>
               </div>
 
@@ -90,13 +90,13 @@ export default function ServicePage({ servicio }: Props) {
                   href={waLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#B71C1C] transition-all shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+                  className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#B71C1C] transition-all"
                 >
                   Empezar este proyecto
                 </a>
                 <button
                   onClick={() => openContact(servicio.nombre)}
-                  className="w-full sm:w-auto border border-white/20 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/5 transition-all"
+                  className="w-full sm:w-auto border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/5 transition-all"
                 >
                   Formulario de contacto
                 </button>
@@ -257,13 +257,13 @@ export default function ServicePage({ servicio }: Props) {
                   href={waLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#B71C1C] transition-all shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+                  className="w-full sm:w-auto text-center bg-[#D32F2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#B71C1C] transition-all"
                 >
                   Cotizar por WhatsApp
                 </a>
                 <button
                   onClick={() => openContact(servicio.nombre)}
-                  className="w-full sm:w-auto border border-white/20 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/5 transition-all"
+                  className="w-full sm:w-auto border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/5 transition-all"
                 >
                   Ir al formulario
                 </button>

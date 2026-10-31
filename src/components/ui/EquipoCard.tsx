@@ -48,7 +48,7 @@ function StackIcon({ tech }: { tech: string }) {
         decoding="async"
         width={28}
         height={28}
-        className={`w-full h-full object-contain${tech === 'n8n' ? ' rounded' : ''}`}
+        className={`w-full h-full object-contain${tech === 'n8n' ? ' rounded-lg' : ''}`}
       />
     </div>
   )
@@ -80,7 +80,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
               {iniciales(nombre)}
             </span>
           </div>
-          <span className="absolute top-3 right-3 rounded-full bg-[#D32F2F] text-white text-xs font-medium px-2.5 py-1 leading-none">
+          <span className="absolute top-3 right-3 rounded-lg bg-[#D32F2F] text-white text-xs font-medium px-2.5 py-1 leading-none">
             Próximamente
           </span>
         </>

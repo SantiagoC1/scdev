@@ -37,7 +37,7 @@ export default function PortfolioCard({ proyecto }: Props) {
           {proyecto.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs bg-white/5 border border-white/10 px-2 py-0.5 rounded text-white/50"
+              className="text-xs bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg text-white/60"
             >
               {tag}
             </span>

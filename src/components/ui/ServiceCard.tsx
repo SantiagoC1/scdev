@@ -38,7 +38,7 @@ export default function ServiceCard({ servicio }: Props) {
     >
       {servicio.badge && (
         <span
-          className={`absolute top-4 right-4 text-xs font-mono px-2 py-1 rounded ${
+          className={`absolute top-4 right-4 text-xs font-medium px-2 py-1 rounded-lg ${
             servicio.badge.tipo === 'popular'
               ? 'bg-[#D32F2F] text-white'
               : 'bg-[#D32F2F]/10 text-accent-text border border-[#D32F2F]/30'
@@ -56,7 +56,7 @@ export default function ServiceCard({ servicio }: Props) {
       <p className="text-white/50 text-sm mb-4 flex-1">{servicio.descripcion}</p>
 
       <div className="mb-4">
-        <div className="text-xl font-bold text-white">{precio}</div>
+        <div className="text-xl font-bold text-accent-text">{precio}</div>
         <div className="text-xs text-white/60">{servicio.precioTipo}</div>
       </div>
 
@@ -64,7 +64,7 @@ export default function ServiceCard({ servicio }: Props) {
         {servicio.pills.map((pill) => (
           <span
             key={pill}
-            className="text-xs bg-white/5 border border-white/10 px-2 py-1 rounded text-white/60"
+            className="text-xs bg-white/5 border border-white/10 px-2 py-1 rounded-lg text-white/60"
           >
             {pill}
           </span>

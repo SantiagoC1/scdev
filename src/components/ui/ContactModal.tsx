@@ -36,10 +36,10 @@ const LABEL_CLASS = 'block text-xs text-white/50 mb-1.5'
 const TIENE_WEB_OPCIONES = [{ v: 'si', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'no_se', l: 'No sé' }]
 
 const INPUT_CLASS =
-  'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#D32F2F]/50 transition-colors'
+  'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm placeholder-white/25 focus:border-[#D32F2F]/50 transition-colors'
 
 const SELECT_CLASS =
-  'w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#D32F2F]/50 transition-colors'
+  'w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#D32F2F]/50 transition-colors'
 
 export default function ContactModal({ isOpen, onClose, servicioPreseleccionado = '' }: Props) {
   const config = useConfig()
@@ -191,21 +191,21 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div aria-hidden="true" onClick={onClose} className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      <div aria-hidden="true" onClick={onClose} className="absolute inset-0 bg-black/80 backdrop-blur-sm modal-overlay-enter" />
 
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-modal-title"
         onKeyDown={handleDialogKeyDown}
-        className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl"
+        className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl modal-enter"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 bg-[#111] border-b border-white/10">
           <h2 id="contact-modal-title" className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-all"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
           >
             <X size={16} />
           </button>
@@ -329,9 +329,9 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-[#D32F2F] text-white font-semibold py-3 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+            className="w-full bg-[#D32F2F] text-white font-semibold py-3 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {submitting ? 'Enviando...' : 'Enviar mensaje →'}
+            {submitting ? 'Enviando...' : 'Enviar mensaje'}
           </button>
         </form>
       </div>

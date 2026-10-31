@@ -22,7 +22,7 @@ export default function MantenimientoTier({
       }`}
     >
       {popular && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D32F2F] text-white text-xs px-3 py-1 rounded-full whitespace-nowrap">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D32F2F] text-white text-xs px-3 py-1 rounded-lg whitespace-nowrap">
           ★ MÁS ELEGIDO
         </span>
       )}
