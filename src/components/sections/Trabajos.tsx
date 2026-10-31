@@ -7,32 +7,57 @@ import type { Cliente } from '../../data/clientes'
 const UMBRAL_ARRASTRE = 5
 
 const VISIBLES = PROYECTOS.filter((p) => p.visible !== false)
-// Clientes sin tarjeta en el carrusel: van en la franja de abajo.
-const SIN_TARJETA = CLIENTES.filter((c) => !VISIBLES.some((p) => p.id === c.id))
+// Franja "Confían en SCdev": solo clientes reales y visibles, nunca demos ni proyectos propios.
+const CONFIAN = CLIENTES.filter((c) => c.tipo === 'cliente' && c.visible !== false)
+const MARQUEE_DESDE = 6
 
-function ClienteLogo({ cliente }: { cliente: Cliente }) {
+function Logo({ cliente }: { cliente: Cliente }) {
+  return cliente.logo ? (
+    <img
+      src={cliente.logo}
+      alt={cliente.nombre}
+      width={cliente.logoSize?.[0] ?? 32}
+      height={cliente.logoSize?.[1] ?? 32}
+      loading="lazy"
+      decoding="async"
+      className="h-8 w-auto flex-none grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+    />
+  ) : (
+    // Sin logo cargado: el nombre en texto, al mismo alto y con el mismo tratamiento.
+    <span className="flex h-8 flex-none items-center font-display font-bold text-white opacity-60 hover:opacity-100 transition duration-300 whitespace-nowrap">
+      {cliente.nombre}
+    </span>
+  )
+}
+
+function FranjaClientes() {
+  if (CONFIAN.length === 0) return null
+  const marquee = CONFIAN.length >= MARQUEE_DESDE
   return (
-    <li className="flex items-center gap-3 group">
-      <div className="w-12 h-12 flex-none rounded-lg bg-white border border-white/10 flex items-center justify-center overflow-hidden">
-        {cliente.logo ? (
-          <img
-            src={cliente.logo}
-            alt=""
-            width={48}
-            height={48}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-contain p-1 grayscale group-hover:grayscale-0 transition-[filter] duration-300"
-          />
-        ) : (
-          <span className="font-bold text-sm text-white/70">{cliente.iniciales ?? ''}</span>
-        )}
-      </div>
-      <div>
-        <p className="text-sm font-semibold leading-tight">{cliente.nombre}</p>
-        <p className="text-xs text-white/60">{cliente.rubro}</p>
-      </div>
-    </li>
+    <div className="max-w-6xl mx-auto px-6 mt-16">
+      <h3 className="text-sm text-white/70 mb-5 text-center">Confían en SCdev</h3>
+      {marquee ? (
+        <div
+          tabIndex={0}
+          role="group"
+          aria-label="Clientes de SCdev"
+          className="marquee-pausable overflow-hidden"
+        >
+          <div className="flex w-max animate-marquee">
+            <ul className="flex items-center gap-12 pr-12">
+              {CONFIAN.map((c) => <li key={c.id}><Logo cliente={c} /></li>)}
+            </ul>
+            <ul aria-hidden="true" className="flex items-center gap-12 pr-12">
+              {CONFIAN.map((c) => <li key={c.id}><Logo cliente={c} /></li>)}
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <ul className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
+          {CONFIAN.map((c) => <li key={c.id}><Logo cliente={c} /></li>)}
+        </ul>
+      )}
+    </div>
   )
 }
 
@@ -84,10 +109,10 @@ export default function Trabajos() {
         onPointerLeave={terminar}
         onClickCapture={onClickCapture}
         onDragStart={(e) => e.preventDefault()}
-        className="flex gap-6 px-6 md:px-12 pb-4 overflow-x-auto snap-x snap-mandatory scroll-pl-6 md:scroll-pl-12 cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-6 pl-[max(1.5rem,calc((100%_-_72rem)/2_+_1.5rem))] pr-6 scroll-pl-[max(1.5rem,calc((100%_-_72rem)/2_+_1.5rem))] pb-4 overflow-x-auto snap-x snap-mandatory cursor-grab active:cursor-grabbing select-none"
       >
         {VISIBLES.map((proyecto) => (
-          <div key={proyecto.id} className="snap-start flex-none">
+          <div key={proyecto.id} className="snap-start flex-none flex">
             <PortfolioCard proyecto={proyecto} />
           </div>
         ))}
@@ -97,16 +122,7 @@ export default function Trabajos() {
         <p className="text-white/60 text-xs">Arrastrá o deslizá para ver más</p>
       </div>
 
-      {SIN_TARJETA.length > 0 && (
-        <div className="max-w-6xl mx-auto px-6 mt-14">
-          <h3 className="text-sm text-white/70 mb-5">También confían en SCdev</h3>
-          <ul className="flex flex-wrap gap-x-10 gap-y-5">
-            {SIN_TARJETA.map((c) => (
-              <ClienteLogo key={c.id} cliente={c} />
-            ))}
-          </ul>
-        </div>
-      )}
+      <FranjaClientes />
     </section>
   )
 }

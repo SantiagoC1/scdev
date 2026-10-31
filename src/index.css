@@ -54,7 +54,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   animation: marquee 25s linear infinite;
 }
 
-.animate-marquee:hover {
+.marquee-pausable:hover .animate-marquee,
+.marquee-pausable:focus-within .animate-marquee,
+.marquee-pausable:focus-visible .animate-marquee {
   animation-play-state: paused;
 }
 
@@ -99,6 +101,7 @@ main:focus { outline: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .animate-marquee { animation: none !important; }
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
