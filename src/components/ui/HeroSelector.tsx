@@ -38,9 +38,9 @@ export default function HeroSelector() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#111111]/90 p-5 md:p-6">
-      <p id="rubro-label" className="text-sm text-white/70 mb-3">Mi negocio es de…</p>
-      <div role="radiogroup" aria-labelledby="rubro-label" onKeyDown={onKeyDown} className="flex flex-wrap gap-2 mb-5">
+    <div className="rounded-2xl border border-white/10 bg-[#111111]/90 p-4 md:p-6">
+      <p id="rubro-label" className="text-sm text-white/70 mb-2 md:mb-3">Mi negocio es de…</p>
+      <div role="radiogroup" aria-labelledby="rubro-label" onKeyDown={onKeyDown} className="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-5">
         {RUBROS.map((r, i) => {
           const activo = i === idx
           return (
@@ -52,7 +52,7 @@ export default function HeroSelector() {
               aria-checked={activo}
               tabIndex={activo ? 0 : -1}
               onClick={() => elegir(i)}
-              className={`px-3.5 py-2 rounded-lg text-sm border transition-colors duration-200 ${
+              className={`px-3 py-1.5 md:px-3.5 md:py-2 rounded-lg text-sm border transition-colors duration-200 ${
                 activo
                   ? 'bg-white text-[#0a0a0a] border-white font-medium'
                   : 'text-white/80 border-white/15 hover:border-white/40'
@@ -65,14 +65,14 @@ export default function HeroSelector() {
       </div>
 
       {/* Alto mínimo fijo: cambiar de rubro no mueve el resto de la página. */}
-      <div aria-live="polite" className="min-h-[21rem] sm:min-h-[19rem]">
+      <div aria-live="polite" className="min-h-[13rem] sm:min-h-[19rem]">
         <div key={rubro.id} className="hero-fade">
           <p className="text-xl font-bold font-[family-name:var(--font-display)] mb-1">{servicio.nombre}</p>
           <p className="mb-4">
             <span className="text-2xl font-bold text-accent-text">Desde {desde}</span>
-            <span className="text-sm text-white/60 ml-2">{servicio.precioTipo} · {servicio.tiempo}</span>
+            <span className="block sm:inline text-sm text-white/60 sm:ml-2">{servicio.precioTipo} · {servicio.tiempo}</span>
           </p>
-          <ul className="space-y-1.5 mb-4 text-sm text-white/80">
+          <ul className="hidden sm:block space-y-1.5 mb-4 text-sm text-white/80">
             {servicio.incluye.slice(0, 3).map((it) => (
               <li key={it.titulo} className="flex gap-2">
                 <span aria-hidden="true" className="text-white/70">✓</span>
