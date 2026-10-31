@@ -29,7 +29,7 @@ export default function CtaFinal() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="font-mono text-[#D32F2F] text-xs tracking-widest uppercase mb-8">
+          <p className="font-mono text-accent-text text-xs tracking-widest uppercase mb-8">
             — Hablemos
           </p>
 
@@ -38,7 +38,7 @@ export default function CtaFinal() {
             style={{ fontSize: 'clamp(2.8rem, 8vw, 6rem)' }}
           >
             ¿Listo para{' '}
-            <span className="block text-[#D32F2F]">digitalizar tu negocio?</span>
+            <span className="block text-accent-text">digitalizar tu negocio?</span>
           </h2>
 
           <p className="text-white/40 text-base mb-12 max-w-md mx-auto">

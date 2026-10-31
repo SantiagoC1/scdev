@@ -75,13 +75,13 @@ export default function NosotrosPage() {
         <section className="bg-[#121212] py-24 md:py-32">
           <div className="max-w-4xl mx-auto px-6">
             <motion.div {...fadeInUp}>
-              <p className="font-mono text-[#D32F2F] text-sm mb-4">Sobre nosotros</p>
+              <p className="font-mono text-accent-text text-sm mb-4">Sobre nosotros</p>
               <h1
                 className="font-bold leading-[1.05] mb-6"
                 style={{ fontSize: 'clamp(2.4rem, 6vw, 4.5rem)' }}
               >
                 Código que funciona.
-                <span className="block text-[#D32F2F]">Equipo que responde.</span>
+                <span className="block text-accent-text">Equipo que responde.</span>
               </h1>
               <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
                 Somos una agencia chica de La Plata. Tomamos pocos proyectos a la vez porque
@@ -92,7 +92,7 @@ export default function NosotrosPage() {
                 {STATS.map((stat) => (
                   <div key={stat.unidad}>
                     <div className="font-display font-bold text-3xl md:text-4xl text-white">
-                      {stat.valor} <span className="text-[#D32F2F]">{stat.unidad}</span>
+                      {stat.valor} <span className="text-accent-text">{stat.unidad}</span>
                     </div>
                     <div className="text-white/40 text-sm mt-1">{stat.label}</div>
                   </div>
@@ -164,7 +164,7 @@ export default function NosotrosPage() {
                       </span>
 
                       <div className="relative flex flex-col items-center gap-3">
-                        <Icono size={28} className="text-[#D32F2F]" strokeWidth={1.5} />
+                        <Icono size={28} className="text-accent-text" strokeWidth={1.5} />
                         <h3 className="font-display font-bold text-white">{paso.titulo}</h3>
                         <p className="text-white/50 text-sm leading-relaxed">{paso.desc}</p>
                       </div>

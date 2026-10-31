@@ -56,7 +56,7 @@ function StatCard({ valor, label, activo }: { valor: number; label: string; acti
       variants={statCard}
       className="bg-[#1e1e1e] border border-white/[0.08] rounded-2xl px-6 py-5"
     >
-      <div className="font-display font-bold text-4xl text-[#D32F2F] leading-none">{actual}</div>
+      <div className="font-display font-bold text-4xl text-accent-text leading-none">{actual}</div>
       <div className="text-white/40 text-sm mt-2">{label}</div>
     </motion.div>
   )
@@ -76,7 +76,7 @@ export default function Nosotros() {
             whileInView="show"
             viewport={{ once: true }}
           >
-            <p className="font-mono text-[#D32F2F] text-sm mb-3">Nosotros</p>
+            <p className="font-mono text-accent-text text-sm mb-3">Nosotros</p>
             <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
               Una agencia que arrancó con ganas y no paró.
             </h2>
@@ -96,7 +96,7 @@ export default function Nosotros() {
 
             <Link
               to="/nosotros"
-              className="inline-block mt-8 text-sm text-[#D32F2F] border border-[#D32F2F]/30 px-6 py-3 rounded-xl hover:bg-[#D32F2F]/10 transition-all duration-200"
+              className="inline-block mt-8 text-sm text-accent-text border border-[#D32F2F]/30 px-6 py-3 rounded-xl hover:bg-[#D32F2F]/10 transition-all duration-200"
             >
               Conocé al equipo →
             </Link>

@@ -32,7 +32,7 @@ export default function MantenimientoTier({
       <ul className="space-y-2">
         {incluye.map((item) => (
           <li key={item} className="flex items-start gap-2 text-sm text-white/60">
-            <span className="text-[#D32F2F] mt-0.5 flex-shrink-0">✓</span>
+            <span className="text-accent-text mt-0.5 flex-shrink-0">✓</span>
             {item}
           </li>
         ))}

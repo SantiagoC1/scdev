@@ -67,7 +67,7 @@ export function useSheetConfig() {
       .then((data) => {
         clearTimeout(timeout)
         if (data.ok && data.config) {
-          console.log('[SCdev] Config cargada desde Sheets:', data.config)
+          if (import.meta.env.DEV) console.log('[SCdev] Config cargada desde Sheets:', data.config)
           setConfig({ ...CONFIG_FALLBACK, ...data.config } as SheetConfig)
         }
       })

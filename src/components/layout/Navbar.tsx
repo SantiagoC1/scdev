@@ -123,7 +123,7 @@ export default function Navbar() {
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-[#D32F2F] border border-[#D32F2F]/30 px-4 py-2 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
+              className="flex items-center gap-2 text-sm text-accent-text border border-[#D32F2F]/30 px-4 py-2 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
             >
               WhatsApp
             </a>

@@ -83,13 +83,14 @@ export default function ParticlesBackground() {
       observer.observe(el)
     }
 
-    if ('requestIdleCallback' in window) idleId = window.requestIdleCallback(iniciar, { timeout: 3000 })
+    const ric = (window as Window & { requestIdleCallback?: typeof window.requestIdleCallback }).requestIdleCallback
+    if (ric) idleId = ric(iniciar, { timeout: 3000 })
     else timeoutId = window.setTimeout(iniciar, 1500)
 
     return () => {
       cancelado = true
       observer?.disconnect()
-      if (idleId !== undefined) window.cancelIdleCallback(idleId)
+      if (idleId !== undefined) window.cancelIdleCallback?.(idleId)
       if (timeoutId !== undefined) window.clearTimeout(timeoutId)
       if (window.pJSDom && window.pJSDom.length > 0) {
         window.pJSDom[0].pJS.fn.vendors.destroypJS()

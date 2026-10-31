@@ -92,7 +92,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
               {iniciales(nombre)}
             </span>
           </div>
-          <span className="absolute top-3 right-3 rounded-full bg-[#D32F2F] text-white text-[10px] font-medium px-2.5 py-1 leading-none">
+          <span className="absolute top-3 right-3 rounded-full bg-[#D32F2F] text-white text-xs font-medium px-2.5 py-1 leading-none">
             Próximamente
           </span>
         </>
@@ -103,7 +103,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
 
       <div className="absolute inset-x-0 bottom-0 p-4">
         <h3 className="font-display font-bold text-white leading-tight">{nombre}</h3>
-        <p className="text-xs text-[#D32F2F] mt-0.5">{rol}</p>
+        <p className="text-xs text-accent-text mt-0.5">{rol}</p>
       </div>
     </>
   )

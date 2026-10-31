@@ -59,7 +59,7 @@ export default function Hero() {
           style={{ fontSize: 'clamp(2rem, 7vw, 5rem)' }}
         >
           Transformamos tu negocio en{' '}
-          <span className="text-[#D32F2F]">presencia digital</span>
+          <span className="text-accent-text">presencia digital</span>
         </motion.h1>
 
         <motion.div
@@ -68,7 +68,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-xl md:text-2xl text-white/60 font-mono mb-6 h-8"
         >
-          <span className="text-[#D32F2F]">&gt;</span> {displayText}
+          <span className="text-accent-text">&gt;</span> {displayText}
           <span className="animate-pulse">|</span>
         </motion.div>
 

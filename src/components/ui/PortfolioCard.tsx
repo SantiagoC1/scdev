@@ -49,7 +49,7 @@ export default function PortfolioCard({ proyecto }: Props) {
               href={proyecto.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-[#D32F2F] hover:text-white transition-colors"
+              className="text-xs text-accent-text hover:text-white transition-colors"
             >
               Ver más →
             </a>
