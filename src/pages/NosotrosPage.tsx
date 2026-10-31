@@ -194,7 +194,7 @@ export default function NosotrosPage() {
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">
                 ¿Tenés un proyecto en mente?
               </h2>
-              <p className="text-white/80 mb-10">
+              <p className="text-white mb-10">
                 Contanos qué necesitás. La primera reunión no tiene costo.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">

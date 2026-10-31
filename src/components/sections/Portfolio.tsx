@@ -12,6 +12,7 @@ export default function Portfolio() {
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse' || !carrilRef.current) return
     arrastre.current = { activo: true, x: e.clientX, scroll: carrilRef.current.scrollLeft, movido: false }
+    carrilRef.current.style.scrollSnapType = 'none' // el snap pelea con el scroll manual mientras se arrastra
   }
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const a = arrastre.current
@@ -20,7 +21,11 @@ export default function Portfolio() {
     if (Math.abs(dx) > UMBRAL_ARRASTRE) a.movido = true
     carrilRef.current.scrollLeft = a.scroll - dx
   }
-  const terminar = () => { arrastre.current.activo = false }
+  const terminar = () => {
+    if (!arrastre.current.activo) return
+    arrastre.current.activo = false
+    if (carrilRef.current) carrilRef.current.style.scrollSnapType = ''
+  }
   // Si hubo arrastre, el click final no debe abrir el link de la card.
   const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
     if (arrastre.current.movido) {
@@ -46,7 +51,8 @@ export default function Portfolio() {
         onPointerUp={terminar}
         onPointerLeave={terminar}
         onClickCapture={onClickCapture}
-        className="flex gap-6 px-6 md:px-12 pb-4 overflow-x-auto snap-x snap-mandatory cursor-grab active:cursor-grabbing select-none"
+        onDragStart={(e) => e.preventDefault()}
+        className="flex gap-6 px-6 md:px-12 pb-4 overflow-x-auto snap-x snap-mandatory scroll-pl-6 md:scroll-pl-12 cursor-grab active:cursor-grabbing select-none"
       >
         {PROYECTOS.map((proyecto) => (
           <div key={proyecto.id} className="snap-start flex-none">

@@ -181,7 +181,7 @@ export default function ServicePage({ servicio }: Props) {
                 <div
                   key={paso.num}
                 >
-                  <div className="text-5xl font-mono font-bold text-accent-text/20 mb-3">
+                  <div className="text-5xl font-mono font-bold text-accent-text/70 mb-3">
                     {paso.num}
                   </div>
                   <h3 className="font-bold mb-2">{paso.titulo}</h3>
