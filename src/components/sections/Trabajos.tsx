@@ -12,6 +12,10 @@ const CONFIAN = CLIENTES.filter((c) => c.tipo === 'cliente' && c.visible !== fal
 const MARQUEE_DESDE = 6
 
 function Logo({ cliente }: { cliente: Cliente }) {
+  // Los logos apaisados (más de 2,5 veces más anchos que altos, como el de Tábano) llevan letra fina: con 32 px de alto
+  // no se leen, así que se muestran un poco más altos. Los cuadrados y verticales siguen en 32 px.
+  const [ancho, alto] = cliente.logoSize ?? [1, 1]
+  const altura = ancho / alto > 2.5 ? 'h-11' : 'h-8'
   return cliente.logo ? (
     <img
       src={cliente.logo}
@@ -20,7 +24,7 @@ function Logo({ cliente }: { cliente: Cliente }) {
       height={cliente.logoSize?.[1] ?? 32}
       loading="lazy"
       decoding="async"
-      className="h-8 w-auto flex-none grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+      className={`${altura} w-auto flex-none grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300`}
     />
   ) : (
     // Sin logo cargado: el nombre en texto, al mismo alto y con el mismo tratamiento.
