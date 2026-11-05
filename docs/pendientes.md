@@ -84,6 +84,13 @@ La página existe (prerenderizada, en sitemap con prioridad 0.3, link en el foot
 - TODO(santi): el texto de la Ley 25.326 es un resumen general (acceso, rectificación, actualización y supresión; órgano de control). Conviene que lo revise alguien con formación legal.
 - Si la clave de Gemini pasa a plan pago, el texto de Google cambia ("Paid Services"): actualizar la cita.
 
+## Mobile de mantenimiento y carrusel de Trabajos
+
+- TODO(santi): probar el carrusel de Trabajos en un teléfono real. El emulador no genera inercia táctil, así que no se pudo medir si `scroll-snap` mandatory "frenaba" el deslizamiento (se pasó a `proximity` por la guía). Ver `docs/auditoria-carrusel.md`.
+- TODO(santi): decidir si las flechas del carrusel (hoy desde 768 px) también deben verse en celular. Se dejaron ocultas porque el dedo alcanza y ahorran espacio.
+- En el Estándar de la vista de mantenimiento en celular, la insignia "Recomendado" ocupa el lugar de la descripción, porque en los datos la descripción de ese plan *es* "Recomendado". Si se quiere una descripción propia ("Para negocios que ya venden online", etc.) hay que agregarla a `PLANES` en `src/data/mantenimiento.ts`.
+- El proyecto no tiene ESLint configurado (no existe un script `lint`). La verificación de código es `tsc` (dentro de `npm run build`) y los scripts de `scripts/probar-*.mjs`. Si se quiere lint, hay que decidir las reglas.
+
 ## Para cuando existan
 
 - Botón flotante de WhatsApp: usar `track({ event: 'cta_whatsapp_click', location: 'flotante' })`.
