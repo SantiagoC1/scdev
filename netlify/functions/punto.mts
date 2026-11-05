@@ -219,7 +219,8 @@ export default async function handler(req: Request, context?: { ip?: string }): 
       headers: {
         'Content-Type': 'text/event-stream; charset=utf-8',
         'Cache-Control': 'no-store, no-transform',
-        'X-Punto-Proveedor': p.nombre,
+        // Qué proveedor respondió: solo en desarrollo (netlify dev), no se expone en producción.
+        ...(process.env.NETLIFY_DEV === 'true' ? { 'X-Punto-Proveedor': p.nombre } : {}),
       },
     })
   }

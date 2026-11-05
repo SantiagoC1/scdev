@@ -11,6 +11,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+// Modo desarrollo: la función solo expone X-Punto-Proveedor (qué proveedor respondió) cuando NETLIFY_DEV=true.
+process.env.NETLIFY_DEV = 'true'
+
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const imp = (rel) => import(pathToFileURL(path.join(raiz, rel)).href)
 
