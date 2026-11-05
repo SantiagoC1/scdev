@@ -41,6 +41,29 @@ function almacenBlobs(): Almacen {
   }
 }
 
+/**
+ * Identidad de red que se hashea. IPv4: la dirección. IPv6: solo el prefijo /64 (los 4 primeros grupos), porque una
+ * conexión doméstica recibe un /64 entero y cambiar de dirección dentro de él es trivial: contar por dirección completa
+ * permitiría esquivar los límites. Una IPv4 mapeada en IPv6 (::ffff:1.2.3.4) se trata como la IPv4.
+ */
+export function claveRed(ip: string): string {
+  let s = ip.trim().toLowerCase().replace(/^\[|\]$/g, '').replace(/%.*$/, '') // sin corchetes ni zona (%eth0)
+  const mapeada = s.match(/^(?:0{1,4}:){5}ffff:(\d{1,3}(?:\.\d{1,3}){3})$/) ?? s.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/)
+  if (mapeada) return mapeada[1]
+  if (!s.includes(':')) return s // IPv4 (o algo que no es una IP: se usa tal cual)
+  // IPv6: IPv4 incrustada al final ("::1.2.3.4") a dos grupos hexadecimales, y se expande "::"
+  s = s.replace(/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/, (_, a, b, c, d) =>
+    ((+a << 8) | +b).toString(16) + ':' + ((+c << 8) | +d).toString(16),
+  )
+  const [izq, der] = s.split('::')
+  const l = izq ? izq.split(':') : []
+  const r = der !== undefined && der ? der.split(':') : []
+  const falta = s.includes('::') ? Math.max(0, 8 - l.length - r.length) : 0
+  const grupos = [...l, ...Array(falta).fill('0'), ...r]
+  if (grupos.length !== 8 || grupos.some((g) => !/^[0-9a-f]{1,4}$/.test(g))) return s // no se pudo interpretar: se usa tal cual
+  return grupos.slice(0, 4).map((g) => g.padStart(4, '0')).join(':') + '::/64'
+}
+
 /** Día en horario de Argentina (UTC-3), así los contadores se reinician a la medianoche local. */
 const diaActual = () => new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10)
 
@@ -81,7 +104,7 @@ export async function revisarLimites(ip: string, almacen?: Almacen): Promise<Res
   const dia = diaActual()
   const sal = process.env.PUNTO_SALT ?? ''
   if (!sal) console.warn('[punto] PUNTO_SALT no definida: el hash de IP no lleva sal')
-  const hash = createHash('sha256').update(`${sal}|${ip}|${dia}`).digest('hex').slice(0, 32)
+  const hash = createHash('sha256').update(`${sal}|${claveRed(ip)}|${dia}`).digest('hex').slice(0, 32)
   try {
     const a = almacen ?? almacenBlobs()
     if (intervaloMs > 0 && !(await intervaloCumplido(a, `${dia}/t/${hash}`, intervaloMs))) return 'intervalo'
