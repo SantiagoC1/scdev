@@ -4,6 +4,7 @@ import { X, Send } from 'lucide-react'
 import PuntoAvatar, { PuntoDefs } from './PuntoAvatar'
 import { usePuntoChat } from './usePuntoChat'
 import { RESPUESTAS_RAPIDAS } from './respuestasRapidas'
+import { servicioDeConversacion, textoWhatsApp } from './servicioWhatsapp'
 import { useConfig } from '../../context/ConfigContext'
 import { useModal } from '../../context/ModalContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -33,6 +34,17 @@ export default function PuntoWidget() {
 
   const waLink = buildWALink(config.whatsapp_number, config.whatsapp_default_text)
 
+  // El botón va solo en el último mensaje que pidió pasar a WhatsApp (no se apilan botones viejos).
+  const idUltimoWhatsApp = [...chat.mensajes].reverse().find((x) => x.whatsapp)?.id
+
+  // "Seguir por WhatsApp": el link ya lleva el servicio del que se habló; acá se miden los eventos y Punto se pone contento.
+  const seguirPorWhatsApp = () => {
+    const servicio = servicioDeConversacion(chat.mensajes)
+    track({ event: 'punto_whatsapp', servicio: servicio?.id ?? 'sin_definir' })
+    track({ event: 'cta_whatsapp_click', location: 'punto' })
+    chat.celebrar()
+  }
+
   // Globito "¿Te ayudo con tu web?": una vez por sesión, a los 20 s o al 50% del scroll.
   useEffect(() => {
     if (leerSesion()) return
@@ -61,6 +73,7 @@ export default function PuntoWidget() {
     marcarSesion()
     setAbierto(true)
     chat.saludar()
+    track({ event: 'punto_open' })
   }
   const cerrar = () => setAbierto(false)
 
@@ -75,10 +88,10 @@ export default function PuntoWidget() {
     }
   }, [abierto])
 
-  // El último mensaje siempre a la vista.
+  // El último mensaje (y el botón de WhatsApp, que aparece al terminar la respuesta) siempre a la vista.
   useEffect(() => {
     lista.current?.scrollTo({ top: lista.current.scrollHeight })
-  }, [chat.mensajes])
+  }, [chat.mensajes, chat.ocupado])
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -173,17 +186,29 @@ export default function PuntoWidget() {
               className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3"
             >
               {chat.mensajes.map((msg) => (
+                <div key={msg.id} className={`flex max-w-[85%] flex-col gap-2 ${msg.role === 'user' ? 'self-end' : 'self-start'}`}>
                 <div
-                  key={msg.id}
-                  className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                  className={`whitespace-pre-line rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'self-end bg-[#D32F2F] text-white rounded-br-md'
+                      ? 'bg-[#D32F2F] text-white rounded-br-md'
                       : msg.error
-                        ? 'self-start bg-[#161618] text-[#F5F5F4] rounded-bl-md border border-[#D32F2F]/50'
-                        : 'self-start bg-[#161618] text-[#F5F5F4] rounded-bl-md'
+                        ? 'bg-[#161618] text-[#F5F5F4] rounded-bl-md border border-[#D32F2F]/50'
+                        : 'bg-[#161618] text-[#F5F5F4] rounded-bl-md'
                   }`}
                 >
                   {msg.texto}
+                </div>
+                {msg.id === idUltimoWhatsApp && !chat.ocupado && (
+                  <a
+                    href={buildWALink(config.whatsapp_number, textoWhatsApp(servicioDeConversacion(chat.mensajes)))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={seguirPorWhatsApp}
+                    className="inline-flex min-h-11 items-center justify-center self-start rounded-lg bg-[#D32F2F] px-4 text-sm font-semibold text-white hover:bg-[#B71C1C] transition-colors"
+                  >
+                    Seguir por WhatsApp
+                  </a>
+                )}
                 </div>
               ))}
               {chat.estado === 'pensando' && (
