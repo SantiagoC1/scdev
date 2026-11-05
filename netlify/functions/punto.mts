@@ -1,6 +1,7 @@
 import { armarConocimiento } from './punto/conocimiento.ts'
 import { obtenerPrecios } from './punto/config.ts'
 import { revisarLimites } from './punto/limite.ts'
+import { origenPermitido } from './punto/origen.ts'
 import { SYSTEM_PROMPT } from './punto/prompt.ts'
 
 export const config = { path: '/api/punto' }
@@ -167,6 +168,7 @@ const json = (cuerpo: unknown, status: number) => Response.json(cuerpo, { status
 
 export default async function handler(req: Request, context?: { ip?: string }): Promise<Response> {
   if (req.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } })
+  if (!origenPermitido(req)) return json({ error: 'origen' }, 403)
   if (Number(req.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) return json({ error: 'demasiado_largo' }, 413)
 
   let cuerpo: { mensajes?: unknown }

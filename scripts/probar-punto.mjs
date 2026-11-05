@@ -98,7 +98,7 @@ function banderas(texto) {
 async function preguntar(q) {
   for (let intento = 0; intento < 3; intento++) {
     const r = await handler(
-      new Request('http://local/api/punto', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mensajes: [{ role: 'user', content: q }] }) }),
+      new Request('http://local/api/punto', { method: 'POST', headers: { 'content-type': 'application/json', origin: 'https://scdev.com.ar' }, body: JSON.stringify({ mensajes: [{ role: 'user', content: q }] }) }),
       { ip: 'probar-punto' },
     )
     if (r.status === 200) {
