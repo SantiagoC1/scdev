@@ -1,5 +1,6 @@
 import { armarConocimiento } from './punto/conocimiento.ts'
 import { obtenerPrecios } from './punto/config.ts'
+import { registrarUso } from './punto/limite.ts'
 import { SYSTEM_PROMPT } from './punto/prompt.ts'
 
 export const config = { path: '/api/punto' }
@@ -134,7 +135,7 @@ async function intentar(
 
 const json = (cuerpo: unknown, status: number) => Response.json(cuerpo, { status, headers: { 'Cache-Control': 'no-store' } })
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: Request, context?: { ip?: string }): Promise<Response> {
   if (req.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } })
   if (Number(req.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) return json({ error: 'demasiado_largo' }, 413)
 
@@ -146,6 +147,9 @@ export default async function handler(req: Request): Promise<Response> {
   }
   const historial = limpiarHistorial(cuerpo?.mensajes)
   if (!historial.length || historial[historial.length - 1].role !== 'user') return json({ error: 'sin_mensaje' }, 400)
+
+  const ip = context?.ip ?? req.headers.get('x-nf-client-connection-ip') ?? 'desconocida'
+  if (!(await registrarUso(ip))) return json({ error: 'limite' }, 429)
 
   const mensajes = [{ role: 'system', content: SYSTEM_PROMPT.replace('{{conocimiento}}', armarConocimiento(await obtenerPrecios())) }, ...historial]
 
