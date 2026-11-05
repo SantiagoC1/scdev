@@ -41,4 +41,5 @@ export const RESPUESTAS_RAPIDAS: RespuestaRapida[] = [
 
 // Mensajes de Punto cuando algo falla. En los dos casos el botón "Hablar con el equipo" sigue a la vista.
 export const MENSAJE_LIMITE = 'Por hoy ya charlamos un montón. Escribile al equipo por WhatsApp y te responden ahí.'
+export const MENSAJE_RAPIDO = 'Escribís más rápido de lo que llego a contestar. Esperá unos segundos y probá de nuevo.'
 export const MENSAJE_ERROR = 'Uy, se me cortó la conexión y no pude contestarte. Probá de nuevo en un rato o escribile al equipo por WhatsApp.'

@@ -180,6 +180,7 @@ export default async function handler(req: Request, context?: { ip?: string }): 
 
   const ip = context?.ip ?? req.headers.get('x-nf-client-connection-ip') ?? 'desconocida'
   const limite = await revisarLimites(ip)
+  if (limite === 'intervalo') return Response.json({ error: limite }, { status: 429, headers: { 'Cache-Control': 'no-store', 'Retry-After': '3' } })
   if (limite !== 'ok') return json({ error: limite }, 429) // 'limite' (tope de esa IP) o 'tope' (tope global del día)
 
   const mensajes = [{ role: 'system', content: SYSTEM_PROMPT.replace('{{conocimiento}}', armarConocimiento(await obtenerPrecios())) }, ...historial]

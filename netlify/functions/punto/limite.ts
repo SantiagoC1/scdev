@@ -7,13 +7,14 @@ import { getStore } from '@netlify/blobs'
  *
  *  - Por IP y por día: PUNTO_LIMITE_DIA (por defecto 30).
  *  - Global por día, para todos los visitantes juntos: PUNTO_TOPE_DIARIO (por defecto 600). Protege el plan gratuito.
+ *  - Intervalo mínimo entre mensajes de la misma IP: PUNTO_INTERVALO_MS (por defecto 3000), verificado acá además de en el cliente.
  *
  * Los contadores usan escrituras condicionales de Blobs (crear solo si no existe / reemplazar solo si el ETag
  * coincide), así que dos mensajes simultáneos no pisan la cuenta del otro. Si Blobs falla, se deja pasar (mejor un
  * mensaje de más que dejar a un cliente sin respuesta por un problema nuestro).
  */
 
-export type Resultado = 'ok' | 'limite' | 'tope'
+export type Resultado = 'ok' | 'intervalo' | 'limite' | 'tope'
 
 /** Lo mínimo que se necesita de un almacén clave-valor con escrituras condicionales (Blobs, o uno en memoria para pruebas). */
 export interface Almacen {
@@ -59,16 +60,31 @@ async function incrementar(a: Almacen, clave: string, tope: number): Promise<'ok
   return 'ok'
 }
 
+/**
+ * Intervalo mínimo entre mensajes aceptados de la misma IP. Guarda la hora del último mensaje aceptado con una escritura
+ * condicional: si dos pedidos llegan a la vez, solo uno gana y el otro se rechaza (una ráfaga no lo esquiva).
+ * Un pedido rechazado no renueva la hora, así quien reintenta cada 2,9 s no queda bloqueado para siempre.
+ */
+async function intervaloCumplido(a: Almacen, clave: string, minMs: number): Promise<boolean> {
+  const ahora = Date.now()
+  const previo = await a.leer(clave)
+  if (!previo) return a.crear(clave, String(ahora))
+  if (ahora - (Number(previo.valor) || 0) < minMs) return false
+  return a.reemplazar(clave, String(ahora), previo.etag)
+}
+
 /** Revisa y registra el uso de un mensaje. El orden importa: un visitante pasado de su tope diario no gasta el tope global. */
 export async function revisarLimites(ip: string, almacen?: Almacen): Promise<Resultado> {
   const topeIp = Number(process.env.PUNTO_LIMITE_DIA) || 30
   const topeGlobal = Number(process.env.PUNTO_TOPE_DIARIO) || 600
+  const intervaloMs = process.env.PUNTO_INTERVALO_MS === undefined ? 3000 : Number(process.env.PUNTO_INTERVALO_MS) || 0
   const dia = diaActual()
   const sal = process.env.PUNTO_SALT ?? ''
   if (!sal) console.warn('[punto] PUNTO_SALT no definida: el hash de IP no lleva sal')
   const hash = createHash('sha256').update(`${sal}|${ip}|${dia}`).digest('hex').slice(0, 32)
   try {
     const a = almacen ?? almacenBlobs()
+    if (intervaloMs > 0 && !(await intervaloCumplido(a, `${dia}/t/${hash}`, intervaloMs))) return 'intervalo'
     if ((await incrementar(a, `${dia}/${hash}`, topeIp)) === 'tope') return 'limite'
     if ((await incrementar(a, `${dia}/global`, topeGlobal)) === 'tope') return 'tope'
     return 'ok'

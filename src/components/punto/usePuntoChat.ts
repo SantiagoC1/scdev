@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { EstadoPunto } from './PuntoAvatar'
-import { RESPUESTAS_RAPIDAS, SALUDO_INICIAL, MENSAJE_ERROR, MENSAJE_LIMITE } from './respuestasRapidas'
+import { RESPUESTAS_RAPIDAS, SALUDO_INICIAL, MENSAJE_ERROR, MENSAJE_LIMITE, MENSAJE_RAPIDO } from './respuestasRapidas'
 import { crearFiltroEtiqueta } from './filtroEtiqueta'
 import type { SheetConfig } from '../../hooks/useSheetConfig'
 
@@ -86,11 +86,9 @@ export function usePuntoChat(config: SheetConfig) {
     })
   }, [])
 
-  const preocupar = (error: 'limite' | 'conexion') => {
-    setMensajes((m) => [
-      ...m,
-      { id: idSiguiente.current++, role: 'assistant', texto: error === 'limite' ? MENSAJE_LIMITE : MENSAJE_ERROR, error: true, whatsapp: error === 'limite' },
-    ])
+  const preocupar = (error: 'limite' | 'conexion' | 'rapido') => {
+    const texto = error === 'limite' ? MENSAJE_LIMITE : error === 'rapido' ? MENSAJE_RAPIDO : MENSAJE_ERROR
+    setMensajes((m) => [...m, { id: idSiguiente.current++, role: 'assistant', texto, error: true, whatsapp: error === 'limite' }])
     if (error === 'limite') setBloqueado(true)
     setEstado('preocupado')
     programar(() => setEstado('reposo'), PREOCUPADO_MS)
@@ -118,7 +116,11 @@ export function usePuntoChat(config: SheetConfig) {
         body: JSON.stringify({ mensajes: historial }),
         signal: ctl.signal,
       })
-      if (r.status === 429) return preocupar('limite')
+      if (r.status === 429) {
+        // 'intervalo': mensajes muy seguidos (no bloquea). 'limite' / 'tope': tope por IP o global del día (bloquea el campo).
+        const motivo = await r.json().then((j: { error?: string }) => j.error, () => undefined)
+        return preocupar(motivo === 'intervalo' ? 'rapido' : 'limite')
+      }
       if (!r.ok || !r.body) return preocupar('conexion')
 
       const lector = r.body.getReader()
