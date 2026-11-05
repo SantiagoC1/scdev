@@ -14,7 +14,7 @@ export const config = { path: '/api/punto' }
  * Solo se reenvía choices[0].delta.content: los campos de razonamiento (reasoning, reasoning_content, thought…) se descartan.
  */
 
-const TIMEOUT_MS = 8000
+const TIMEOUT_MS = 5000 // por proveedor, hasta el primer fragmento de contenido
 const MAX_MENSAJES = 8
 const MAX_CARACTERES = 500
 const MAX_BODY_BYTES = 16_000
@@ -107,7 +107,7 @@ async function intentar(
       return null
     }
     const gen = deltas(r.body.getReader())
-    const primero = await gen.next() // el plazo de 8 s cubre hasta el primer contenido
+    const primero = await gen.next() // el plazo de 5 s cubre hasta el primer contenido
     if (primero.done) {
       console.warn(`[punto] ${p.nombre}: respuesta vacía`)
       return null
