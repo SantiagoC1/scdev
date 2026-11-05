@@ -32,14 +32,13 @@ export const PROYECTOS: Proyecto[] = [
   },
   {
     id: 'florencia-inveninato',
-    tipo: 'demo', // chip "Demo" sobre la imagen y botón "Ver demo"
+    tipo: 'cliente', // sin cartel "Demo" ni link: ya no se enlaza al sistema (https://demo-flor.vercel.app/pacientes)
     nombre: 'Florencia Inveninato',
     rubro: 'Salud, consultorio',
-    descripcion: 'Demo de un sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
+    descripcion: 'Sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
     imagen: '/images/flor-captura.webp',
-    // "Demo" ya es el chip sobre la imagen, por eso no se repite acá.
     tags: ['Sistema a medida'],
-    url: 'https://demo-flor.vercel.app/pacientes',
+    url: null,
   },
   {
     id: 'deca-sgi',

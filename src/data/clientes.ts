@@ -26,14 +26,16 @@ export const CLIENTES: Cliente[] = [
     desc: 'Sitio web institucional con React, Vite y Framer Motion. Backend en Google Sheets para captura de leads.',
   },
   {
-    id: 'padejimas',
-    nombre: 'Consultorio Dr. Padejimas',
-    // TODO(santi): /images/DrPadegimas.webp es una textura azul sin transparencia, no un logo. Cargar el logo real y volver a poner `logo`.
+    // Ocupa el lugar del consultorio Dr. Padejimas, que ya no trabaja con SCdev. Sin link: no se enlaza al sistema.
+    id: 'florencia-inveninato',
+    nombre: 'Florencia Inveninato',
+    rubro: 'Salud, consultorio',
+    logo: '/images/flor-logo-blanco.webp',
+    logoSize: [506, 136],
+    iniciales: 'FI',
     tipo: 'cliente',
-    rubro: 'Medicina Estética · La Plata',
-    iniciales: 'DP',
     url: null,
-    desc: 'Implementación de WhatsApp Business con WATI y automatización de atención al paciente.',
+    desc: 'Sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
   },
   {
     id: 'adsumpater',
