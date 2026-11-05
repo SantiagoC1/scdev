@@ -15,3 +15,12 @@ export const BENEFICIOS: { texto: string; valores: (boolean | string)[] }[] = [
   { texto: 'Prioridad en soporte', valores: [false, false, true] },
   { texto: 'Auditoría SEO trimestral', valores: [false, false, true] },
 ]
+
+/**
+ * Un beneficio no booleano como frase, para la presentación en celular: "Cambios de contenido" + "2 por mes" da
+ * "2 cambios de contenido por mes" y + "Ilimitados" da "Cambios de contenido ilimitados". Sale de los mismos datos de arriba.
+ */
+export function fraseBeneficio(texto: string, valor: string): string {
+  const conNumero = valor.match(/^(\d+)\s+(.*)$/)
+  return conNumero ? `${conNumero[1]} ${texto.toLowerCase()} ${conNumero[2]}` : `${texto} ${valor.toLowerCase()}`
+}

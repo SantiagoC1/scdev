@@ -200,3 +200,19 @@ main:focus { outline: none; }
   html.punto-abierto,
   html.punto-abierto body { overflow: hidden; overscroll-behavior: none; }
 }
+
+/* Planes de mantenimiento en celular: las tres tarjetas comparten la misma celda de la grilla (la altura es la de la más
+   alta, no salta) y solo la activa se ve. Cambio de plan = cross-fade de opacidad de 150 ms. Con prefers-reduced-motion
+   la regla de arriba deja las transiciones en 0,01 ms (cambio instantáneo). visibility la saca del orden de foco y de
+   los lectores de pantalla. */
+.mant-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease, visibility 0s linear 150ms;
+}
+.mant-panel[data-activo='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 150ms ease;
+}
