@@ -41,6 +41,20 @@ Hechos de la sección 4 de `docs/punto/punto-asistente-web.md` que **no** van al
 - TODO(santi): "SCdev no gestiona redes sociales de clientes".
 - Servicios que el documento lista y el sitio no muestra (no se incluyen en Punto): "Bot de WhatsApp $500.000" y "Diagnóstico digital $150.000".
 
+### Modelos de `/api/punto` (verificados el 2026-11-04)
+
+Viven en variables de entorno (`GROQ_MODEL`, `GEMINI_MODEL`, `CLOUDFLARE_MODEL`; también en Netlify → Site settings → Environment variables). Orden de la cadena: Groq → Gemini → Cloudflare.
+
+| Proveedor | Id | Cómo se verificó |
+|---|---|---|
+| Groq | `llama-3.3-70b-versatile` | Solo con la doc pública (modelo de producción): `GET /models` devolvió 401 con la clave del `.env` |
+| Gemini | `gemini-3.5-flash-lite` | `GET /v1beta/openai/models` + stream de prueba OK |
+| Cloudflare | `@cf/meta/llama-3.3-70b-instruct-fp8-fast` | Lista de modelos de la cuenta + stream de prueba OK (`/ai/v1/chat/completions`) |
+
+- TODO(santi): la `GROQ_API_KEY` del `.env` empieza con `sk_` y Groq responde "Invalid API Key" (las de Groq empiezan con `gsk_`). Generar una nueva en console.groq.com, cargarla en `.env` y en Netlify, y volver a verificar el id con `GET /models`. Mientras tanto la cadena responde por Gemini.
+- Los modelos de razonamiento (p. ej. `openai/gpt-oss-*`) funcionan, pero la función solo reenvía `delta.content`.
+- Revisar los ids en cada despliegue importante: los modelos de Gemini cambian seguido.
+
 ## Perfil de Empresa de Google (`index.html`)
 
 TODO(santi): URL del Perfil de Empresa ("SCdev|Desarrollo Web Profesional") para sumarla a `sameAs` del `LocalBusiness`.
