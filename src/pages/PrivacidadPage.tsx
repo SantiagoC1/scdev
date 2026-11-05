@@ -44,10 +44,17 @@ const PROVEEDORES: Proveedor[] = [
     id: 'gemini',
     nombre: 'Google (Gemini API, plan gratuito)',
     resumen:
-      'Según Google, en el plan gratuito de la Gemini API ("Unpaid Services") se usa el contenido que se envía y las respuestas generadas para "proveer, mejorar y desarrollar" (la frase sigue en su página), y personas pueden leer, anotar y procesar esos datos para mejorar la calidad y sus productos. Google pide no enviar información sensible, confidencial ni personal.',
+      'Según Google, cuando se usan los servicios gratuitos (Unpaid Services), por ejemplo Google AI Studio y la cuota gratuita de la Gemini API, Google usa el contenido que se envía y las respuestas generadas para proveer, mejorar y desarrollar productos, servicios y tecnologías de aprendizaje automático de Google, incluidas sus funciones, productos y servicios empresariales, de acuerdo con su Política de Privacidad. Además, revisores humanos pueden leer, anotar y procesar la entrada y la salida de la API para ayudar con la calidad y mejorar sus productos. Google dice que toma medidas para proteger la privacidad, entre ellas desconectar esos datos de la cuenta de Google, la clave de API y el proyecto de Cloud antes de que los revisores los vean o anoten. Pide no enviar información sensible, confidencial ni personal.',
     citas: [
-      { texto: 'Google uses the content you submit to the Services and any generated responses to provide, improve, and develop' },
+      {
+        texto:
+          "When you use Unpaid Services, including, for example, Google AI Studio and the unpaid quota on Gemini API, Google uses the content you submit to the Services and any generated responses to provide, improve, and develop Google products and services and machine learning technologies, including Google's enterprise features, products, and services, consistent with our Privacy Policy.",
+      },
       { texto: 'To help with quality and improve our products, human reviewers may read, annotate, and process your API input and output.' },
+      {
+        texto:
+          'Google takes steps to protect your privacy as part of this process. This includes disconnecting this data from your Google Account, API key, and Cloud project before reviewers see or annotate it.',
+      },
       { texto: 'Do not submit sensitive, confidential, or personal information to the Unpaid Services.' },
     ],
     fuentes: [
@@ -190,8 +197,8 @@ export default function PrivacidadPage() {
               </div>
               <p className="mt-6">
                 <strong className="text-white">Importante:</strong> en el plan gratuito de algunos proveedores, el
-                contenido que se envía puede usarse para mejorar sus productos y modelos, y personas del proveedor pueden
-                leerlo. Es lo que dice Google para su plan gratuito de la Gemini API, según la cita de arriba. Si no querés
+                contenido que se envía puede usarse para mejorar sus productos y tecnologías de aprendizaje automático, y
+                revisores humanos pueden leerlo. Es lo que dice Google para su plan gratuito de la Gemini API, según la cita de arriba. Si no querés
                 que lo que escribís pase por ahí, no uses a Punto y escribinos directamente.
               </p>
             </div>
