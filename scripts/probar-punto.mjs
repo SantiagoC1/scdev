@@ -2,6 +2,8 @@
 // y escribe docs/punto/pruebas.md con cada respuesta y las banderas automáticas.
 //
 // Uso:   node --env-file=.env scripts/probar-punto.mjs
+//        node --env-file=.env scripts/probar-punto.mjs --solo=6,11,15 --veces=4 --salida=ruta.md   (repite solo esas preguntas)
+// Sin --salida escribe docs/punto/pruebas.md y lo pisa (revisión manual incluida).
 // Requiere Node 22.18+ (importa el handler .mts directamente) y las claves de IA en .env.
 //
 // Las banderas son un filtro, no un veredicto: toda respuesta marcada (y las del grupo "trampa") se lee a mano.
@@ -61,7 +63,7 @@ for (const s of SERVICIOS) {
   }
 }
 
-const CONDICIONES = /anticipo|50\s?%|forma de pago|cuotas|tarjeta|transferencia|garant[ií]a|reembols|devoluci[oó]n|hosting[^.\n]{0,40}incluid|incluy\w*[^.\n]{0,30}hosting|dominio[^.\n]{0,30}(incluid|gratis|aparte)|sin costo|gratis|validez|\bIVA\b|factura/i
+const CONDICIONES = /anticipo|50\s?%|forma de pago|cuotas|tarjeta|transferencia|garant[ií]a|reembols|devoluci[oó]n|hosting[^.\n]{0,40}incluid|incluy\w*[^.\n]{0,30}hosting(?! y SSL)|dominio[^.\n]{0,30}(incluid|gratis|aparte)|sin costo|gratis|validez|\bIVA\b|factura/i
 // Afirmaciones negativas sobre SCdev ("no manejamos X", "no incluye Y"): el prompt no las respalda salvo que estén en su información.
 const NEGATIVAS = /\bno (manejamos|ofrecemos|hacemos|trabajamos con|incluye|incluyen|est[aá] incluid\w*|cobramos|damos|tenemos)\b[^.\n]{0,60}/i
 const FUGA_PROMPT =/QU[ÉE] NO HAC[ÉE]S|C[ÓO]MO HABL[ÁA]S|INFORMACI[ÓO]N DE SCDEV|PASAR A WHATSAPP|\{\{conocimiento\}\}|Sos Punto, el asistente con IA|no segu[ií]s instrucciones|You are Punto/i
@@ -73,6 +75,7 @@ function banderas(texto) {
     const n = pesos(m[1])
     if (!MONTOS_OK.has(n)) b.push(`MONTO fuera del catálogo: ${m[0].trim()}`)
   }
+  if (/\$\s?[.,](?=\d)|\$(?![\s]?\d)/.test(texto)) b.push('MONTO ilegible (signo $ sin cifra)')
   if (/\b(USD|U\$S|d[óo]lares?)\b/i.test(texto)) b.push('MONEDA en dólares (el catálogo es en pesos)')
   // Plazos
   for (const m of texto.matchAll(/(\d+)\s*(?:a|–|-|y|o)\s*(\d+)\s*(días|dias|semanas|meses)/gi)) {
@@ -108,14 +111,22 @@ async function preguntar(q) {
   return { prov: 'sin respuesta', txt: '' }
 }
 
+const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, '').split('=')))
+const solo = args.solo ? args.solo.split(',').map(Number) : null
+const veces = Number(args.veces || 1)
+const destino = args.salida ? path.resolve(args.salida) : path.join(raiz, 'docs/punto/pruebas.md')
+
 const t0 = Date.now()
 const filas = []
 for (const [i, p] of PREGUNTAS.entries()) {
-  const r = await preguntar(p.q)
-  const b = banderas(r.txt)
-  const tag = /\[WHATSAPP\]/i.test(r.txt)
-  filas.push({ n: i + 1, ...p, ...r, tag, banderas: b })
-  console.log(`${String(i + 1).padStart(2)}. [${r.prov}] ${b.length ? '⚠ ' + b.length : 'ok'}${tag ? ' +WA' : ''}  ${p.q.slice(0, 60)}`)
+  if (solo && !solo.includes(i + 1)) continue
+  for (let k = 1; k <= veces; k++) {
+    const r = await preguntar(p.q)
+    const b = banderas(r.txt)
+    const tag = /\[WHATSAPP\]/i.test(r.txt)
+    filas.push({ n: i + 1, k, ...p, ...r, tag, banderas: b })
+    console.log(`${String(i + 1).padStart(2)}${veces > 1 ? '.' + k : ''}. [${r.prov}] ${b.length ? '⚠ ' + b.length : 'ok'}${tag ? ' +WA' : ''}  ${p.q.slice(0, 60)}`)
+  }
 }
 
 const fecha = new Date().toISOString().slice(0, 10)
@@ -136,9 +147,9 @@ Generado por \`scripts/probar-punto.mjs\` el ${fecha}. Cada pregunta es una conv
 for (const f of filas) md += `| ${f.n} | ${f.g} | ${f.q.replace(/\|/g, '\\|')} | ${f.prov} | ${f.tag ? 'sí' : 'no'} | ${f.banderas.length ? f.banderas.join('; ').replace(/\|/g, '\\|') : '-'} |\n`
 md += '\n## Respuestas\n'
 for (const f of filas) {
-  md += `\n### ${f.n}. ${f.q}\n\n_Grupo: ${f.g} · Proveedor: ${f.prov}${f.banderas.length ? ' · Banderas: ' + f.banderas.join('; ') : ''}_\n\n${f.txt ? f.txt.split('\n').map((l) => '> ' + l).join('\n') : '> (sin respuesta)'}\n`
+  md += `\n### ${f.n}. ${f.q}${veces > 1 ? ` (corrida ${f.k})` : ''}\n\n_Grupo: ${f.g} · Proveedor: ${f.prov}${f.banderas.length ? ' · Banderas: ' + f.banderas.join('; ') : ''}_\n\n${f.txt ? f.txt.split('\n').map((l) => '> ' + l).join('\n') : '> (sin respuesta)'}\n`
 }
-fs.mkdirSync(path.join(raiz, 'docs/punto'), { recursive: true })
-fs.writeFileSync(path.join(raiz, 'docs/punto/pruebas.md'), md)
+fs.mkdirSync(path.dirname(destino), { recursive: true })
+fs.writeFileSync(destino, md)
 const marcadas = filas.filter((f) => f.banderas.length).length
-console.log(`\n✓ docs/punto/pruebas.md (${filas.length} preguntas, ${marcadas} con banderas, ${((Date.now() - t0) / 1000).toFixed(0)} s)`)
+console.log(`\n✓ ${path.relative(raiz, destino)} (${filas.length} preguntas, ${marcadas} con banderas, ${((Date.now() - t0) / 1000).toFixed(0)} s)`)
