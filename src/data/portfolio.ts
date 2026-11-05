@@ -2,6 +2,8 @@ export interface Proyecto {
   id: string
   nombre: string
   imagen: string
+  /** Ancho en px del archivo `imagen`. Si está, la card usa srcset con las variantes -480.webp y -960.webp (scripts/optimizar-imagenes.mjs). */
+  anchoImagen?: number
   tags: string[]
   url: string | null
   descripcion?: string
@@ -27,6 +29,7 @@ export const PROYECTOS: Proyecto[] = [
     rubro: 'Institucional, educación',
     descripcion: 'Sitio institucional de una asociación civil de educación y cultura. Mantenimiento mensual de contenido.',
     imagen: '/images/tabano-captura.webp',
+    anchoImagen: 1600,
     tags: ['Sitio institucional', 'Mantenimiento mensual'],
     url: 'https://tabanocultura.org/',
   },
@@ -37,6 +40,7 @@ export const PROYECTOS: Proyecto[] = [
     rubro: 'Salud, consultorio',
     descripcion: 'Sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
     imagen: '/images/flor-captura.webp',
+    anchoImagen: 1600,
     tags: ['Sistema a medida'],
     url: null,
   },
@@ -76,6 +80,7 @@ export const PROYECTOS: Proyecto[] = [
     url: 'https://www.unidosconstruimos.com.ar',
     repo: 'https://github.com/scdevok-sudo/Ticketera',
     imagen: '/images/UnidosConstruimos.webp',
+    anchoImagen: 640,
     categoria: 'Plataforma / Sistema a medida',
   },
   {
@@ -83,6 +88,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'cliente',
     nombre: 'Balance, agencia de marketing',
     imagen: '/images/balance.webp',
+    anchoImagen: 1600,
     tags: ['React 19', 'TypeScript', 'Tailwind', 'Framer Motion', 'Vite'],
     url: 'https://somosbalance.com.ar',
   },
@@ -91,6 +97,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'propio',
     nombre: 'Sitio de SCdev',
     imagen: '/images/Scdev.webp',
+    anchoImagen: 1280,
     tags: ['React 19', 'TypeScript', 'Tailwind v4'],
     url: 'https://scdev.com.ar',
   },
@@ -99,6 +106,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'cliente',
     nombre: 'Adsum Pater (Web App)',
     imagen: '/images/AdsumPater.webp',
+    anchoImagen: 1600,
     tags: ['.NET 8', 'Blazor', 'Firebase', 'Clean Arch'],
     url: 'https://adsumpater.com.ar',
   },
@@ -107,6 +115,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'demo',
     nombre: 'CentroEventos (CampusFit)',
     imagen: '/images/campusfit.webp',
+    anchoImagen: 751,
     tags: ['.NET 8', 'Blazor', 'SQLite', 'EF Core'],
     url: null,
   },

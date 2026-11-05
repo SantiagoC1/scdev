@@ -51,3 +51,17 @@ for (const t of [32, 180, 512]) {
   const info = await sharp(path.join('scripts/fuentes', 'LogoChicoFN.png')).resize(t, t, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png({ compressionLevel: 9 }).toFile(out)
   console.log(`favicon-${t}.png ${(info.size / 1024).toFixed(1)} KB`)
 }
+
+// Variantes del carrusel de Trabajos: las cards se muestran a 317 px (celular) y 480 px (escritorio), o el doble en pantallas
+// de alta densidad. Se generan -480.webp y -960.webp (solo si son más chicas que el original) para usar con srcset.
+const CARRUSEL = ['tabano-captura', 'flor-captura', 'UnidosConstruimos', 'balance', 'Scdev', 'AdsumPater', 'campusfit']
+for (const base of CARRUSEL) {
+  const src = path.join(DIR, base + '.webp')
+  const { width } = await sharp(src).metadata()
+  for (const ancho of [480, 960]) {
+    if (width <= ancho) continue
+    const out = path.join(DIR, `${base}-${ancho}.webp`)
+    const info = await sharp(src).resize({ width: ancho }).webp({ quality: 80, effort: 6 }).toFile(out)
+    console.log(`${base}.webp (${width} px) -> ${path.basename(out)} ${info.width}x${info.height} ${(info.size / 1024).toFixed(0)} KB`)
+  }
+}
