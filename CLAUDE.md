@@ -913,3 +913,9 @@ Cómo se nota: el chat dice "Uy, se me cortó la conexión…" (la función devu
 - **El origen no frena a un script** que falsifica el header `Origin`: para eso están los topes.
 - **Deploy Previews con 403.** El nombre del sitio se deduce de variables de Netlify; si no se puede, definir `PUNTO_NETLIFY_SITE` con el `<sitio>` de `<sitio>.netlify.app`.
 - **Pruebas sin red:** `node scripts/probar-limites.mjs` (IPv6, topes, intervalo, origen, interruptor y header). Pruebas de punta a punta: `PUNTO_TOPE_DIARIO=3 npx netlify-cli dev` y pedidos con `Origin: http://localhost:8888`.
+
+### Responsive del widget
+
+Reglas (todas en `.punto-panel` y `.punto-fab` de `src/index.css`): menos de 640 px es una hoja desde abajo de ancho completo con alto `min(85dvh, 100dvh - 24px)`; desde 640 px, panel abajo a la derecha de `min(380px, 100vw - 32px)` por `min(560px, 100dvh - 96px)`; con menos de 500 px de alto (celular en horizontal, zoom alto) ocupa `100dvh - 16px` y Punto del encabezado baja a 48 px. Con el teclado en pantalla, `useVisualViewport` publica `--punto-vvh` y `--punto-bottom` para que el panel se achique y suba (en iOS el teclado achica el visual viewport sin cambiar el de diseño). Solo scrollea la lista de mensajes; en celular el fondo se bloquea con la clase `punto-abierto` en `<html>`. El botón flotante respeta `env(safe-area-inset-*)` y se esconde con el panel abierto en celular, con el formulario de contacto y con el menú móvil del navbar. El panel está por encima del navbar (z-60); Escape y la trampa de foco son del documento (el foco puede quedar en el `<body>`). El campo de texto es de 16 px (si no, iOS hace zoom).
+
+Probar: con `npm run dev` corriendo, `node scripts/probar-punto-responsive.mjs --capturas=docs/capturas/punto-responsive` abre el widget en 11 tamaños (con zoom 200% y teclado simulado), mide cada regla, corre axe y sale con código 1 si algo falla.
