@@ -216,3 +216,14 @@ main:focus { outline: none; }
   visibility: visible;
   transition: opacity 150ms ease;
 }
+
+/* Carrusel de Trabajos. Hover barato: en escritorio la imagen crece apenas con una transición de transform (solo compositor),
+   con will-change únicamente mientras hay hover. Mientras se arrastra con el mouse (data-arrastrando) las cards no reciben
+   el puntero: sin cambios de hover ni transiciones que repinten imágenes grandes en pleno scroll (medido: era el mayor
+   costo del arrastre). */
+.carrusel-img { transition: transform 300ms ease; }
+@media (hover: hover) {
+  .carrusel-card:hover .carrusel-img { transform: scale(1.03); will-change: transform; }
+}
+[data-arrastrando='true'] > * { pointer-events: none; }
+[data-arrastrando='true'] .carrusel-img { transform: none !important; transition: none !important; }
