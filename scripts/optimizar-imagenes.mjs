@@ -28,6 +28,23 @@ async function aWebp(archivo, ancho) {
 for (const f of CAPTURAS) await aWebp(f, 1600)
 for (const f of LOGOS) await aWebp(f, 512)
 
+// Clientes nuevos (Tábano y Florencia). Las capturas ya vienen en WebP de 1600×1000: si pesan menos de 300 KB no se tocan.
+for (const f of ['tabano-captura.webp', 'flor-captura.webp']) {
+  const src = path.join(DIR, f)
+  const { width, height } = await sharp(src).metadata()
+  const kb = fs.statSync(src).size / 1024
+  if (width <= 1600 && kb < 300) console.log(`${f}: ${width}x${height} ${kb.toFixed(0)} KB, ya optimizada, no se toca`)
+  else console.log(`${f}: ${width}x${height} ${kb.toFixed(0)} KB, supera el límite: convertir a mano`)
+}
+// Logos con transparencia: los PNG originales viven en scripts/fuentes/ (fuera de public/) y se exportan a WebP de máx. 512 px.
+// tabano-logo-blanco se usa en la franja "Confían en SCdev". Los de Florencia (demo) quedan guardados sin usar.
+// Las variantes de color y los emblemas de Tábano se quedan como fuentes, sin publicar.
+for (const f of ['tabano-logo-blanco.png', 'flor-logo-blanco.png', 'flor-logo-oscuro.png']) {
+  const out = path.join(DIR, f.replace(/\.png$/, '.webp'))
+  const info = await sharp(path.join('scripts/fuentes', f)).resize({ width: 512, withoutEnlargement: true }).webp({ quality: 90, alphaQuality: 100, effort: 6 }).toFile(out)
+  console.log(`${f} -> ${path.basename(out)} ${info.width}x${info.height} ${(info.size / 1024).toFixed(1)} KB (con transparencia)`)
+}
+
 // Favicon: se exporta desde scripts/fuentes/LogoChicoFN.png (fuera de public/).
 for (const t of [32, 180, 512]) {
   const out = path.join(DIR, `favicon-${t}.png`)
