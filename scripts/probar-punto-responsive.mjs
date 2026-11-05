@@ -186,5 +186,4 @@ for (const [w, h, nombre, dsf = 1] of TAMANOS) {
 }
 await navegador.close()
 console.log(`\n${tamanosConFallas ? `✗ ${tamanosConFallas} caso(s) con fallas` : '✓ todos los tamaños cumplen'}`)
-fs.writeFileSync(path.join(import.meta.dirname, '..', 'docs', 'capturas', 'punto-responsive-resultado.json'), JSON.stringify(resumen, null, 1)) // se pisa en cada corrida
 process.exit(tamanosConFallas ? 1 : 0)
