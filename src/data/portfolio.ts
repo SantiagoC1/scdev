@@ -18,21 +18,33 @@ export interface Proyecto {
 }
 
 export const PROYECTOS: Proyecto[] = [
-  // Orden: Tábano, SGI, Florencia, Diputados y después los que ya estaban.
-  // Las capturas se agregan en public/images/ (ver docs/pendientes.md); mientras tanto la card muestra el nombre.
+  // Orden: Tábano, Florencia y después los que ya estaban. SGI (Deca) y Diputados siguen ocultos (visible: false).
+  // Tábano y Florencia: sin chips de tecnología porque no conocemos su stack; los chips son del tipo de proyecto (máx. 3).
   {
     id: 'tabano',
     tipo: 'cliente',
     nombre: 'Tábano · Cultura y Vida Cristiana',
     rubro: 'Institucional, educación',
     descripcion: 'Sitio institucional de una asociación civil de educación y cultura. Mantenimiento mensual de contenido.',
-    imagen: '',
-    tags: [],
+    imagen: '/images/tabano-captura.webp',
+    tags: ['Sitio institucional', 'Mantenimiento mensual'],
     url: 'https://tabanocultura.org/',
   },
   {
+    id: 'florencia-inveninato',
+    tipo: 'demo', // chip "Demo" sobre la imagen y botón "Ver demo"
+    nombre: 'Florencia Inveninato',
+    rubro: 'Salud, consultorio',
+    descripcion: 'Demo de un sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
+    imagen: '/images/flor-captura.webp',
+    // "Demo" ya es el chip sobre la imagen, por eso no se repite acá.
+    tags: ['Sistema a medida'],
+    url: 'https://demo-flor.vercel.app/pacientes',
+  },
+  {
     id: 'deca-sgi',
-    // TODO(santi): pedir permiso a Juan Sequeira para mostrarlo. Hasta entonces no se renderiza.
+    // TODO(santi): pedir permiso a Juan Sequeira antes de mostrarlo. Hasta entonces no se renderiza.
+    // Cuando se active: sin nombre ni logo de Deca, salvo que Santi lo autorice. Sin imagen por ahora.
     visible: false,
     tipo: 'demo',
     chip: 'Demo con datos de ejemplo',
@@ -44,18 +56,8 @@ export const PROYECTOS: Proyecto[] = [
     url: 'https://demo-deca.vercel.app/dashboard',
   },
   {
-    id: 'florencia-inveninato',
-    tipo: 'demo',
-    nombre: 'Florencia Inveninato',
-    rubro: 'Salud, consultorio',
-    descripcion: 'Demo de un sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
-    imagen: '',
-    tags: [],
-    url: 'https://demo-flor.vercel.app/pacientes',
-  },
-  {
     id: 'diputados-bonaerenses',
-    // TODO(santi): confirmar con Juan Manuel Negri que podemos mostrar el sitio.
+    // TODO(santi): confirmar con Juan Manuel Negri que podemos mostrar el sitio. Hasta entonces no se renderiza. Sin imagen por ahora.
     visible: false,
     tipo: 'cliente',
     nombre: 'Diputados Bonaerenses',

@@ -59,6 +59,8 @@ export const CLIENTES: Cliente[] = [
     id: 'tabano',
     nombre: 'Tábano · Cultura y Vida Cristiana',
     rubro: 'Institucional, educación',
+    logo: '/images/tabano-logo-blanco.webp',
+    logoSize: [512, 168],
     iniciales: 'TB',
     tipo: 'cliente',
     url: 'https://tabanocultura.org/',
