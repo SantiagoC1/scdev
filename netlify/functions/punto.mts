@@ -7,7 +7,7 @@ export const config = { path: '/api/punto' }
 /**
  * Cadena de proveedores: Groq → Gemini → Cloudflare Workers AI, los tres con API compatible con OpenAI.
  * Los ids de modelo vienen de variables de entorno (GROQ_MODEL, GEMINI_MODEL, CLOUDFLARE_MODEL):
- * un proveedor sin clave o sin modelo se saltea.
+ * un proveedor sin clave o sin modelo se saltea. GROQ_/GEMINI_/CLOUDFLARE_REASONING_EFFORT (opcional) se reenvía como reasoning_effort.
  * Los precios del prompt salen de la config en vivo (Apps Script, caché de 10 min, con respaldo): ver punto/config.ts.
  *
  * Formato hacia el cliente (SSE): `data: {"delta":"texto"}\n\n` … `data: [DONE]\n\n`.
@@ -24,23 +24,26 @@ interface Proveedor {
   url: string
   key: string
   model: string
+  effort: string
 }
 
 function proveedores(): Proveedor[] {
   const e = process.env
   const lista: Proveedor[] = [
-    { nombre: 'groq', url: 'https://api.groq.com/openai/v1/chat/completions', key: e.GROQ_API_KEY ?? '', model: e.GROQ_MODEL ?? '' },
+    { nombre: 'groq', url: 'https://api.groq.com/openai/v1/chat/completions', key: e.GROQ_API_KEY ?? '', model: e.GROQ_MODEL ?? '', effort: e.GROQ_REASONING_EFFORT ?? '' },
     {
       nombre: 'gemini',
       url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
       key: e.GEMINI_API_KEY ?? '',
       model: e.GEMINI_MODEL ?? '',
+      effort: e.GEMINI_REASONING_EFFORT ?? '',
     },
     {
       nombre: 'cloudflare',
       url: `https://api.cloudflare.com/client/v4/accounts/${e.CLOUDFLARE_ACCOUNT_ID ?? ''}/ai/v1/chat/completions`,
       key: e.CLOUDFLARE_API_TOKEN ?? '',
       model: e.CLOUDFLARE_MODEL ?? '',
+      effort: e.CLOUDFLARE_REASONING_EFFORT ?? '',
     },
   ]
   return lista.filter((p) => p.key && p.model && (p.nombre !== 'cloudflare' || e.CLOUDFLARE_ACCOUNT_ID))
@@ -99,7 +102,14 @@ async function intentar(
       method: 'POST',
       signal: ctl.signal,
       headers: { Authorization: `Bearer ${p.key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: p.model, messages: mensajes, max_tokens: 300, temperature: 0.6, stream: true }),
+      body: JSON.stringify({
+        model: p.model,
+        messages: mensajes,
+        max_tokens: 300,
+        temperature: 0.6,
+        stream: true,
+        ...(p.effort ? { reasoning_effort: p.effort } : {}),
+      }),
     })
     if (!r.ok || !r.body) {
       console.warn(`[punto] ${p.nombre}: HTTP ${r.status}`)
