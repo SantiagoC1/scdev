@@ -52,6 +52,9 @@ Viven en variables de entorno (`GROQ_MODEL`, `GEMINI_MODEL`, `CLOUDFLARE_MODEL`;
 | Cloudflare | `@cf/meta/llama-3.3-70b-instruct-fp8-fast` | Lista de modelos de la cuenta + stream de prueba OK (`/ai/v1/chat/completions`) |
 
 - TODO(santi): la `GROQ_API_KEY` del `.env` empieza con `sk_` y Groq responde "Invalid API Key" (las de Groq empiezan con `gsk_`). Generar una nueva en console.groq.com, cargarla en `.env` y en Netlify, y volver a verificar el id con `GET /models`. Mientras tanto la cadena responde por Gemini.
+- TODO(santi): cuando cargues la clave nueva de Groq, verificar `llama-3.3-70b-versatile` contra `GET /models` y probar el stream. Si no está en el plan gratis: `GROQ_MODEL=openai/gpt-oss-120b` y `GROQ_REASONING_EFFORT=low` (la función ya reenvía `reasoning_effort` si la variable existe).
+- Los precios del prompt salen de la config en vivo (Apps Script, caché de 10 min por instancia, respaldo `src/data/configFallback.ts`). La variable del servidor es `APPS_SCRIPT_URL` (en `.env` estaba como `PPS_SCRIPT_URL`; renombrada). Cargarla también en Netlify (si falta, usa `VITE_APPS_SCRIPT_URL`).
+- Límite diario (Blobs, store `punto-uso`): 30 por IP por día (`PUNTO_LIMITE_DIA` para cambiarlo), con hash de IP + sal `PUNTO_SALT`. Las claves de días anteriores no se borran solas (son hashes de pocos bytes); si molesta, limpiar el prefijo `AAAA-MM-DD/` desde la consola de Netlify.
 - Los modelos de razonamiento (p. ej. `openai/gpt-oss-*`) funcionan, pero la función solo reenvía `delta.content`.
 - Revisar los ids en cada despliegue importante: los modelos de Gemini cambian seguido.
 
