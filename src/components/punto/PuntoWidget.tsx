@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import { X, Send } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import PuntoAvatar, { PuntoDefs } from './PuntoAvatar'
 import { usePuntoChat } from './usePuntoChat'
 import { RESPUESTAS_RAPIDAS } from './respuestasRapidas'
@@ -267,7 +268,7 @@ export default function PuntoWidget() {
               </a>
               <p className="mt-2 text-xs text-white/60 leading-snug">
                 Punto es un asistente con IA. No compartas datos sensibles.{' '}
-                <a href="/privacidad" className="underline underline-offset-2 hover:text-white">Cómo usamos tus datos</a>
+                <Link to="/privacidad" onClick={cerrar} className="underline underline-offset-2 hover:text-white">Cómo usamos tus datos</Link>
               </p>
             </div>
           </m.div>
