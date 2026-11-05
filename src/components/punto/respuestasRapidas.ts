@@ -3,7 +3,7 @@ import { PRICE_MAP } from '../../data/precios'
 import { formatPrice } from '../../hooks/useSheetConfig'
 import type { SheetConfig } from '../../hooks/useSheetConfig'
 
-// Fase 1 (sin IA): textos fijos de los 3 botones rápidos. Los precios salen de la config, nunca copiados.
+// Textos fijos de los 3 botones rápidos (no gastan IA). Los precios salen de la config, nunca copiados.
 export interface RespuestaRapida {
   id: string
   boton: string
@@ -39,5 +39,6 @@ export const RESPUESTAS_RAPIDAS: RespuestaRapida[] = [
   },
 ]
 
-export const RESPUESTA_SIN_IA =
-  'Por ahora solo puedo responder a los botones de arriba. Para otra consulta, escribile al equipo por WhatsApp con el botón de abajo.'
+// Mensajes de Punto cuando algo falla. En los dos casos el botón "Hablar con el equipo" sigue a la vista.
+export const MENSAJE_LIMITE = 'Por hoy ya charlamos un montón. Escribile al equipo por WhatsApp y te responden ahí.'
+export const MENSAJE_ERROR = 'Uy, se me cortó la conexión y no pude contestarte. Probá de nuevo en un rato o escribile al equipo por WhatsApp.'

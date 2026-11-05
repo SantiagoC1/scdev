@@ -178,7 +178,9 @@ export default function PuntoWidget() {
                   className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                     msg.role === 'user'
                       ? 'self-end bg-[#D32F2F] text-white rounded-br-md'
-                      : 'self-start bg-[#161618] text-[#F5F5F4] rounded-bl-md'
+                      : msg.error
+                        ? 'self-start bg-[#161618] text-[#F5F5F4] rounded-bl-md border border-[#D32F2F]/50'
+                        : 'self-start bg-[#161618] text-[#F5F5F4] rounded-bl-md'
                   }`}
                 >
                   {msg.texto}
@@ -214,15 +216,16 @@ export default function PuntoWidget() {
                   value={texto}
                   maxLength={500}
                   autoComplete="off"
-                  placeholder="Escribí tu mensaje"
+                  disabled={chat.bloqueado}
+                  placeholder={chat.bloqueado ? 'Seguí con el equipo por WhatsApp' : 'Escribí tu mensaje'}
                   onChange={(e) => { setTexto(e.target.value); chat.setEscribiendo(e.target.value.length > 0) }}
                   onBlur={() => chat.setEscribiendo(false)}
-                  className="min-h-11 flex-1 min-w-0 rounded-lg bg-white/5 border border-white/15 px-3 text-sm text-white placeholder:text-white/50 focus:border-white/40"
+                  className="min-h-11 flex-1 min-w-0 rounded-lg bg-white/5 border border-white/15 px-3 text-sm text-white placeholder:text-white/50 focus:border-white/40 disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   aria-label="Enviar mensaje"
-                  disabled={!texto.trim() || chat.ocupado}
+                  disabled={!texto.trim() || chat.ocupado || chat.bloqueado}
                   className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-[#D32F2F] text-white hover:bg-[#B71C1C] disabled:opacity-40 disabled:hover:bg-[#D32F2F] transition-colors"
                 >
                   <Send size={18} aria-hidden="true" />
