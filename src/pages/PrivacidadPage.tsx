@@ -14,6 +14,8 @@ interface Cita {
 interface Proveedor {
   id: string
   nombre: string
+  /** Resumen en español de lo que dicen las citas de abajo. No puede afirmar nada que las citas no digan. */
+  resumen: string
   /** Frases textuales de la página del proveedor, en su idioma original. No agregar nada que el proveedor no diga. */
   citas: Cita[]
   fuentes: { etiqueta: string; href: string }[]
@@ -24,6 +26,8 @@ const PROVEEDORES: Proveedor[] = [
   {
     id: 'groq',
     nombre: 'Groq',
+    resumen:
+      'Según Groq, por defecto no retiene los datos de los pedidos de inferencia. Puede registrar temporalmente lo que se envía y lo que se responde solo para resolver errores que afecten la plataforma o investigar sospechas de abuso, y esos registros se conservan hasta 30 días, salvo que la ley exija más.',
     citas: [
       { texto: 'By default, Groq does not retain customer data for inference requests.' },
       {
@@ -39,6 +43,8 @@ const PROVEEDORES: Proveedor[] = [
   {
     id: 'gemini',
     nombre: 'Google (Gemini API, plan gratuito)',
+    resumen:
+      'Según Google, en el plan gratuito de la Gemini API ("Unpaid Services") se usa el contenido que se envía y las respuestas generadas para "proveer, mejorar y desarrollar" (la frase sigue en su página), y personas pueden leer, anotar y procesar esos datos para mejorar la calidad y sus productos. Google pide no enviar información sensible, confidencial ni personal.',
     citas: [
       { texto: 'Google uses the content you submit to the Services and any generated responses to provide, improve, and develop' },
       { texto: 'To help with quality and improve our products, human reviewers may read, annotate, and process your API input and output.' },
@@ -51,6 +57,8 @@ const PROVEEDORES: Proveedor[] = [
   {
     id: 'cloudflare',
     nombre: 'Cloudflare (Workers AI)',
+    resumen:
+      'Según Cloudflare, no usa el contenido que procesa Workers AI para entrenar modelos de IA, y lo procesa solo durante el tiempo necesario para prestar el servicio.',
     citas: [
       { texto: 'Cloudflare does not use Customer Content processed by Workers AI to train AI models.' },
       { texto: 'Workers AI processes Customer Content only for as long as needed to provide the service.' },
@@ -152,13 +160,15 @@ export default function PrivacidadPage() {
             <div id="proveedores">
               <h2 className={H2}>Qué dicen los proveedores de IA</h2>
               <p className="mb-6">
-                Lo que sigue son frases textuales de la página de cada proveedor, en su idioma original, leídas el{' '}
-                {LEIDAS}. Son sus reglas, no las nuestras, y pueden cambiar: te dejamos el link a cada fuente.
+                De cada proveedor te dejamos primero un resumen en español y debajo las frases textuales de su página, en su idioma
+                original, leídas el {LEIDAS}. Son sus reglas, no las nuestras, y pueden cambiar: te dejamos el link a cada fuente.
               </p>
               <div className="flex flex-col gap-8">
                 {PROVEEDORES.map((p) => (
                   <div key={p.id} className="rounded-2xl bg-[#111111] border border-white/[0.08] p-5 md:p-6">
                     <h3 className="font-display font-bold text-white mb-3">{p.nombre}</h3>
+                    <p className="text-sm text-white/80 leading-relaxed mb-4">{p.resumen}</p>
+                    <p className="text-xs uppercase tracking-wide text-white/50 mb-2">Texto original (en inglés)</p>
                     <div className="flex flex-col gap-3">
                       {p.citas.map((c) => (
                         <blockquote key={c.texto} lang="en" className="border-l-2 border-[#D32F2F]/60 pl-4 text-sm text-white/80">
