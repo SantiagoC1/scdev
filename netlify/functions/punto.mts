@@ -1,4 +1,5 @@
-import { CONOCIMIENTO } from './punto/conocimiento.ts'
+import { armarConocimiento } from './punto/conocimiento.ts'
+import { obtenerPrecios } from './punto/config.ts'
 import { SYSTEM_PROMPT } from './punto/prompt.ts'
 
 export const config = { path: '/api/punto' }
@@ -7,6 +8,7 @@ export const config = { path: '/api/punto' }
  * Cadena de proveedores: Groq → Gemini → Cloudflare Workers AI, los tres con API compatible con OpenAI.
  * Los ids de modelo vienen de variables de entorno (GROQ_MODEL, GEMINI_MODEL, CLOUDFLARE_MODEL):
  * un proveedor sin clave o sin modelo se saltea.
+ * Los precios del prompt salen de la config en vivo (Apps Script, caché de 10 min, con respaldo): ver punto/config.ts.
  *
  * Formato hacia el cliente (SSE): `data: {"delta":"texto"}\n\n` … `data: [DONE]\n\n`.
  * Solo se reenvía choices[0].delta.content: los campos de razonamiento (reasoning, reasoning_content, thought…) se descartan.
@@ -135,7 +137,7 @@ export default async function handler(req: Request): Promise<Response> {
   const historial = limpiarHistorial(cuerpo?.mensajes)
   if (!historial.length || historial[historial.length - 1].role !== 'user') return json({ error: 'sin_mensaje' }, 400)
 
-  const mensajes = [{ role: 'system', content: SYSTEM_PROMPT.replace('{{conocimiento}}', CONOCIMIENTO) }, ...historial]
+  const mensajes = [{ role: 'system', content: SYSTEM_PROMPT.replace('{{conocimiento}}', armarConocimiento(await obtenerPrecios())) }, ...historial]
 
   for (const p of proveedores()) {
     const r = await intentar(p, mensajes, req.signal)

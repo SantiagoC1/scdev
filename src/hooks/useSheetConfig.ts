@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { APPS_SCRIPT_URL, WA_NUMBER } from '../constants'
+import { PRECIOS_FALLBACK } from '../data/configFallback'
 
 export interface SheetConfig {
   whatsapp_number: string
@@ -33,22 +34,7 @@ export const CONFIG_FALLBACK: SheetConfig = {
   github_url: 'https://github.com/SantiagoC1',
   instagram_url: 'https://www.instagram.com/scdev.ar/',
   email: 'scdev.ok@gmail.com',
-  price_esencial_min: '80000',
-  price_esencial_max: '100000',
-  price_landing_min: '400000',
-  price_landing_max: '700000',
-  price_corporativo_min: '800000',
-  price_corporativo_max: '1500000',
-  price_sistema_min: '1500000',
-  price_sistema_max: '4000000',
-  price_automatizacion_min: '300000',
-  price_automatizacion_max: '900000',
-  price_mant_basico_min: '80000',
-  price_mant_basico_max: '120000',
-  price_mant_estandar_min: '180000',
-  price_mant_estandar_max: '250000',
-  price_mant_pro_min: '350000',
-  price_mant_pro_max: '500000',
+  ...PRECIOS_FALLBACK,
 }
 
 export function useSheetConfig() {
