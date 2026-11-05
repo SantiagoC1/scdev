@@ -166,9 +166,15 @@ async function intentar(
 
 const json = (cuerpo: unknown, status: number) => Response.json(cuerpo, { status, headers: { 'Cache-Control': 'no-store' } })
 
+/** Interruptor: PUNTO_ACTIVO=false apaga a Punto sin tocar código (cualquier otro valor, o sin definir, lo deja activo). */
+const puntoActivo = () => (process.env.PUNTO_ACTIVO ?? '').trim().toLowerCase() !== 'false'
+
 export default async function handler(req: Request, context?: { ip?: string }): Promise<Response> {
-  if (req.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } })
+  if (req.method !== 'POST' && req.method !== 'GET') return new Response(null, { status: 405, headers: { Allow: 'GET, POST' } })
   if (!origenPermitido(req)) return json({ error: 'origen' }, 403)
+  // El widget pregunta el estado al abrir el panel, para mostrar solo "Hablar con el equipo" si Punto está apagado.
+  if (req.method === 'GET') return json({ activo: puntoActivo() }, 200)
+  if (!puntoActivo()) return json({ error: 'desactivado' }, 503)
   if (Number(req.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) return json({ error: 'demasiado_largo' }, 413)
 
   let cuerpo: { mensajes?: unknown }

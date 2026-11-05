@@ -4,7 +4,7 @@ import { X, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PuntoAvatar, { PuntoDefs } from './PuntoAvatar'
 import { usePuntoChat } from './usePuntoChat'
-import { RESPUESTAS_RAPIDAS } from './respuestasRapidas'
+import { RESPUESTAS_RAPIDAS, MENSAJE_DESACTIVADO } from './respuestasRapidas'
 import { servicioDeConversacion, textoWhatsApp } from './servicioWhatsapp'
 import { useConfig } from '../../context/ConfigContext'
 import { useModal } from '../../context/ModalContext'
@@ -74,6 +74,7 @@ export default function PuntoWidget() {
     marcarSesion()
     setAbierto(true)
     chat.saludar()
+    chat.consultarEstado()
     track({ event: 'punto_open' })
   }
   const cerrar = () => setAbierto(false)
@@ -176,7 +177,12 @@ export default function PuntoWidget() {
               </button>
             </div>
 
-            {/* Conversación */}
+            {/* Conversación (si Punto está apagado: solo un aviso y el botón del equipo) */}
+            {chat.desactivado ? (
+              <div className="flex-1 px-4 py-6">
+                <p role="status" className="text-sm text-white/80 leading-relaxed">{MENSAJE_DESACTIVADO}</p>
+              </div>
+            ) : (
             <div
               ref={lista}
               role="log"
@@ -230,10 +236,12 @@ export default function PuntoWidget() {
                 </div>
               )}
             </div>
+            )}
 
             {/* Entrada */}
             <div className="border-t border-white/10 px-4 pt-3 pb-3">
-              {chat.aviso && <p role="status" className="text-xs text-white/70 mb-2">{chat.aviso}</p>}
+              {!chat.desactivado && chat.aviso && <p role="status" className="text-xs text-white/70 mb-2">{chat.aviso}</p>}
+              {!chat.desactivado && (
               <form onSubmit={enviar} className="flex gap-2">
                 <label htmlFor="punto-input" className="sr-only">Escribí tu mensaje</label>
                 <input
@@ -257,6 +265,7 @@ export default function PuntoWidget() {
                   <Send size={18} aria-hidden="true" />
                 </button>
               </form>
+              )}
               <a
                 href={waLink}
                 target="_blank"
@@ -266,10 +275,12 @@ export default function PuntoWidget() {
               >
                 Hablar con el equipo
               </a>
+              {!chat.desactivado && (
               <p className="mt-2 text-xs text-white/60 leading-snug">
                 Punto es un asistente con IA. No compartas datos sensibles.{' '}
                 <Link to="/privacidad" onClick={cerrar} className="underline underline-offset-2 hover:text-white">Cómo usamos tus datos</Link>
               </p>
+              )}
             </div>
           </m.div>
         )}

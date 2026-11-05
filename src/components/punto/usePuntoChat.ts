@@ -33,6 +33,8 @@ export function usePuntoChat(config: SheetConfig) {
   const [escribiendo, setEscribiendo] = useState(false)
   const [aviso, setAviso] = useState('')
   const [bloqueado, setBloqueado] = useState(false)
+  const [desactivado, setDesactivado] = useState(false) // PUNTO_ACTIVO=false: el panel muestra solo "Hablar con el equipo"
+  const estadoConsultado = useRef(false)
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   const ultimoEnvio = useRef(0)
   const idSiguiente = useRef(1)
@@ -116,6 +118,11 @@ export function usePuntoChat(config: SheetConfig) {
         body: JSON.stringify({ mensajes: historial }),
         signal: ctl.signal,
       })
+      if (r.status === 503 && (await r.clone().json().then((j: { error?: string }) => j.error, () => undefined)) === 'desactivado') {
+        setDesactivado(true)
+        setEstado('reposo')
+        return
+      }
       if (r.status === 429) {
         // 'intervalo': mensajes muy seguidos (no bloquea). 'limite' / 'tope': tope por IP o global del día (bloquea el campo).
         const motivo = await r.json().then((j: { error?: string }) => j.error, () => undefined)
@@ -218,6 +225,18 @@ export function usePuntoChat(config: SheetConfig) {
     })
   }
 
+  /** Al abrir el panel (una vez por visita): pregunta a /api/punto si está activo. Si no responde, se asume que sí. */
+  const consultarEstado = () => {
+    if (estadoConsultado.current) return
+    estadoConsultado.current = true
+    fetch('/api/punto', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: { activo?: boolean } | null) => {
+        if (j && j.activo === false) setDesactivado(true)
+      })
+      .catch(() => {})
+  }
+
   /** Al abrir el panel: saluda una vez y vuelve a reposo (si no está en medio de una respuesta). */
   const saludar = () => {
     if (ocupado) return
@@ -240,6 +259,8 @@ export function usePuntoChat(config: SheetConfig) {
     aviso,
     ocupado,
     bloqueado,
+    desactivado,
+    consultarEstado,
     setEscribiendo,
     enviarRapida,
     enviarLibre,
