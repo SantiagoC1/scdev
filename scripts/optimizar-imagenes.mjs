@@ -9,7 +9,7 @@ const DIR = 'public/images'
 const borrar = process.argv.includes('--borrar-originales')
 
 const CAPTURAS = ['AdsumPater.png', 'balance.png', 'Scdev.png', 'campusfit.png']
-const LOGOS = ['BalanceLogo.png', 'DrPadegimas.png', 'LogoAdsum-Claro.png', 'LogoCompletoHorizontalFN.png']
+const LOGOS = ['BalanceLogo.png', 'LogoAdsum-Claro.png', 'LogoCompletoHorizontalFN.png']
 
 async function aWebp(archivo, ancho) {
   const src = path.join(DIR, archivo)
