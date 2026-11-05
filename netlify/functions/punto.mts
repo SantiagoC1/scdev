@@ -1,6 +1,6 @@
 import { armarConocimiento } from './punto/conocimiento.ts'
 import { obtenerPrecios } from './punto/config.ts'
-import { registrarUso } from './punto/limite.ts'
+import { revisarLimites } from './punto/limite.ts'
 import { SYSTEM_PROMPT } from './punto/prompt.ts'
 
 export const config = { path: '/api/punto' }
@@ -179,7 +179,8 @@ export default async function handler(req: Request, context?: { ip?: string }): 
   if (!historial.length || historial[historial.length - 1].role !== 'user') return json({ error: 'sin_mensaje' }, 400)
 
   const ip = context?.ip ?? req.headers.get('x-nf-client-connection-ip') ?? 'desconocida'
-  if (!(await registrarUso(ip))) return json({ error: 'limite' }, 429)
+  const limite = await revisarLimites(ip)
+  if (limite !== 'ok') return json({ error: limite }, 429) // 'limite' (tope de esa IP) o 'tope' (tope global del día)
 
   const mensajes = [{ role: 'system', content: SYSTEM_PROMPT.replace('{{conocimiento}}', armarConocimiento(await obtenerPrecios())) }, ...historial]
 

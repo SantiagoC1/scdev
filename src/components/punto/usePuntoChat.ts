@@ -89,7 +89,7 @@ export function usePuntoChat(config: SheetConfig) {
   const preocupar = (error: 'limite' | 'conexion') => {
     setMensajes((m) => [
       ...m,
-      { id: idSiguiente.current++, role: 'assistant', texto: error === 'limite' ? MENSAJE_LIMITE : MENSAJE_ERROR, error: true },
+      { id: idSiguiente.current++, role: 'assistant', texto: error === 'limite' ? MENSAJE_LIMITE : MENSAJE_ERROR, error: true, whatsapp: error === 'limite' },
     ])
     if (error === 'limite') setBloqueado(true)
     setEstado('preocupado')

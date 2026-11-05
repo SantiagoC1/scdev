@@ -2,30 +2,78 @@ import { createHash } from 'node:crypto'
 import { getStore } from '@netlify/blobs'
 
 /**
- * Límite diario por IP con Netlify Blobs. No se guarda la IP: solo un hash (SHA-256 con sal PUNTO_SALT + día),
+ * Límites de uso de Punto con Netlify Blobs. No se guarda la IP: solo un hash (SHA-256 con sal PUNTO_SALT + día),
  * así que el mismo visitante no se puede reconocer de un día para el otro.
- * El tope sale de PUNTO_LIMITE_DIA (por defecto 30). Si Blobs falla, se deja pasar (mejor un mensaje de más que
- * dejar a un cliente sin respuesta por un problema nuestro).
  *
- * Nota: Blobs no tiene incremento atómico; con mensajes simultáneos de la misma IP el conteo puede quedar 1 o 2 abajo.
- * Para un tope de cortesía es suficiente.
+ *  - Por IP y por día: PUNTO_LIMITE_DIA (por defecto 30).
+ *  - Global por día, para todos los visitantes juntos: PUNTO_TOPE_DIARIO (por defecto 600). Protege el plan gratuito.
+ *
+ * Los contadores usan escrituras condicionales de Blobs (crear solo si no existe / reemplazar solo si el ETag
+ * coincide), así que dos mensajes simultáneos no pisan la cuenta del otro. Si Blobs falla, se deja pasar (mejor un
+ * mensaje de más que dejar a un cliente sin respuesta por un problema nuestro).
  */
-export async function registrarUso(ip: string): Promise<boolean> {
-  const tope = Number(process.env.PUNTO_LIMITE_DIA) || 30
-  // Día en horario de Argentina (UTC-3), así el contador se reinicia a la medianoche local.
-  const dia = new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10)
+
+export type Resultado = 'ok' | 'limite' | 'tope'
+
+/** Lo mínimo que se necesita de un almacén clave-valor con escrituras condicionales (Blobs, o uno en memoria para pruebas). */
+export interface Almacen {
+  leer(clave: string): Promise<{ valor: string; etag: string } | null>
+  /** Crea la clave solo si no existe. Devuelve false si ya existía. */
+  crear(clave: string, valor: string): Promise<boolean>
+  /** Reemplaza solo si el ETag sigue siendo el leído. Devuelve false si alguien escribió en el medio. */
+  reemplazar(clave: string, valor: string, etag: string): Promise<boolean>
+}
+
+function almacenBlobs(): Almacen {
+  const store = getStore({ name: 'punto-uso', consistency: 'strong' })
+  return {
+    async leer(clave) {
+      const r = await store.getWithMetadata(clave, { type: 'text' })
+      return r ? { valor: r.data, etag: r.etag ?? '' } : null
+    },
+    async crear(clave, valor) {
+      return (await store.set(clave, valor, { onlyIfNew: true })).modified
+    },
+    async reemplazar(clave, valor, etag) {
+      return (await store.set(clave, valor, { onlyIfMatch: etag })).modified
+    },
+  }
+}
+
+/** Día en horario de Argentina (UTC-3), así los contadores se reinician a la medianoche local. */
+const diaActual = () => new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10)
+
+/** Suma 1 al contador si no llegó al tope. 'tope' si ya estaba en el tope. */
+async function incrementar(a: Almacen, clave: string, tope: number): Promise<'ok' | 'tope'> {
+  for (let intento = 0; intento < 8; intento++) {
+    const actual = await a.leer(clave)
+    if (!actual) {
+      if (await a.crear(clave, '1')) return 'ok'
+      continue // alguien lo creó justo antes: se vuelve a leer
+    }
+    const n = Number(actual.valor) || 0
+    if (n >= tope) return 'tope'
+    if (await a.reemplazar(clave, String(n + 1), actual.etag)) return 'ok'
+  }
+  console.warn('[punto] contador con demasiada contención: se deja pasar')
+  return 'ok'
+}
+
+/** Revisa y registra el uso de un mensaje. El orden importa: un visitante pasado de su tope diario no gasta el tope global. */
+export async function revisarLimites(ip: string, almacen?: Almacen): Promise<Resultado> {
+  const topeIp = Number(process.env.PUNTO_LIMITE_DIA) || 30
+  const topeGlobal = Number(process.env.PUNTO_TOPE_DIARIO) || 600
+  const dia = diaActual()
   const sal = process.env.PUNTO_SALT ?? ''
   if (!sal) console.warn('[punto] PUNTO_SALT no definida: el hash de IP no lleva sal')
   const hash = createHash('sha256').update(`${sal}|${ip}|${dia}`).digest('hex').slice(0, 32)
   try {
-    const store = getStore({ name: 'punto-uso', consistency: 'strong' })
-    const clave = `${dia}/${hash}`
-    const actual = Number(await store.get(clave)) || 0
-    if (actual >= tope) return false
-    await store.set(clave, String(actual + 1))
-    return true
+    const a = almacen ?? almacenBlobs()
+    if ((await incrementar(a, `${dia}/${hash}`, topeIp)) === 'tope') return 'limite'
+    if ((await incrementar(a, `${dia}/global`, topeGlobal)) === 'tope') return 'tope'
+    return 'ok'
   } catch (e) {
     console.warn(`[punto] límite no disponible (${(e as Error).message}): se deja pasar`)
-    return true
+    return 'ok'
   }
 }
