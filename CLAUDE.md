@@ -875,3 +875,41 @@ Todo se configura con variables de entorno (lista completa y comentada en `.env.
 - **No loguear** el contenido de los mensajes ni la IP en la función (hoy solo se registran el proveedor, el código HTTP y errores genéricos).
 - Las citas de `PrivacidadPage.tsx` son textuales y tienen fecha de lectura: si cambia un proveedor o el plan (p. ej. Gemini pasa a pago), releer su política y actualizar la página.
 - Eventos de medición: `punto_open`, `punto_whatsapp` (con `servicio`) y `cta_whatsapp_click` (`location: 'punto'`).
+
+### Protecciones contra abuso
+
+Todas se configuran con variables de entorno (en Netlify: *Site configuration → Environment variables*; después hace falta un **deploy nuevo**). Lista comentada en `.env.example`.
+
+| Protección | Variable (por defecto) | Qué pasa al saltar |
+|---|---|---|
+| Interruptor | `PUNTO_ACTIVO` (activo; solo `false` lo apaga) | La función devuelve 503 `desactivado` y el panel muestra solo el aviso y "Hablar con el equipo". |
+| Tope global diario, todos los visitantes juntos | `PUNTO_TOPE_DIARIO` (600) | 429 `tope`: el chat dice "Por hoy ya charlamos un montón…", bloquea el campo y muestra "Seguir por WhatsApp". |
+| Tope por IP y por día | `PUNTO_LIMITE_DIA` (30) | 429 `limite`, mismo mensaje. |
+| Intervalo mínimo entre mensajes de la misma IP | `PUNTO_INTERVALO_MS` (3000) | 429 `intervalo` con `Retry-After: 3`; el chat avisa sin bloquear. El cliente también espera 3 s. |
+| Origen del pedido | `PUNTO_NETLIFY_SITE`, `PUNTO_ORIGENES_EXTRA` | 403 `origen`. Se acepta solo `scdev.com.ar`, `www.scdev.com.ar`, los Deploy Previews del sitio y, en desarrollo, localhost. |
+
+Detalles: las IPv6 se agrupan por prefijo /64 (una IPv4 mapeada se trata como IPv4); la IP nunca se guarda, solo un hash con sal (`PUNTO_SALT`) y día. Los contadores viven en el store `punto-uso` de Netlify Blobs (claves `AAAA-MM-DD/global`, `AAAA-MM-DD/<hash>` y `AAAA-MM-DD/t/<hash>`) y se reinician a la medianoche de Argentina. El orden de las revisiones es: origen → interruptor → intervalo → tope por IP → tope global (una IP pasada de su tope no gasta el global). El header `X-Punto-Proveedor` solo existe en desarrollo (`NETLIFY_DEV=true`). Si Blobs falla, la función deja pasar el mensaje.
+
+#### Subir o bajar el tope diario
+
+1. Netlify → *Environment variables* → editar `PUNTO_TOPE_DIARIO` (el valor es la cantidad de mensajes por día para todos los visitantes).
+2. *Deploys → Trigger deploy → Deploy site*, para que la función tome el valor nuevo.
+3. Comprobar: `npx netlify-cli blobs:get punto-uso <AAAA-MM-DD>/global` muestra lo consumido hoy (el día es el de Argentina); `blobs:set` permite corregirlo a mano. Los subcomandos exactos están en `netlify blobs --help`.
+
+Cómo elegir el valor: el tope cuenta **mensajes**, no pedidos a proveedores. Conviene dejarlo por debajo de lo que aguanta en un día el plan gratuito del primer proveedor de la cadena (los límites vigentes se ven en su consola: cambian seguido), de modo que los otros dos queden de reserva para picos y fallas. Con 600 por día y 30 por IP hacen falta al menos 20 visitantes distintos para agotarlo.
+
+#### Si se agota el plan gratuito de la IA
+
+Cómo se nota: el chat dice "Uy, se me cortó la conexión…" (la función devuelve 503 `sin_servicio` cuando los tres proveedores fallan) y en *Logs de funciones* aparecen líneas como `[punto] groq: HTTP 429`.
+
+1. Mirar en los logs qué proveedores devuelven 429 o errores de cuota.
+2. Para frenar el gasto o dar un mensaje claro de inmediato: bajar `PUNTO_TOPE_DIARIO` (corta antes, con el mensaje de "por hoy ya charlamos" y el botón de WhatsApp) o poner `PUNTO_ACTIVO=false` (el panel avisa y deriva al equipo). Los planes gratuitos se reinician por día: se puede volver a activar al día siguiente.
+3. Si pasa seguido: pasar un proveedor a un plan pago (cambia la política de datos: en Gemini pasa a "Paid Services", hay que releer y actualizar la cita en `src/pages/PrivacidadPage.tsx`) o agregar otro proveedor (código: `proveedores()` en `netlify/functions/punto.mts`).
+4. Subir el tope solo si el plan lo aguanta. Después de cualquier cambio, correr `node --env-file=.env scripts/probar-punto.mjs`.
+
+#### Limitaciones conocidas y cómo probar
+
+- **Ráfagas simultáneas.** El intervalo y los contadores usan escrituras condicionales de Blobs (`onlyIfNew` / `onlyIfMatch`). El emulador local de `netlify dev` **no las respeta de forma atómica** (medido: de 6 pedidos simultáneos pasaban entre 1 y 4). Las ráfagas secuenciales sí se frenan siempre. En producción hay que verificarlo en un Deploy Preview: 6 `curl` en paralelo con un `Origin` válido deberían dar a lo sumo 1 respuesta 200 por ventana de 3 s. Si no es así, los topes diarios siguen acotando el daño.
+- **El origen no frena a un script** que falsifica el header `Origin`: para eso están los topes.
+- **Deploy Previews con 403.** El nombre del sitio se deduce de variables de Netlify; si no se puede, definir `PUNTO_NETLIFY_SITE` con el `<sitio>` de `<sitio>.netlify.app`.
+- **Pruebas sin red:** `node scripts/probar-limites.mjs` (IPv6, topes, intervalo, origen, interruptor y header). Pruebas de punta a punta: `PUNTO_TOPE_DIARIO=3 npx netlify-cli dev` y pedidos con `Origin: http://localhost:8888`.

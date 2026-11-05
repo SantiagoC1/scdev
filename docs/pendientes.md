@@ -58,6 +58,14 @@ Viven en variables de entorno (`GROQ_MODEL`, `GEMINI_MODEL`, `CLOUDFLARE_MODEL`,
 - TODO(santi): el prompt a veces pide nombre y número de teléfono ("¿Podés pasarme tu nombre y número para que el equipo te contacte?") aunque Punto no puede pasarle esos datos al equipo. Ver la propuesta de ajuste del prompt en el informe de A4.
 - Revisar los ids en cada despliegue importante: los modelos cambian seguido.
 
+### Protecciones contra abuso: verificar en el Deploy Preview
+
+Probadas en local (`node scripts/probar-limites.mjs` y `netlify dev`), con dos cosas que solo se pueden confirmar en Netlify:
+
+- TODO(santi): **ráfaga simultánea.** El emulador local de Blobs no respeta la atomicidad de las escrituras condicionales (pasaban entre 1 y 4 de 6 pedidos simultáneos). En el Deploy Preview: 6 `curl` en paralelo con `Origin` válido; debería pasar a lo sumo 1 por ventana de 3 s. Si pasan varios, los topes diarios (30 por IP, 600 global) siguen acotando el uso.
+- TODO(santi): **Deploy Previews y origen.** Abrir el panel de Punto en el Deploy Preview y mandar un mensaje. Si da 403, definir `PUNTO_NETLIFY_SITE` (el `<sitio>` de `<sitio>.netlify.app`) en Netlify.
+- Cargar en Netlify: `PUNTO_TOPE_DIARIO` (600), `PUNTO_LIMITE_DIA` (30) y, si se quiere apagar a Punto, `PUNTO_ACTIVO=false`.
+
 ## Perfil de Empresa de Google (`index.html`)
 
 TODO(santi): URL del Perfil de Empresa ("SCdev|Desarrollo Web Profesional") para sumarla a `sameAs` del `LocalBusiness`.
