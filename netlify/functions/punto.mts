@@ -63,14 +63,18 @@ function limpiarHistorial(mensajes: unknown): MensajeIA[] {
     .map((m) => ({ role: m.role as 'user' | 'assistant', content: (m.content as string).slice(0, MAX_CARACTERES) }))
 }
 
-/** Lee el SSE de un proveedor y entrega solo los fragmentos no vacíos de delta.content. */
+/**
+ * Lee el SSE de un proveedor y entrega solo los fragmentos no vacíos de delta.content.
+ * Un stream que termina sin finish_reason ni [DONE] está cortado (p. ej. Gemini manda un 503 "high demand" a mitad
+ * de respuesta como un JSON suelto): se lanza un error para no entregar una frase a medias como si fuera completa.
+ */
 async function* deltas(reader: ReadableStreamDefaultReader<Uint8Array>): AsyncGenerator<string> {
   const dec = new TextDecoder()
   let buf = ''
+  let completo = false
   for (;;) {
     const { value, done } = await reader.read()
-    if (done) break
-    buf += dec.decode(value, { stream: true })
+    buf += done ? '\n' : dec.decode(value, { stream: true })
     let i: number
     while ((i = buf.indexOf('\n')) >= 0) {
       const linea = buf.slice(0, i).trim()
@@ -79,13 +83,17 @@ async function* deltas(reader: ReadableStreamDefaultReader<Uint8Array>): AsyncGe
       const dato = linea.slice(5).trim()
       if (dato === '[DONE]') return
       try {
-        const c = JSON.parse(dato)?.choices?.[0]?.delta?.content
+        const eleccion = JSON.parse(dato)?.choices?.[0]
+        if (eleccion?.finish_reason) completo = true
+        const c = eleccion?.delta?.content
         if (typeof c === 'string' && c) yield c
       } catch {
         /* línea incompleta o no JSON: se ignora */
       }
     }
+    if (done) break
   }
+  if (!completo) throw new Error('stream_cortado')
 }
 
 /** Devuelve el stream con el primer fragmento ya leído, o null si hay que pasar al siguiente proveedor. */

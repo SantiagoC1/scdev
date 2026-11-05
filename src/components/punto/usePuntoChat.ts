@@ -172,15 +172,11 @@ export function usePuntoChat(config: SheetConfig) {
       mostrar(crudo, filtro.vista)
       programar(() => setEstado('reposo'), CIERRE_BOCA_MS)
     } catch {
-      // Cortado a mitad de respuesta: si ya hay texto se conserva; si no, mensaje de error.
+      // Cortado (a mitad de respuesta o sin respuesta): se conserva el texto parcial y se muestra el mensaje de error.
       filtro.fin()
-      if (crudo.trim()) {
-        mostrar(crudo, filtro.vista)
-        setEstado('reposo')
-      } else {
-        if (id) setMensajes((m) => m.filter((x) => x.id !== id))
-        preocupar('conexion')
-      }
+      if (crudo.trim()) mostrar(crudo, filtro.vista) // lo que llegó se conserva, pero se avisa que quedó cortado
+      else if (id) setMensajes((m) => m.filter((x) => x.id !== id))
+      preocupar('conexion')
     } finally {
       clearTimeout(espera)
       if (abortar.current === ctl) abortar.current = null
