@@ -865,6 +865,7 @@ Todo se configura con variables de entorno (lista completa y comentada en `.env.
 - **Cambiar la clave**: actualizar `*_API_KEY` (o `CLOUDFLARE_API_TOKEN`).
 - Después de cambiar variables en Netlify hace falta **un deploy nuevo** para que la función las vea. Para probar en local: `npx netlify-cli dev` (lee `.env`) y, sin servidor, `node --env-file=.env scripts/probar-punto.mjs`.
 - El **orden** (Groq → Gemini → Cloudflare) y agregar un cuarto proveedor sí requieren código: `proveedores()` en `netlify/functions/punto.mts` (cualquier API compatible con OpenAI entra con una entrada más).
+- **Cloudflare se pide sin streaming** (`sinStream` en `proveedores()`): su stream manda los tokens puramente numéricos como número JSON y se perdían montos y plazos. No cambiarlo salvo que lo corrijan (probar con `--solo=4,6 --veces=3`).
 - Reglas fijas de la función: 5 s por proveedor hasta el primer fragmento de contenido; si falla (HTTP, vacío, timeout o stream cortado) pasa al siguiente; los últimos 8 mensajes, 500 caracteres cada uno, `max_tokens` 300.
 
 ### Reglas al tocar a Punto
