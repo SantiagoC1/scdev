@@ -71,7 +71,15 @@ TODO(santi): URL del Perfil de Empresa ("SCdev|Desarrollo Web Profesional") para
 
 `price_esencial_min` en el Sheet publicado devuelve 80000 (el fallback también). Si ya se cambió a 90000, falta publicar una versión nueva del despliegue del Apps Script.
 
+## Privacidad (`/privacidad`)
+
+La página existe (prerenderizada, en sitemap con prioridad 0.3, link en el footer y en el panel de Punto). Las citas de Groq, Google y Cloudflare son textuales y se leyeron el 2026-11-04: releerlas cada tanto (están en `src/pages/PrivacidadPage.tsx`, constante `PROVEEDORES`).
+
+- TODO(santi): plazo de conservación de los datos del formulario (hoy la página solo dice que se guardan en una planilla de Google Sheets y se usan para responder la consulta).
+- TODO(santi): la web usa Google Tag Manager (`GTM-TW45W6NJ`). Si dispara analítica o cookies de Google, agregar una sección que diga cuáles; no lo escribí porque no sé qué hay configurado en el contenedor.
+- TODO(santi): el texto de la Ley 25.326 es un resumen general (acceso, rectificación, actualización y supresión; órgano de control). Conviene que lo revise alguien con formación legal.
+- Si la clave de Gemini pasa a plan pago, el texto de Google cambia ("Paid Services"): actualizar la cita.
+
 ## Para cuando existan
 
-- `/privacidad`: sumarla al prerender (`src/entry-server.tsx`, `RUTAS`) y al sitemap (se genera solo desde `RUTAS`).
-- Botón flotante de WhatsApp y panel de Punto: usar `track({ event: 'cta_whatsapp_click', location: 'flotante' | 'punto' })`.
+- Botón flotante de WhatsApp: usar `track({ event: 'cta_whatsapp_click', location: 'flotante' })`.
