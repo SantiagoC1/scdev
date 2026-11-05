@@ -835,3 +835,42 @@ Crear un componente `ServicePage.tsx` que reciba un `Servicio` como prop y rende
 14. Crear `public/_redirects`
 15. `npm run build` y verificar que no hay errores TypeScript
 16. Verificar mobile en DevTools (375px)
+
+---
+
+## Punto (asistente con IA)
+
+Punto es el asistente del sitio: un widget (botón flotante + panel) que habla con una función de Netlify, y esa función llama a un proveedor de IA. Las claves nunca llegan al navegador.
+
+### Piezas
+
+| Qué | Dónde |
+|---|---|
+| Widget, estados y chat (stream, errores) | `src/components/punto/` (`PuntoWidget`, `usePuntoChat`, `PuntoAvatar`, `filtroEtiqueta`, `servicioWhatsapp`, `respuestasRapidas`) |
+| Función `/api/punto` (cadena de proveedores, stream normalizado) | `netlify/functions/punto.mts` |
+| Personalidad y reglas (incluye cuándo emitir `[WHATSAPP]`) | `netlify/functions/punto/prompt.ts` |
+| Información que sabe (servicios, plazos, precios) | `netlify/functions/punto/conocimiento.ts`: se arma desde `src/data/servicios.ts` y los precios en vivo |
+| Precios en vivo (Apps Script, caché de 10 min, respaldo) | `netlify/functions/punto/config.ts`, `src/data/configFallback.ts` |
+| Límite diario por IP (Netlify Blobs, hash con sal) | `netlify/functions/punto/limite.ts` |
+| Política de privacidad (citas de cada proveedor) | `src/pages/PrivacidadPage.tsx` |
+| Pruebas de las 20 preguntas | `scripts/probar-punto.mjs` → `docs/punto/pruebas.md` |
+
+### Cambiar de modelo o de proveedor sin tocar código
+
+Todo se configura con variables de entorno (lista completa y comentada en `.env.example`):
+
+- **Cambiar el modelo** de un proveedor: editar `GROQ_MODEL`, `GEMINI_MODEL` o `CLOUDFLARE_MODEL`. Verificar antes que el id exista: Groq `GET https://api.groq.com/openai/v1/models`, Gemini `GET https://generativelanguage.googleapis.com/v1beta/openai/models` (ambos con `Authorization: Bearer <clave>`), Cloudflare en su catálogo de Workers AI (`@cf/...`).
+- **Modelos con razonamiento** (p. ej. `openai/gpt-oss-120b`): poner `<PROVEEDOR>_REASONING_EFFORT` (`low`). La función solo reenvía `delta.content`, así que el razonamiento nunca llega al chat.
+- **Sacar un proveedor de la cadena**: dejar vacío su `*_MODEL` o su clave. Un proveedor sin clave o sin modelo se saltea.
+- **Cambiar la clave**: actualizar `*_API_KEY` (o `CLOUDFLARE_API_TOKEN`).
+- Después de cambiar variables en Netlify hace falta **un deploy nuevo** para que la función las vea. Para probar en local: `npx netlify-cli dev` (lee `.env`) y, sin servidor, `node --env-file=.env scripts/probar-punto.mjs`.
+- El **orden** (Groq → Gemini → Cloudflare) y agregar un cuarto proveedor sí requieren código: `proveedores()` en `netlify/functions/punto.mts` (cualquier API compatible con OpenAI entra con una entrada más).
+- Reglas fijas de la función: 5 s por proveedor hasta el primer fragmento de contenido; si falla (HTTP, vacío, timeout o stream cortado) pasa al siguiente; los últimos 8 mensajes, 500 caracteres cada uno, `max_tokens` 300.
+
+### Reglas al tocar a Punto
+
+- **Precios y plazos no se escriben en el prompt.** Salen de `src/data/servicios.ts` y del Sheet. Los hechos sin confirmar (hosting incluido, anticipo, validez del presupuesto, servicios que el sitio no muestra) están listados en `docs/pendientes.md` y **no** deben entrar al conocimiento hasta confirmarse.
+- **Después de cambiar `prompt.ts` o `conocimiento.ts`**, correr `node --env-file=.env scripts/probar-punto.mjs` y leer las 20 respuestas: el filtro automático marca montos, plazos y condiciones, pero no detecta todo (p. ej. un precio correcto atribuido al servicio equivocado). Cada corrida cambia las respuestas.
+- **No loguear** el contenido de los mensajes ni la IP en la función (hoy solo se registran el proveedor, el código HTTP y errores genéricos).
+- Las citas de `PrivacidadPage.tsx` son textuales y tienen fecha de lectura: si cambia un proveedor o el plan (p. ej. Gemini pasa a pago), releer su política y actualizar la página.
+- Eventos de medición: `punto_open`, `punto_whatsapp` (con `servicio`) y `cta_whatsapp_click` (`location: 'punto'`).
