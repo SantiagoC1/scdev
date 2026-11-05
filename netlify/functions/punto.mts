@@ -26,6 +26,12 @@ interface Proveedor {
   key: string
   model: string
   effort: string
+  /**
+   * Pide la respuesta completa y la entrega en fragmentos. Cloudflare Workers AI manda en el stream los tokens
+   * puramente numéricos como número JSON (`"content":1`, y "000" llegaría como 0): se perdían o se alteraban los
+   * montos y plazos ("desde $.000", "entre  y  meses"). Sin streaming el texto llega como string y no se pierde nada.
+   */
+  sinStream?: boolean
 }
 
 function proveedores(): Proveedor[] {
@@ -45,6 +51,7 @@ function proveedores(): Proveedor[] {
       key: e.CLOUDFLARE_API_TOKEN ?? '',
       model: e.CLOUDFLARE_MODEL ?? '',
       effort: e.CLOUDFLARE_REASONING_EFFORT ?? '',
+      sinStream: true,
     },
   ]
   return lista.filter((p) => p.key && p.model && (p.nombre !== 'cloudflare' || e.CLOUDFLARE_ACCOUNT_ID))
@@ -116,7 +123,7 @@ async function intentar(
         messages: mensajes,
         max_tokens: 300,
         temperature: 0.6,
-        stream: true,
+        stream: !p.sinStream,
         ...(p.effort ? { reasoning_effort: p.effort } : {}),
       }),
     })
@@ -124,6 +131,21 @@ async function intentar(
       console.warn(`[punto] ${p.nombre}: HTTP ${r.status}`)
       await r.body?.cancel().catch(() => {})
       return null
+    }
+    if (p.sinStream) {
+      const contenido = (await r.json())?.choices?.[0]?.message?.content
+      const texto = typeof contenido === 'number' ? String(contenido) : contenido
+      if (typeof texto !== 'string' || !texto.trim()) {
+        console.warn(`[punto] ${p.nombre}: respuesta vacía`)
+        return null
+      }
+      const trozos = texto.match(/(?:\S+\s*){1,3}/g) ?? [texto] // de a 3 palabras, para que el chat "hable" igual
+      return {
+        primero: trozos[0],
+        resto: (async function* () {
+          for (const t of trozos.slice(1)) yield t
+        })(),
+      }
     }
     const gen = deltas(r.body.getReader())
     const primero = await gen.next() // el plazo de 5 s cubre hasta el primer contenido
