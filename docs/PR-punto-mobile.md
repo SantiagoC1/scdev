@@ -41,15 +41,30 @@ Rama `feat/mobile-mantenimiento` → `main`. Son ~100 commits; este resumen los 
 - [ ] Los precios y plazos que dice Punto coinciden con el sitio.
 
 **Ráfaga simultánea (6 `curl` en paralelo)**
-- [ ] Con un `Origin` válido (el del Deploy Preview), lanzar 6 pedidos a `/api/punto` a la vez: a lo sumo 1 respuesta 200 por ventana de 3 s, el resto 429 `intervalo`. El emulador local no respeta la atomicidad de las escrituras condicionales de Blobs, por eso esto solo se confirma acá.
+- [ ] Lanzar 6 pedidos a `/api/punto` a la vez desde Git Bash, WSL o Mac/Linux. El Deploy Preview debería dejar pasar **a lo sumo 1 (200) por ventana de 3 s** y responder **429 `intervalo`** al resto. El emulador local no respeta la atomicidad de las escrituras condicionales de Blobs, por eso esto solo se confirma en Netlify.
+  - Reemplazar `<URL-DEL-PREVIEW>` por la URL del Deploy Preview **con `https://` y sin barra final** (por ejemplo `https://deploy-preview-12--<sitio>.netlify.app`). Se usa también como `Origin`, que es lo que la función exige (acepta `scdev.com.ar`, `www.scdev.com.ar` y los Deploy Previews del sitio). Si da 403, definir `PUNTO_NETLIFY_SITE`.
+  - El cuerpo es el formato real de la función: `{"mensajes":[{"role":"user","content":"..."}]}` (clave `mensajes`, con `role` `user` o `assistant`; el último mensaje tiene que ser del usuario).
+  - Un solo bloque, para pegar tal cual:
   ```bash
+  URL_PREVIEW="<URL-DEL-PREVIEW>"
+  D=$(mktemp -d)
   for i in 1 2 3 4 5 6; do
-    curl -s -o /dev/null -w "%{http_code}\n" -X POST "https://<preview>.netlify.app/api/punto" \
-      -H "Origin: https://<preview>.netlify.app" -H "Content-Type: application/json" \
-      -d '{"messages":[{"role":"user","content":"hola"}]}' &
-  done; wait
+    curl -s -m 30 -o "$D/$i.cuerpo" -w "%{http_code}
+" -X POST "$URL_PREVIEW/api/punto" \
+      -H "Origin: $URL_PREVIEW" -H "Content-Type: application/json" \
+      -d '{"mensajes":[{"role":"user","content":"hola"}]}' > "$D/$i.codigo" &
+  done
+  wait
+  echo "--- códigos (cantidad  código) ---"
+  cat "$D"/*.codigo | sort | uniq -c
+  echo "pasaron (200): $(cat "$D"/*.codigo | grep -c '^200$')"
+  echo "429: $(cat "$D"/*.codigo | grep -c '^429$')"
+  echo "--- motivo de cada 429 ---"
+  for i in 1 2 3 4 5 6; do [ "$(cat "$D/$i.codigo")" = "429" ] && cat "$D/$i.cuerpo" && echo; done | sort | uniq -c
+  rm -rf "$D"
   ```
-  (ajustar el cuerpo al formato real de la función; ver `src/components/punto/usePuntoChat`)
+  - Resultado esperado: `pasaron (200): 1` (o 0), `429: 5` (o 6) y todos los motivos `{"error":"intervalo"}`. Si pasan 2 o más, anotar cuántas y avisar: el intervalo no es atómico en producción (los topes de 30 por IP y 600 globales siguen acotando el uso). Otros motivos: `limite` (tope de esa IP), `tope` (tope global del día). Cualquier otro código (`403` origen, `503` desactivado o `sin_servicio`) se ve en la lista de códigos.
+  - Esperar unos 4 segundos entre una corrida y otra, y recordar que cada 200 cuenta contra el límite diario de esa IP.
 - [ ] Un pedido con `Origin` ajeno devuelve 403 `origen`.
 - [ ] Probar el interruptor: `PUNTO_ACTIVO=false` + deploy, el panel muestra solo el aviso y "Hablar con el equipo". Volver a dejarlo activo.
 
