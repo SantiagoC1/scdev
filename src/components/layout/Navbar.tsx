@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react'
+import { track } from '../../utils/track'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
 import { NAV_HEIGHT } from '../../constants'
 
 const NAV_LINKS = [
-  { label: 'Inicio', href: '/#hero' },
-  { label: 'Nosotros', href: '/nosotros' },
   { label: 'Servicios', href: '/#servicios' },
-  { label: 'Clientes', href: '/#clientes' },
-  { label: 'Proyectos', href: '/#portfolio' },
+  { label: 'Trabajos', href: '/#trabajos' },
+  { label: 'Nosotros', href: '/#nosotros' },
+  { label: 'Preguntas', href: '/#preguntas' },
   { label: 'Contacto', href: '/#cta' },
 ]
 
-function scrollToId(id: string) {
+// Las secciones de la home cargan con lazy(): si el ancla todavía no existe, reintenta unos segundos.
+function scrollToId(id: string, intentos = 40) {
   const el = document.getElementById(id)
-  if (!el) return
+  if (!el) {
+    if (intentos > 0) setTimeout(() => scrollToId(id, intentos - 1), 100)
+    return
+  }
   const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT
   window.scrollTo({ top, behavior: 'smooth' })
 }
@@ -79,6 +83,12 @@ export default function Navbar() {
             : 'bg-transparent'
         }`}
       >
+      <a
+        href="#contenido"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] bg-[#D32F2F] text-white px-4 py-2 rounded-lg font-semibold"
+      >
+        Saltar al contenido
+      </a>
         <div className="max-w-6xl mx-auto px-6 h-24 md:h-26 flex items-center justify-between">
           <Link
             to="/"
@@ -86,9 +96,11 @@ export default function Navbar() {
             className="flex-shrink-0"
           >
             <img
-              src="/images/LogoCompletoHorizontalFN.png"
+              src="/images/LogoCompletoHorizontalFN.webp"
               alt="SCdev"
-              className="h-14 md:h-18"
+              width={512}
+              height={288}
+              className="h-14 md:h-18 w-auto"
             />
           </Link>
 
@@ -119,15 +131,16 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={waLink}
+              onClick={() => track({ event: 'cta_whatsapp_click', location: 'navbar' })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-[#D32F2F] border border-[#D32F2F]/30 px-4 py-2 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
+              className="flex items-center gap-2 text-sm text-accent-text border border-[#D32F2F]/30 px-4 py-2 rounded-lg hover:bg-[#D32F2F]/10 transition-all duration-200"
             >
               WhatsApp
             </a>
             <button
               onClick={() => openContact()}
-              className="text-sm bg-[#D32F2F] text-white px-4 py-2 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+              className="text-sm bg-[#D32F2F] text-white px-4 py-2 rounded-lg hover:bg-[#B71C1C] transition-all duration-200"
             >
               Formulario
             </button>
@@ -148,7 +161,7 @@ export default function Navbar() {
         {/* Menú mobile */}
         <AnimatePresence>
           {menuOpen && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -180,14 +193,17 @@ export default function Navbar() {
                     href={waLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      track({ event: 'cta_whatsapp_click', location: 'navbar' })
+                      setMenuOpen(false)
+                    }}
                     className="block text-center text-sm bg-[#D32F2F] text-white px-4 py-3 rounded-lg"
                   >
                     Cotizar por WhatsApp
                   </a>
                 </li>
               </ul>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </nav>

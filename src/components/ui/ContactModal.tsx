@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { track } from '../../utils/track'
 import { X } from 'lucide-react'
 import { APPS_SCRIPT_URL } from '../../constants'
 import { sanitizeInput, sanitizeEmail, sanitizeTel } from '../../utils/sanitize'
@@ -28,11 +29,18 @@ const EMPTY_FORM: FormState = {
   tiene_web: '', servicio: '', presupuesto: '', urgencia: '', mensaje: '',
 }
 
+const FOCUSABLE =
+  'button:not([disabled]), a[href], input:not([name="_honey"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+const LABEL_CLASS = 'block text-xs text-white/50 mb-1.5'
+
+const TIENE_WEB_OPCIONES = [{ v: 'si', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'no_se', l: 'No sé' }]
+
 const INPUT_CLASS =
-  'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#D32F2F]/50 transition-colors'
+  'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm placeholder-white/25 focus:border-[#D32F2F]/50 transition-colors'
 
 const SELECT_CLASS =
-  'w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#D32F2F]/50 transition-colors'
+  'w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#D32F2F]/50 transition-colors'
 
 export default function ContactModal({ isOpen, onClose, servicioPreseleccionado = '' }: Props) {
   const config = useConfig()
@@ -67,10 +75,29 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
     timers.current = []
   }, [])
 
-  // Al abrir, el foco va al primer campo (no es un focus trap completo)
+  // Al abrir, el foco va al primer campo y al cerrar vuelve al elemento que abrió el modal
   useEffect(() => {
-    if (isOpen) nombreRef.current?.focus()
+    if (!isOpen) return
+    const anterior = document.activeElement as HTMLElement | null
+    nombreRef.current?.focus()
+    return () => anterior?.focus?.()
   }, [isOpen])
+
+  // Trampa de foco: Tab y Shift+Tab ciclan dentro del diálogo
+  const handleDialogKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab') return
+    const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>(FOCUSABLE))
+    if (items.length === 0) return
+    const primero = items[0]
+    const ultimo = items[items.length - 1]
+    if (e.shiftKey && document.activeElement === primero) {
+      e.preventDefault()
+      ultimo.focus()
+    } else if (!e.shiftKey && document.activeElement === ultimo) {
+      e.preventDefault()
+      primero.focus()
+    }
+  }
 
   if (!isOpen) return null
 
@@ -94,6 +121,16 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
+  // Flechas dentro del radiogroup: mueven la selección y el foco
+  const handleRadioKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const paso = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
+    if (!paso) return
+    e.preventDefault()
+    const sig = (i + paso + TIENE_WEB_OPCIONES.length) % TIENE_WEB_OPCIONES.length
+    handleRadio('tiene_web', TIENE_WEB_OPCIONES[sig].v)
+    ;(e.currentTarget.parentElement?.children[sig] as HTMLElement | undefined)?.focus()
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const honey = (e.currentTarget.querySelector('[name="_honey"]') as HTMLInputElement)?.value
@@ -114,9 +151,6 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
       origen: window.location.href,
     }
 
-    console.log('[SCdev] Enviando lead a:', APPS_SCRIPT_URL)
-    console.log('[SCdev] Payload:', payload)
-
     let enviado = false
 
     try {
@@ -131,10 +165,9 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
         body: formData,
       })
 
-      console.log('[SCdev] Fetch completado (no-cors, asumimos éxito)')
       enviado = true
     } catch (err) {
-      console.error('[SCdev] Error en fetch:', err)
+      console.error('[SCdev] Error al enviar el formulario', err instanceof Error ? err.name : 'desconocido')
       setStatus('error')
     } finally {
       setSubmitting(false)
@@ -159,29 +192,21 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label="Cerrar"
-        onClick={onClose}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === 'Escape') onClose() }}
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-      />
+      <div aria-hidden="true" onClick={onClose} className="absolute inset-0 bg-black/80 backdrop-blur-sm modal-overlay-enter" />
 
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-modal-title"
-        className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl"
+        onKeyDown={handleDialogKeyDown}
+        className="relative w-full max-w-lg max-h-[95vh] overflow-y-auto bg-[#111] border border-white/10 rounded-2xl shadow-2xl modal-enter"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 bg-[#111] border-b border-white/10">
-          <div>
-            <h2 id="contact-modal-title" className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
-          </div>
+          <h2 id="contact-modal-title" className="font-display text-lg font-bold text-white">Empecemos tu proyecto</h2>
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-all"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
           >
             <X size={16} />
           </button>
@@ -191,58 +216,65 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           <input type="text" name="_honey" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} onChange={() => {}} />
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">Nombre *</label>
-            <input ref={nombreRef} type="text" name="nombre" required placeholder="Tu nombre completo"
+            <label htmlFor="cm-nombre" className={LABEL_CLASS}>Nombre *</label>
+            <input ref={nombreRef} type="text" id="cm-nombre" name="nombre" required placeholder="Tu nombre completo"
               value={form.nombre} onChange={handleChange} maxLength={100} className={INPUT_CLASS} />
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">Email *</label>
-            <input type="email" name="email" required placeholder="tu@email.com"
+            <label htmlFor="cm-email" className={LABEL_CLASS}>Email *</label>
+            <input type="email" id="cm-email" name="email" required placeholder="tu@email.com"
               value={form.email} onChange={handleChange} maxLength={254} className={INPUT_CLASS} />
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">
-              Teléfono / WhatsApp <span className="text-white/25">(opcional)</span>
+            <label htmlFor="cm-telefono" className={LABEL_CLASS}>Teléfono / WhatsApp <span className="text-white/60">(opcional)</span>
             </label>
-            <input type="tel" name="telefono" placeholder="+54 9 221 XXX-XXXX"
+            <input type="tel" id="cm-telefono" name="telefono" placeholder="+54 9 221 XXX-XXXX"
               value={form.telefono} onChange={handleChange} maxLength={20} className={INPUT_CLASS} />
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">
-              Empresa / Negocio <span className="text-white/25">(opcional)</span>
+            <label htmlFor="cm-empresa" className={LABEL_CLASS}>Empresa / Negocio <span className="text-white/60">(opcional)</span>
             </label>
-            <input type="text" name="empresa" placeholder="Ej: Ferretería El Tornillo..."
+            <input type="text" id="cm-empresa" name="empresa" placeholder="Ej: Ferretería El Tornillo..."
               value={form.empresa} onChange={handleChange} maxLength={200} className={INPUT_CLASS} />
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">¿Tenés sitio web actualmente?</label>
-            <div className="flex gap-2">
-              {[{ v: 'si', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'no_se', l: 'No sé' }].map((opt) => (
-                <button
-                  type="button"
-                  key={opt.v}
-                  onClick={() => handleRadio('tiene_web', opt.v)}
-                  className={`flex-1 py-2 rounded-lg border text-xs font-medium transition-all ${
-                    form.tiene_web === opt.v
-                      ? 'border-[#D32F2F] bg-[#D32F2F]/15 text-white'
-                      : 'border-white/10 text-white/40 hover:border-white/20'
-                  }`}
-                >
-                  {opt.l}
-                </button>
-              ))}
+            <span id="cm-tiene-web-label" className={LABEL_CLASS}>¿Tenés sitio web actualmente?</span>
+            <div role="radiogroup" aria-labelledby="cm-tiene-web-label" className="flex gap-2">
+              {TIENE_WEB_OPCIONES.map((opt, i) => {
+                const marcado = form.tiene_web === opt.v
+                const tabStop = marcado || (!form.tiene_web && i === 0)
+                return (
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={marcado}
+                    aria-label={`¿Tenés sitio web actualmente? ${opt.l}`}
+                    tabIndex={tabStop ? 0 : -1}
+                    key={opt.v}
+                    onClick={() => handleRadio('tiene_web', opt.v)}
+                    onKeyDown={(e) => handleRadioKeyDown(e, i)}
+                    className={`flex-1 py-2 rounded-lg border text-xs font-medium transition-all ${
+                      marcado
+                        ? 'border-[#D32F2F] bg-[#D32F2F]/15 text-white'
+                        : 'border-white/10 text-white/60 hover:border-white/20'
+                    }`}
+                  >
+                    {opt.l}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">Servicio de interés *</label>
-            <select name="servicio" required value={form.servicio} onChange={handleChange} className={SELECT_CLASS}>
+            <label htmlFor="cm-servicio" className={LABEL_CLASS}>Servicio de interés *</label>
+            <select id="cm-servicio" name="servicio" required value={form.servicio} onChange={handleChange} className={SELECT_CLASS}>
               <option value="">Seleccioná...</option>
-              <option value="Presencia Web Esencial">Presencia Web Esencial ($80k–$100k)</option>
+              <option value="Presencia Web Esencial">Presencia Web Esencial</option>
               <option value="Landing Page Profesional">Landing Page Profesional</option>
               <option value="Sitio Web Corporativo">Sitio Web Corporativo</option>
               <option value="Sistema a Medida">Sistema / Plataforma a Medida</option>
@@ -253,8 +285,8 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">Presupuesto estimado</label>
-            <select name="presupuesto" value={form.presupuesto} onChange={handleChange} className={SELECT_CLASS}>
+            <label htmlFor="cm-presupuesto" className={LABEL_CLASS}>Presupuesto estimado</label>
+            <select id="cm-presupuesto" name="presupuesto" value={form.presupuesto} onChange={handleChange} className={SELECT_CLASS}>
               <option value="">Sin definir / no sé</option>
               <option value="menos_100k">Menos de $100.000 ARS</option>
               <option value="100k_500k">$100.000 – $500.000 ARS</option>
@@ -264,8 +296,8 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">¿Cuándo lo necesitás?</label>
-            <select name="urgencia" value={form.urgencia} onChange={handleChange} className={SELECT_CLASS}>
+            <label htmlFor="cm-urgencia" className={LABEL_CLASS}>¿Cuándo lo necesitás?</label>
+            <select id="cm-urgencia" name="urgencia" value={form.urgencia} onChange={handleChange} className={SELECT_CLASS}>
               <option value="">Seleccioná...</option>
               <option value="urgente">Lo antes posible</option>
               <option value="1_mes">En el próximo mes</option>
@@ -275,8 +307,8 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           </div>
 
           <div>
-            <label className="block text-xs text-white/50 mb-1.5">Mensaje *</label>
-            <textarea name="mensaje" required rows={3} placeholder="Contame sobre tu proyecto..."
+            <label htmlFor="cm-mensaje" className={LABEL_CLASS}>Mensaje *</label>
+            <textarea id="cm-mensaje" name="mensaje" required rows={3} placeholder="Contame sobre tu proyecto..."
               value={form.mensaje} onChange={handleChange} maxLength={1000}
               className={`${INPUT_CLASS} resize-none`} />
           </div>
@@ -289,7 +321,7 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           {status === 'error' && (
             <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
               ✗ Error al enviar.{' '}
-              <a href={waLink} target="_blank" rel="noopener noreferrer" className="underline">
+              <a href={waLink} onClick={() => track({ event: 'cta_whatsapp_click', location: 'modal' })} target="_blank" rel="noopener noreferrer" className="underline">
                 Escribime por WhatsApp
               </a>
             </div>
@@ -298,9 +330,9 @@ export default function ContactModal({ isOpen, onClose, servicioPreseleccionado 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-[#D32F2F] text-white font-semibold py-3 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(211,47,47,0.3)]"
+            className="w-full bg-[#D32F2F] text-white font-semibold py-3 rounded-lg hover:bg-[#B71C1C] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {submitting ? 'Enviando...' : 'Enviar mensaje →'}
+            {submitting ? 'Enviando...' : 'Enviar mensaje'}
           </button>
         </form>
       </div>

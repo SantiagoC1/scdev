@@ -3,7 +3,7 @@ export interface Integrante {
   nombre: string
   rol: string
   descripcion: string
-  stack: string[]        // nombres de devicon (igual que en Nosotros.tsx)
+  stack: string[]        // nombres de devicon; máximo 6, en una sola fila
   foto?: string          // path a /images/, opcional
   email?: string
   github?: string
@@ -17,21 +17,7 @@ export const EQUIPO: Integrante[] = [
     rol: 'Founder & Dev Lead',
     descripcion:
       'Desarrollador full-stack y fundador de SCdev. Construyo soluciones digitales para negocios argentinos desde La Plata.',
-    stack: [
-      'react',
-      'typescript',
-      'python',
-      'fastapi',
-      'javascript',
-      'postgresql',
-      'supabase',
-      'tailwindcss',
-      'java',
-      'docker',
-      'nextjs',
-      'n8n',
-      'git',
-    ],
+    stack: ['react', 'typescript', 'python', 'fastapi', 'postgresql', 'supabase'],
     foto: '/images/SantaigoCaceres.webp',
     linkedin: 'https://www.linkedin.com/in/santiago-caceres01/',
   },
@@ -40,7 +26,7 @@ export const EQUIPO: Integrante[] = [
     nombre: 'Agustín Mazzoni',
     rol: 'Full-Stack Developer',
     descripcion: 'Estudiante de Licenciatura en Sistemas en UNLP. Trabaja con Python, FastAPI, Java y bases de datos SQL. Interesado en análisis de requerimientos, incorporación de IA al desarrollo y automatización de tareas.',
-    stack: ['python', 'fastapi', 'java', 'javascript', 'html5', 'css3', 'supabase','postgresql','nextjs','n8n','git','nodejs'],
+    stack: ['python', 'fastapi', 'java', 'javascript', 'postgresql', 'supabase'],
     foto: '/images/AgustinMazzoni.webp',
     email: 'mazzoni.agustine@gmail.com',
     linkedin: 'https://www.linkedin.com/in/agustin-mazzoni-48044b30b/',
@@ -50,7 +36,7 @@ export const EQUIPO: Integrante[] = [
     nombre: 'Lucas Fernández',
     rol: 'Developer',
     descripcion: 'Colaborador de SCdev. Estudiante de Informática en UNLP.',
-    stack: ['python', 'fastapi', 'java', 'javascript', 'html5', 'css3', 'supabase','git',],
+    stack: ['python', 'fastapi', 'java', 'javascript', 'supabase', 'git'],
     foto: '/images/lucasFernandez.webp',
     linkedin: 'https://www.linkedin.com/in/lucas-fern%C3%A1ndez-121292210/',
   },
@@ -59,7 +45,7 @@ export const EQUIPO: Integrante[] = [
     nombre: 'Ezequiel Weber',
     rol: 'Developer',
     descripcion: 'Colaborador de SCdev. Estudiante de Informática en UNLP.',
-    stack: ['python', 'fastapi', 'java', 'javascript', 'html5', 'css3', 'supabase','postgresql','git',],
+    stack: ['python', 'fastapi', 'java', 'javascript', 'postgresql', 'supabase'],
     foto: '/images/EzequielWeber.webp',
     linkedin: 'https://www.linkedin.com/in/ezequiel-weber-2b621a415/',
   },

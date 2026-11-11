@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Google Tag Manager -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Google Tag Manager (src/gtm.config.ts: GTM_DIFERIDO) -->
+<!--gtm:inicio-->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TW45W6NJ');</script>
+<!--gtm:fin-->
 <!-- End Google Tag Manager -->
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/LogoChicoFN.png" />
-  <link rel="apple-touch-icon" href="/images/LogoChicoFN.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/LogoChicoFN.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/LogoChicoFN.png" />
+    <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon-512.png" />
+  <link rel="apple-touch-icon" href="/images/favicon-180.png" />
 
   <!-- SEO primario -->
   <title>SCdev | Agencia de Desarrollo Web en La Plata, Argentina</title>
@@ -34,10 +35,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta property="og:title" content="SCdev | Agencia de Desarrollo Web en La Plata" />
   <meta property="og:description"
     content="Sitios web profesionales, sistemas a medida y automatización para negocios argentinos. Precios visibles, entrega rápida." />
-  <meta property="og:image" content="https://scdev.com.ar/images/LogoChicoFN.png" />
+  <meta property="og:image" content="https://scdev.com.ar/images/og-scdev.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="SCdev — Agencia de Desarrollo Web" />
+  <meta property="og:image:alt" content="SCdev: webs y sistemas para negocios de La Plata" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:site_name" content="SCdev" />
 
@@ -46,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="twitter:title" content="SCdev | Agencia de Desarrollo Web en La Plata" />
   <meta name="twitter:description"
     content="Sitios web, sistemas a medida y automatización para negocios argentinos." />
-  <meta name="twitter:image" content="https://scdev.com.ar/images/LogoChicoFN.png" />
+  <meta name="twitter:image" content="https://scdev.com.ar/images/og-scdev.jpg" />
 
   <!-- GEO -->
   <meta name="geo.region" content="AR-B" />
@@ -54,16 +55,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="geo.position" content="-34.9215;-57.9545" />
   <meta name="ICBM" content="-34.9215, -57.9545" />
 
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/node_modules/@fontsource/syne/files/syne-latin-700-normal.woff2" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2" />
+
   <!-- Preconnect para performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="preconnect" href="https://script.google.com" />
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
 
-  <!-- particles.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-  <!-- Schema.org JSON-LD -->
+  <!-- Schema.org JSON-LD. TODO(santi): sumar a "sameAs" la URL del Perfil de Empresa de Google ("SCdev|Desarrollo Web Profesional") -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -74,8 +74,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "name": "SCdev — Agencia de Desarrollo Web",
         "alternateName": "SCdev",
         "url": "https://scdev.com.ar",
-        "logo": "https://scdev.com.ar/images/LogoChicoFN.png",
-        "image": "https://scdev.com.ar/images/LogoChicoFN.png",
+        "logo": "https://scdev.com.ar/images/favicon-512.png",
+        "image": "https://scdev.com.ar/images/og-scdev.jpg",
         "description": "Agencia de desarrollo web en La Plata, Argentina. Especializada en sitios web profesionales, sistemas a medida, automatización con IA y bots de WhatsApp para profesionales y empresas argentinas.",
         "founder": {
           "@type": "Person",
@@ -134,12 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         "url": "https://scdev.com.ar",
         "name": "SCdev",
         "description": "Agencia de desarrollo web en La Plata, Argentina.",
-        "inLanguage": "es-AR",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://scdev.com.ar/?s={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
+        "inLanguage": "es-AR"
       }
     ]
   }

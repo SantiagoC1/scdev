@@ -1,10 +1,17 @@
-import { motion } from 'framer-motion'
-import ServiceCard from '../ui/ServiceCard'
-import MantenimientoTier from '../ui/MantenimientoTier'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ChevronRight, Globe, Rocket, Building2, Settings, Bot } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { SERVICIOS } from '../../data/servicios'
+import type { Servicio } from '../../data/servicios'
+import { PRICE_MAP } from '../../data/precios'
+import { track } from '../../utils/track'
+import { PLANES, BENEFICIOS } from '../../data/mantenimiento'
 import { useConfig } from '../../context/ConfigContext'
 import { formatPrice, buildWALink } from '../../hooks/useSheetConfig'
 import type { SheetConfig } from '../../hooks/useSheetConfig'
+
+const ICONOS: Record<string, LucideIcon> = { Globe, Rocket, Building2, Settings, Bot }
 
 const MANT_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
   basico:   { min: 'price_mant_basico_min',   max: 'price_mant_basico_max' },
@@ -12,131 +19,195 @@ const MANT_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig 
   pro:      { min: 'price_mant_pro_min',      max: 'price_mant_pro_max' },
 }
 
-const MANTENIMIENTO_TIERS = [
-  {
-    id: 'basico',
-    nombre: 'Plan Básico',
-    descripcion: 'Para sitios simples',
-    incluye: [
-      'Hosting y SSL activos',
-      'Actualizaciones de seguridad',
-      'Soporte por WhatsApp',
-    ],
-    popular: false,
-  },
-  {
-    id: 'estandar',
-    nombre: 'Plan Estándar',
-    descripcion: 'Lo más elegido',
-    incluye: [
-      'Todo el Plan Básico',
-      '2 cambios de contenido/mes',
-      'Reporte mensual de analytics',
-      'Backup mensual',
-    ],
-    popular: true,
-  },
-  {
-    id: 'pro',
-    nombre: 'Plan Pro',
-    descripcion: 'Para negocios activos',
-    incluye: [
-      'Todo el Plan Estándar',
-      'Cambios ilimitados de contenido',
-      'Prioridad en soporte',
-      'Auditoría SEO trimestral',
-    ],
-    popular: false,
-  },
-]
+function useDesde(s: Servicio) {
+  const config = useConfig()
+  const keys = PRICE_MAP[s.id]
+  return keys ? formatPrice(config[keys.min]) : s.precio
+}
+
+const focoBoton = 'bg-[var(--s-btn)] text-white hover:bg-[var(--s-btn-hover)] transition-colors duration-200'
+
+function Puerta({ servicio }: { servicio: Servicio }) {
+  const desde = useDesde(servicio)
+  const Icono = ICONOS[servicio.iconName]
+  return (
+    <article
+      className={`relative flex flex-col rounded-2xl border bg-[var(--s-card)] p-6 md:p-8 ${
+        servicio.badge?.tipo === 'popular' ? 'border-[var(--s-accent)]' : 'border-[var(--s-border)]'
+      }`}
+    >
+      {servicio.badge && (
+        <span className="absolute top-5 right-5 text-xs font-medium px-2 py-1 rounded-lg border border-[var(--s-border)] text-[var(--s-muted)]">
+          {servicio.badge.texto}
+        </span>
+      )}
+      {Icono && <Icono size={28} className="text-[var(--s-muted)] mb-4" strokeWidth={1.5} aria-hidden="true" />}
+      <h3 className="text-xl md:text-2xl font-bold mb-2">{servicio.nombre}</h3>
+      <p className="text-[var(--s-muted)] text-sm mb-5">{servicio.descripcion}</p>
+      <p className="mb-1">
+        <span className="text-3xl font-bold text-[var(--s-price)]">Desde {desde}</span>
+      </p>
+      <p className="text-sm text-[var(--s-muted)] mb-5">{servicio.precioTipo} · {servicio.tiempo}</p>
+      <ul className="flex flex-wrap gap-1.5 mb-7">
+        {servicio.beneficios.map((p) => (
+          <li key={p} className="text-xs border border-[var(--s-border)] px-2 py-1 rounded-lg text-[var(--s-muted)]">{p}</li>
+        ))}
+      </ul>
+      <Link to={servicio.slug} className={`mt-auto self-start px-5 py-3 rounded-lg font-semibold ${focoBoton}`}>
+        Ver qué incluye →
+      </Link>
+    </article>
+  )
+}
+
+function Fila({ servicio }: { servicio: Servicio }) {
+  const desde = useDesde(servicio)
+  return (
+    <li>
+      <Link
+        to={servicio.slug}
+        className="group flex items-center gap-4 rounded-2xl border border-[var(--s-border)] bg-[var(--s-card)] px-5 py-4 hover:border-[var(--s-fg)] transition-colors duration-200"
+      >
+        <div className="flex-1 min-w-0 grid md:grid-cols-[1.2fr_1.4fr_0.7fr_1fr] md:items-center gap-x-6 gap-y-1">
+          <span className="font-bold font-[family-name:var(--font-display)]">{servicio.nombre}</span>
+          <span className="text-sm text-[var(--s-muted)]">Para {servicio.para}</span>
+          <span className="text-sm text-[var(--s-muted)]">{servicio.tiempo}</span>
+          <span className="block text-right whitespace-nowrap mt-1 md:mt-0">
+            <span className="block font-bold text-[var(--s-price)]">Desde {desde}</span>
+            <span className="block text-xs text-[var(--s-muted)]">{servicio.precioTipo}</span>
+          </span>
+        </div>
+        <ChevronRight size={20} aria-hidden="true" className="flex-none text-[var(--s-muted)] group-hover:translate-x-0.5 transition-transform" />
+      </Link>
+    </li>
+  )
+}
+
+function TablaMantenimiento() {
+  const config = useConfig()
+  const cont = useRef<HTMLDivElement>(null)
+  const [hayMas, setHayMas] = useState(false)
+
+  const actualizar = () => {
+    const c = cont.current
+    if (c) setHayMas(c.scrollLeft + c.clientWidth < c.scrollWidth - 4)
+  }
+
+  // En móvil la tabla desborda: al cargar, deja Estándar pegada a la columna fija de etiquetas.
+  useEffect(() => {
+    const c = cont.current
+    if (!c) return
+    const est = c.querySelector<HTMLElement>('[data-destacado]')
+    const etiquetas = c.querySelector<HTMLElement>('[data-etiquetas]')
+    if (est && etiquetas && c.scrollWidth > c.clientWidth) c.scrollLeft = est.offsetLeft - etiquetas.offsetWidth
+    actualizar()
+    window.addEventListener('resize', actualizar)
+    return () => window.removeEventListener('resize', actualizar)
+  }, [])
+
+  return (
+    <div className="relative">
+    <div ref={cont} onScroll={actualizar} role="region" aria-label="Planes de mantenimiento, desplazable" tabIndex={0} className="relative overflow-x-auto rounded-2xl">
+      <table className="w-full min-w-[34rem] border-separate border-spacing-0 text-sm">
+        <caption className="sr-only">Comparación de planes de mantenimiento mensual</caption>
+        <thead>
+          <tr>
+            <td data-etiquetas className="sticky left-0 z-10 bg-[var(--s-bg)] w-[8.5rem] md:w-[34%]" />
+            {PLANES.map((p) => {
+              const k = MANT_MAP[p.id]
+              return (
+                <th
+                  key={p.id}
+                  scope="col"
+                  data-destacado={p.destacado ? '' : undefined}
+                  className={`text-left align-bottom px-4 pt-6 pb-4 font-normal bg-[var(--s-head)] border-t border-x rounded-t-2xl ${
+                    p.destacado ? 'border-[var(--s-accent)]' : 'border-transparent'
+                  }`}
+                >
+                  <span className="block font-bold font-[family-name:var(--font-display)] text-base">{p.nombre}</span>
+                  <span className="block text-xs text-[var(--s-muted)] mb-2">{p.para}</span>
+                  <span className="block font-bold text-[var(--s-price)]">{formatPrice(config[k.min])} – {formatPrice(config[k.max])}</span>
+                  <span className="block text-xs text-[var(--s-muted)]">por mes</span>
+                </th>
+              )
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {BENEFICIOS.map((b, r) => (
+            <tr key={b.texto}>
+              <th scope="row" className="sticky left-0 z-10 bg-[var(--s-bg)] text-left font-normal py-3 pr-4 border-t border-[var(--s-border)] text-[var(--s-muted)]">
+                {b.texto}
+              </th>
+              {b.valores.map((v, i) => {
+                const ultima = r === BENEFICIOS.length - 1
+                const dest = PLANES[i].destacado
+                return (
+                  <td
+                    key={i}
+                    className={`px-4 py-3 border-t ${dest ? 'bg-[var(--s-card)] border-x border-t-[var(--s-border)] border-x-[var(--s-accent)]' : 'border-[var(--s-border)]'} ${
+                      dest && ultima ? 'border-b border-b-[var(--s-accent)] rounded-b-2xl' : ''
+                    }`}
+                  >
+                    {v === true ? (
+                      <><span aria-hidden="true" className="text-[var(--s-price)] font-bold">✓</span><span className="sr-only">Incluido</span></>
+                    ) : v === false ? (
+                      <><span aria-hidden="true" className="text-[var(--s-muted)]">—</span><span className="sr-only">No incluido</span></>
+                    ) : (
+                      <span>{v}</span>
+                    )}
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+      {hayMas && (
+        <div aria-hidden="true" className="md:hidden pointer-events-none absolute inset-y-0 right-0 w-12 rounded-r-2xl bg-gradient-to-l from-[var(--s-bg)] to-transparent" />
+      )}
+    </div>
+  )
+}
 
 export default function Servicios() {
   const config = useConfig()
-  const first4 = SERVICIOS.slice(0, 4)
-  const last1 = SERVICIOS.slice(4)
+  const puertas = SERVICIOS.filter((s) => s.id === 'presencia-web-esencial' || s.id === 'landing-page-profesional')
+  const filas = SERVICIOS.filter((s) => !puertas.includes(s))
 
   return (
-    <section id="servicios" className="py-24 bg-[#0a0a0a]">
+    <section id="servicios" className="seccion-comercial py-24 bg-[var(--s-bg)] text-[var(--s-fg)]">
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="mb-16"
-        >
-          <h2 className="text-3xl md:text-5xl font-bold mt-3">Servicios</h2>
-        </motion.div>
+        <h2 className="text-3xl md:text-5xl font-bold mb-3">Servicios</h2>
+        <p className="text-[var(--s-muted)] mb-10 max-w-xl">Precios publicados. Empezá por el que más se parece a tu negocio.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {first4.map((s, i) => (
-            <motion.div
-              key={s.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-            >
-              <ServiceCard servicio={s} />
-            </motion.div>
-          ))}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {puertas.map((s) => <Puerta key={s.id} servicio={s} />)}
         </div>
 
-        <div className="flex justify-center">
-          {last1.map((s) => (
-            <motion.div
-              key={s.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="w-full max-w-xl"
-            >
-              <ServiceCard servicio={s} />
-            </motion.div>
-          ))}
-        </div>
+        <ul className="flex flex-col gap-3">
+          {filas.map((s) => <Fila key={s.id} servicio={s} />)}
+        </ul>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-24"
-        >
-          <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-4xl font-bold mb-3">Planes de Mantenimiento</h3>
-            <p className="text-white/50 max-w-xl mx-auto">
-              Mantenemos tu sitio activo, seguro y actualizado. Vos te enfocás en tu negocio.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {MANTENIMIENTO_TIERS.map((tier) => {
-              const keys = MANT_MAP[tier.id]
-              const precio = `${formatPrice(config[keys.min])} – ${formatPrice(config[keys.max])}/mes`
-              return (
-                <MantenimientoTier
-                  key={tier.nombre}
-                  nombre={tier.nombre}
-                  descripcion={tier.descripcion}
-                  incluye={tier.incluye}
-                  popular={tier.popular}
-                  precio={precio}
-                />
-              )
-            })}
-          </div>
-
-          <div className="text-center mt-8">
+        <div className="mt-20">
+          <h3 className="text-2xl md:text-3xl font-bold mb-2">Mantenimiento mensual</h3>
+          <p className="text-[var(--s-muted)] mb-8 max-w-xl">
+            Mantenemos tu sitio activo, seguro y actualizado. Vos te enfocás en tu negocio.
+          </p>
+          <TablaMantenimiento />
+          <div className="mt-8">
             <a
               href={buildWALink(config.whatsapp_number, 'Hola Santi! Me interesa un plan de mantenimiento mensual.')}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block text-sm text-[#D32F2F] border border-[#D32F2F]/30 px-6 py-3 rounded-xl hover:bg-[#D32F2F]/10 transition-all duration-200"
+              onClick={() => track({ event: 'cta_whatsapp_click', location: 'mantenimiento' })}
+              className={`inline-block px-6 py-3 rounded-lg font-semibold ${focoBoton}`}
             >
-              Consultar planes →
+              Consultar planes
             </a>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

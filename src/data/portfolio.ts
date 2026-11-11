@@ -7,11 +7,16 @@ export interface Proyecto {
   descripcion?: string
   categoria?: string
   repo?: string
+  /** 'cliente' = trabajo real entregado; 'demo' = proyecto de muestra. */
+  tipo: 'cliente' | 'demo'
+  /** false = no se renderiza. Por defecto visible. */
+  visible?: boolean
 }
 
 export const PROYECTOS: Proyecto[] = [
   {
     id: 'unidos-construimos',
+    tipo: 'cliente',
     nombre: 'Unidos Construimos',
     descripcion:
       'Plataforma de gestión de consultas ciudadanas para el equipo del Diputado Provincial José Corral (Santa Fe). Los vecinos registran pedidos y reclamos, el equipo los gestiona y el portal de transparencia muestra las estadísticas públicas sin datos personales. Cumple Ley 25.326.',
@@ -23,29 +28,33 @@ export const PROYECTOS: Proyecto[] = [
   },
   {
     id: 'balance',
-    nombre: 'Balance — Agencia de Marketing',
-    imagen: '/images/balance.png',
+    tipo: 'cliente',
+    nombre: 'Balance, agencia de marketing',
+    imagen: '/images/balance.webp',
     tags: ['React 19', 'TypeScript', 'Tailwind', 'Framer Motion', 'Vite'],
     url: 'https://somosbalance.com.ar',
   },
   {
     id: 'scdev',
+    tipo: 'demo',
     nombre: 'Portfolio Personal (scdev)',
-    imagen: '/images/Scdev.png',
+    imagen: '/images/Scdev.webp',
     tags: ['HTML5', 'CSS3', 'JavaScript'],
     url: 'https://scdev.com.ar',
   },
   {
     id: 'adsumpater',
+    tipo: 'cliente',
     nombre: 'Adsum Pater (Web App)',
-    imagen: '/images/AdsumPater.png',
+    imagen: '/images/AdsumPater.webp',
     tags: ['.NET 8', 'Blazor', 'Firebase', 'Clean Arch'],
     url: 'https://adsumpater.com.ar',
   },
   {
     id: 'centroEventos',
+    tipo: 'demo',
     nombre: 'CentroEventos (CampusFit)',
-    imagen: '/images/campusfit.png',
+    imagen: '/images/campusfit.webp',
     tags: ['.NET 8', 'Blazor', 'SQLite', 'EF Core'],
     url: null,
   },

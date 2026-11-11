@@ -6,7 +6,7 @@ export interface Servicio {
   descripcion: string
   precio: string
   precioTipo: string
-  pills: string[]
+  beneficios: string[]
   tiempo: string
   para: string
   badge?: { texto: string; tipo: 'entrada' | 'popular' }
@@ -25,10 +25,10 @@ export const SERVICIOS: Servicio[] = [
     slug: '/servicios/presencia-web-esencial',
     iconName: 'Globe',
     nombre: 'Presencia Web Esencial',
-    descripcion: 'Para gasistas, electricistas, dentistas, peluquerías — el primer paso online.',
+    descripcion: 'Para gasistas, electricistas, dentistas, peluquerías. El primer paso online.',
     precio: '$80.000 – $100.000',
     precioTipo: 'proyecto cerrado',
-    pills: ['1 página scroll', 'responsive', 'botón WhatsApp', 'deploy incluido'],
+    beneficios: ['Diseño personalizado', 'Formulario de contacto', 'Botón de WhatsApp', 'Lista para aparecer en Google', 'Publicada sin trámites técnicos'],
     tiempo: '3–5 días',
     para: 'profesionales de oficio, microemprendimientos',
     badge: { texto: 'ENTRADA', tipo: 'entrada' },
@@ -49,7 +49,7 @@ export const SERVICIOS: Servicio[] = [
       'Cualquier profesional de oficio que necesita ser encontrado online',
     ],
     noIncluye: [
-      'Dominio propio (.com.ar — costo aparte)',
+      'Dominio propio (.com.ar, costo aparte)',
       'Logo (si no tenés, lo cotizamos aparte)',
       'Más de 1 ronda de revisiones',
       'Redacción de textos (el cliente provee contenido)',
@@ -81,10 +81,10 @@ export const SERVICIOS: Servicio[] = [
     descripcion: 'Para comercios, profesionales y emprendimientos con identidad cuidada.',
     precio: '$400.000 – $700.000',
     precioTipo: 'proyecto cerrado',
-    pills: ['React + Vite + Tailwind', 'animaciones', 'formulario', 'SEO básico', 'deploy'],
+    beneficios: ['Diseño a medida', 'Formulario con Google Sheets', 'Aparece en Google (SEO básico)', 'Estadísticas de visitas', 'Publicación y SSL incluidos'],
     tiempo: '1–2 semanas',
     para: 'profesionales, comercios, emprendimientos',
-    badge: { texto: 'MÁS ELEGIDO', tipo: 'popular' },
+    badge: { texto: 'RECOMENDADO', tipo: 'popular' },
     waText: 'Hola Santi! Me interesa una Landing Page Profesional.',
     incluye: [
       { iconName: 'Palette', titulo: 'Diseño a medida', desc: 'Identidad visual propia. No usamos templates genéricos.' },
@@ -134,7 +134,7 @@ export const SERVICIOS: Servicio[] = [
     descripcion: 'Para empresas con múltiples servicios, equipo o blog.',
     precio: '$800.000 – $1.500.000',
     precioTipo: 'proyecto cerrado',
-    pills: ['hasta 6 páginas', 'Framer Motion', 'CMS liviano', 'SEO avanzado', 'Analytics'],
+    beneficios: ['Hasta 6 páginas', 'SEO avanzado', 'Actualizás el contenido sin código', 'Consultas a tu email'],
     tiempo: '3–5 semanas',
     para: 'PyMEs, agencias, clínicas',
     waText: 'Hola Santi! Me interesa un Sitio Web Corporativo.',
@@ -185,7 +185,7 @@ export const SERVICIOS: Servicio[] = [
     descripcion: 'Gestión de turnos, sistemas internos, plataformas con lógica de negocio real.',
     precio: '$1.500.000 – $4.000.000',
     precioTipo: 'por sprint o proyecto',
-    pills: ['FastAPI / .NET', 'PostgreSQL / Supabase', 'auth + roles', 'Railway', 'documentación'],
+    beneficios: ['Relevamiento detallado', 'El código es tuyo', 'Documentación técnica', 'Entregas cada 1–2 semanas'],
     tiempo: '1–4 meses',
     para: 'startups, empresas medianas',
     waText: 'Hola Santi! Me interesa un Sistema o Plataforma a medida.',
@@ -236,7 +236,7 @@ export const SERVICIOS: Servicio[] = [
     descripcion: 'Bots de WhatsApp, automatización de procesos, pipelines con Python.',
     precio: '$300.000 – $900.000',
     precioTipo: 'proyecto cerrado',
-    pills: ['WATI / WhatsApp API', 'Python', 'Apps Script', 'integración email'],
+    beneficios: ['Bot de WhatsApp', 'Turnos y respuestas automáticas', 'Capacitación al equipo', '1 mes de soporte'],
     tiempo: '1–3 semanas',
     para: 'clínicas, comercios, PyMEs con procesos repetitivos',
     waText: 'Hola Santi! Me interesa automatizar procesos con IA o WhatsApp.',

@@ -52,7 +52,10 @@ export const CONFIG_FALLBACK: SheetConfig = {
 }
 
 export function useSheetConfig() {
-  const [config, setConfig] = useState<SheetConfig>(CONFIG_FALLBACK)
+  // Si hay HTML prerenderizado, arranca con la config con que se generó (sin desajuste al hidratar); después actualiza en vivo.
+  const [config, setConfig] = useState<SheetConfig>(
+    () => (typeof window !== 'undefined' && window.__SCDEV_CONFIG__) || CONFIG_FALLBACK,
+  )
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -67,7 +70,7 @@ export function useSheetConfig() {
       .then((data) => {
         clearTimeout(timeout)
         if (data.ok && data.config) {
-          console.log('[SCdev] Config cargada desde Sheets:', data.config)
+          if (import.meta.env.DEV) console.log('[SCdev] Config cargada desde Sheets:', data.config)
           setConfig({ ...CONFIG_FALLBACK, ...data.config } as SheetConfig)
         }
       })

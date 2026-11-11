@@ -12,6 +12,7 @@
   --color-accent-hover: #B71C1C;
   --color-accent-muted: rgba(211, 47, 47, 0.12);
   --color-accent-border: rgba(211, 47, 47, 0.3);
+  --color-accent-text: #FF6B6B;
   --color-bg-primary: #0a0a0a;
   --color-bg-secondary: #111111;
   --color-bg-card: rgba(255, 255, 255, 0.03);
@@ -53,10 +54,58 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   animation: marquee 25s linear infinite;
 }
 
-.animate-marquee:hover {
+.marquee-pausable:hover .animate-marquee,
+.marquee-pausable:focus-within .animate-marquee,
+.marquee-pausable:focus-visible .animate-marquee {
   animation-play-state: paused;
 }
 
 nav {
   isolation: isolate;
+}
+
+/* Foco visible en todo lo interactivo */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent-text);
+  outline-offset: 2px;
+}
+main:focus { outline: none; }
+
+/* Entrada del modal: respuesta a una acción */
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+.modal-enter { animation: modal-in 180ms ease-out; }
+.modal-overlay-enter { animation: overlay-in 180ms ease-out; }
+
+/* Sección comercial (Servicios): superficie clara, todos los colores salen de estas variables. */
+.seccion-comercial {
+  --s-bg: #E3E5E9;
+  --s-card: #EEF0F2;
+  --s-head: #DDE0E5;
+  --s-border: #CBD0D6;
+  --s-fg: #0a0a0a;
+  --s-muted: #4B5563;
+  --s-price: #B71C1C;
+  --s-accent: #D32F2F;
+  --s-btn: #D32F2F;
+  --s-btn-hover: #B71C1C;
+  --s-focus: #B71C1C;
+}
+.seccion-comercial :where(a, [tabindex]):focus-visible { outline-color: var(--s-focus); }
+
+/* Entrada del hero: solo CSS, escalonada 80 ms. Solo se mueve (translateY): el texto nunca parte de opacity 0,
+   así el HTML prerenderizado se pinta enseguida y el LCP no espera a la hidratación. */
+@keyframes hero-in { from { transform: translateY(12px); } to { transform: none; } }
+@keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+.hero-in { animation: hero-in 450ms ease-out backwards; animation-delay: calc(var(--i, 0) * 80ms); }
+.hero-fade { animation: hero-fade 200ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee { animation: none !important; }
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

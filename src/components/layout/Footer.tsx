@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { track } from '../../utils/track'
 import { useConfig } from '../../context/ConfigContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
 import { useModal } from '../../context/ModalContext'
@@ -15,16 +16,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <Link to="/">
-              <img src="/images/LogoCompletoHorizontalFN.png" alt="SCdev" className="h-18 mb-4" />
+              <img src="/images/LogoCompletoHorizontalFN.webp" alt="SCdev" width={512} height={288} className="h-18 w-auto mb-4" />
             </Link>
-            <p className="text-white/40 text-sm">
+            <p className="text-white/60 text-sm">
               Agencia de desarrollo web en La Plata, Argentina.
             </p>
           </div>
 
           <div>
             <h5 className="font-semibold mb-4 text-sm">Servicios</h5>
-            <ul className="space-y-2 text-white/40 text-sm">
+            <ul className="space-y-2 text-white/60 text-sm">
               <li><Link to="/servicios/presencia-web-esencial" className="hover:text-white transition-colors">Presencia Web Esencial</Link></li>
               <li><Link to="/servicios/landing-page-profesional" className="hover:text-white transition-colors">Landing Page Profesional</Link></li>
               <li><Link to="/servicios/sitio-web-corporativo" className="hover:text-white transition-colors">Sitio Web Corporativo</Link></li>
@@ -35,9 +36,9 @@ export default function Footer() {
 
           <div>
             <h5 className="font-semibold mb-4 text-sm">Contacto</h5>
-            <ul className="space-y-2 text-white/40 text-sm">
+            <ul className="space-y-2 text-white/60 text-sm">
               <li>
-                <a href={waLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                <a href={waLink} onClick={() => track({ event: 'cta_whatsapp_click', location: 'footer' })} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                   WhatsApp
                 </a>
               </li>
@@ -72,7 +73,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-6 text-center text-white/20 text-xs">
+        <div className="border-t border-white/5 pt-6 text-center text-white/60 text-xs">
           © {year} SCdev. Todos los derechos reservados.
         </div>
       </div>

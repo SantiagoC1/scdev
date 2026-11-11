@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import type { Integrante } from '../../data/equipo'
 
 const DEVICON_LABELS: Record<string, string> = {
@@ -35,23 +34,12 @@ const iniciales = (nombre: string) =>
     .join('')
     .toUpperCase()
 
-// Variants compartidos: el contenedor va en la seccion que renderiza el grid
-export const equipoGridVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-}
-
-export const equipoCardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-}
-
 function StackIcon({ tech }: { tech: string }) {
   const label = DEVICON_LABELS[tech] ?? tech
   return (
     <div
       title={label}
-      className="w-7 h-7 flex items-center justify-center"
+      className="w-5 h-5 sm:w-7 sm:h-7 flex-none flex items-center justify-center"
     >
       <img
         src={tech === 'n8n' ? N8N_ICON : deviconUrl(tech)}
@@ -60,7 +48,7 @@ function StackIcon({ tech }: { tech: string }) {
         decoding="async"
         width={28}
         height={28}
-        className={`w-full h-full object-contain${tech === 'n8n' ? ' rounded' : ''}`}
+        className={`w-full h-full object-contain${tech === 'n8n' ? ' rounded-lg' : ''}`}
       />
     </div>
   )
@@ -75,6 +63,8 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
         <img
           src={foto}
           alt={nombre}
+          width={480}
+          height={640}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-[400ms] ease-out"
@@ -84,13 +74,13 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
           <div className="absolute inset-0 bg-gradient-to-br from-[#1e1e1e] to-[#2d2d2d]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span
-              className="font-display font-bold text-white/25 leading-none"
+              className="font-display font-bold text-white/50 leading-none"
               style={{ fontSize: '3rem' }}
             >
               {iniciales(nombre)}
             </span>
           </div>
-          <span className="absolute top-3 right-3 rounded-full bg-[#D32F2F] text-white text-[10px] font-medium px-2.5 py-1 leading-none">
+          <span className="absolute top-3 right-3 rounded-lg bg-[#D32F2F] text-white text-xs font-medium px-2.5 py-1 leading-none">
             Próximamente
           </span>
         </>
@@ -99,9 +89,9 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
       {/* Overlay para legibilidad del texto */}
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#000000e6] via-[#00000090] to-transparent" />
 
-      <div className="absolute inset-x-0 bottom-0 p-4">
-        <h3 className="font-display font-bold text-white leading-tight">{nombre}</h3>
-        <p className="text-xs text-[#D32F2F] mt-0.5">{rol}</p>
+      <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
+        <h3 className="font-display font-bold text-white leading-tight text-sm md:text-base">{nombre}</h3>
+        <p className="text-xs text-white/70 mt-0.5">{rol}</p>
       </div>
     </>
   )
@@ -110,7 +100,7 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
     'group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#1e1e1e] border border-white/[0.08]'
 
   return (
-    <motion.div variants={equipoCardVariants} className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {linkedin ? (
         <a
           href={linkedin}
@@ -126,12 +116,12 @@ export default function EquipoCard({ integrante }: { integrante: Integrante }) {
       )}
 
       {stack.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2.5 px-1">
-          {stack.map((tech) => (
+        <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2.5 px-1">
+          {stack.slice(0, 6).map((tech) => (
             <StackIcon key={tech} tech={tech} />
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }

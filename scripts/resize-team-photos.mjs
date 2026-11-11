@@ -64,15 +64,15 @@ async function quitarFondoClaro(src, { umbral = 215, umbralHalo = 175 } = {}) {
 
 // Fotos de equipo: cards portrait 3:4 de ancho completo (480x640 alcanza para retina)
 const fotos = [
-  { src: 'public/images/SantaigoCaceres.png', threshold: 10 },
-  { src: 'public/images/AgustinMazzoni.png', threshold: 10 },
+  { src: 'scripts/fuentes/SantaigoCaceres.png', threshold: 10 },
+  { src: 'scripts/fuentes/AgustinMazzoni.png', threshold: 10 },
   // JPEG sin alpha sobre fondo blanco: hay que recortarlo antes de que el trim sirva
-  { src: 'public/images/lucasFernandez.jpeg', threshold: 10, quitarFondo: true },
-  { src: 'public/images/EzequielWeber.png', threshold: 10 },
+  { src: 'scripts/fuentes/lucasFernandez.jpeg', threshold: 10, quitarFondo: true },
+  { src: 'scripts/fuentes/EzequielWeber.png', threshold: 10 },
 ]
 
 for (const { src, threshold, quitarFondo } of fotos) {
-  const out = src.replace(/\.(png|jpe?g)$/, '.webp')
+  const out = src.replace('scripts/fuentes/', 'public/images/').replace(/\.(png|jpe?g)$/, '.webp')
   const entrada = quitarFondo ? await quitarFondoClaro(src) : src
   await sharp(entrada)
     // Los originales son recortes con un margen transparente enorme. Sin
@@ -86,14 +86,14 @@ for (const { src, threshold, quitarFondo } of fotos) {
 
 // Logo de cliente: se muestra chico y sobre fondo oscuro, asi que va con
 // contain (no recortar la marca) y fondo transparente.
-await sharp('public/images/UnidosConstruimosLogo.png')
+await sharp('scripts/fuentes/UnidosConstruimosLogo.png')
   .resize(200, 200, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
   .webp({ quality: 90 })
   .toFile('public/images/UnidosLogoCliente.webp')
 console.log('✓ public/images/UnidosLogoCliente.webp')
 
 // Imagen del portfolio: la card la renderiza a 320x192, o sea 640x384 en retina
-await sharp('public/images/UnidosConstruimos.png')
+await sharp('scripts/fuentes/UnidosConstruimos.png')
   .resize(640, 384, { fit: 'cover', position: 'center' })
   .webp({ quality: 85 })
   .toFile('public/images/UnidosConstruimos.webp')
