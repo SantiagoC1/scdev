@@ -45,6 +45,27 @@ for (const f of ['tabano-logo-blanco.png', 'flor-logo-blanco.png', 'flor-logo-os
   console.log(`${f} -> ${path.basename(out)} ${info.width}x${info.height} ${(info.size / 1024).toFixed(1)} KB (con transparencia)`)
 }
 
+// Clientes Deca y Diputados Bonaerenses. Los originales pesados están en scripts/fuentes/ (fuera de public/).
+// Logos blancos con transparencia: la franja los muestra a 44 px de alto (hasta 2x), por eso 512 px (Deca) y 640 px (Diputados).
+// No se publican: deca-azul (no se lee sobre negro), deca-emblema (favicon de Deca, NO es el de SCdev), diputados-emblema-blanco
+// (ampliación de una captura) ni diputados-logo-grande (fondo opaco).
+for (const [f, ancho] of [['deca-blanco.png', 512], ['diputados-logo-blanco.png', 640]]) {
+  const out = path.join(DIR, f.replace(/\.png$/, '.webp'))
+  const info = await sharp(path.join('scripts/fuentes', f)).resize({ width: ancho, withoutEnlargement: true }).webp({ quality: 90, alphaQuality: 100, effort: 6 }).toFile(out)
+  console.log(`${f} -> ${path.basename(out)} ${info.width}x${info.height} ${(info.size / 1024).toFixed(1)} KB (con transparencia)`)
+}
+// Capturas 16:10 recortadas de las capturas de pantalla originales ({ left, top, width, height } en px del original).
+// Deca: dashboard completo desde el logo, sin la barra de scroll. Diputados: cabecera y portada, centradas en el contenido.
+const RECORTES = {
+  'deca-captura': { left: 300, top: 0, width: 1513, height: 946 },
+  'diputados-captura': { left: 355, top: 0, width: 1192, height: 745 },
+}
+for (const [base, r] of Object.entries(RECORTES)) {
+  const out = path.join(DIR, base + '.webp')
+  const info = await sharp(path.join('scripts/fuentes', base + '.png')).extract(r).webp({ quality: 82, effort: 6 }).toFile(out)
+  console.log(`${base}.png -> ${base}.webp ${info.width}x${info.height} ${(info.size / 1024).toFixed(0)} KB`)
+}
+
 // Favicon: se exporta desde scripts/fuentes/LogoChicoFN.png (fuera de public/).
 for (const t of [32, 180, 512]) {
   const out = path.join(DIR, `favicon-${t}.png`)
@@ -54,7 +75,7 @@ for (const t of [32, 180, 512]) {
 
 // Variantes del carrusel de Trabajos: las cards se muestran a 317 px (celular) y 480 px (escritorio), o el doble en pantallas
 // de alta densidad. Se generan -480.webp y -960.webp (solo si son más chicas que el original) para usar con srcset.
-const CARRUSEL = ['tabano-captura', 'flor-captura', 'UnidosConstruimos', 'balance', 'Scdev', 'AdsumPater', 'campusfit']
+const CARRUSEL = ['tabano-captura', 'flor-captura', 'deca-captura', 'diputados-captura', 'UnidosConstruimos', 'balance', 'Scdev', 'AdsumPater', 'campusfit']
 for (const base of CARRUSEL) {
   const src = path.join(DIR, base + '.webp')
   const { width } = await sharp(src).metadata()
