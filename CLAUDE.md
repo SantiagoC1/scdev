@@ -781,7 +781,7 @@ export const PROYECTOS = [
 ### Contacto.tsx
 - Título: "Empecemos tu proyecto"
 - Select de servicios actualizado con los 5 del catálogo + mantenimiento + otro
-- Submit al Apps Script URL: `https://script.google.com/macros/s/AKfycbwyKDvZD-ci0BEHoCcWeFG4NxkalKO8NEGGpAidSKQ_RSyev5IpQiz0v_QN0H4wtSBe/exec`
+- Submit al Apps Script URL: `https://script.google.com/macros/s/<APPS_SCRIPT_ID>/exec`
 - Feedback visual de éxito/error después del submit
 - Honeypot anti-spam: `<input type="text" name="_honey" style={{display:'none'}} />`
 
