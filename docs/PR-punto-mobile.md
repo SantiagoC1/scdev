@@ -49,8 +49,7 @@ Rama `feat/mobile-mantenimiento` → `main`. Son ~100 commits; este resumen los 
   URL_PREVIEW="<URL-DEL-PREVIEW>"
   D=$(mktemp -d)
   for i in 1 2 3 4 5 6; do
-    curl -s -m 30 -o "$D/$i.cuerpo" -w "%{http_code}
-" -X POST "$URL_PREVIEW/api/punto" \
+    curl -s -m 30 -o "$D/$i.cuerpo" -w "%{http_code}\n" -X POST "$URL_PREVIEW/api/punto" \
       -H "Origin: $URL_PREVIEW" -H "Content-Type: application/json" \
       -d '{"mensajes":[{"role":"user","content":"hola"}]}' > "$D/$i.codigo" &
   done
