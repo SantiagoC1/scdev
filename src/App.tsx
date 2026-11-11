@@ -10,8 +10,10 @@ import type { SheetConfig } from './hooks/useSheetConfig'
 import { ConfigContext } from './context/ConfigContext'
 import { ModalProvider, useModal } from './context/ModalContext'
 import ContactModal from './components/ui/ContactModal'
+import PuntoMount from './components/punto/PuntoMount'
 
 const NosotrosPage = lazy(() => import('./pages/NosotrosPage'))
+const PrivacidadPage = lazy(() => import('./pages/PrivacidadPage'))
 const PresenciaWebEsencial = lazy(() => import('./pages/servicios/PresenciaWebEsencial'))
 const LandingPageProfesional = lazy(() => import('./pages/servicios/LandingPageProfesional'))
 const SitioWebCorporativo = lazy(() => import('./pages/servicios/SitioWebCorporativo'))
@@ -38,6 +40,7 @@ const PAGINA_SERVICIO: Record<string, ReactNode> = {
 const PAGINAS: { path: string; element: ReactNode }[] = [
   { path: '/', element: <Home /> },
   { path: '/nosotros', element: <NosotrosPage /> },
+  { path: '/privacidad', element: <PrivacidadPage /> },
   ...SERVICIOS.map((s) => ({ path: s.slug, element: PAGINA_SERVICIO[s.id] })),
 ]
 export const RUTAS_VALIDAS = PAGINAS.map((p) => p.path)
@@ -100,6 +103,7 @@ export default function App() {
       router={
         <BrowserRouter>
           <Rutas />
+          <PuntoMount />
         </BrowserRouter>
       }
     />

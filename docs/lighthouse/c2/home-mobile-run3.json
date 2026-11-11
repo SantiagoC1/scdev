@@ -1268,7 +1268,7 @@
             "entity": "localhost"
           },
           {
-            "url": "https://script.google.com/macros/s/AKfycbyUpnUb8gnF2cUUDDK_4ejbt354o-QvWkGtmpL5U-teIjbQl5Q_SezH3GtYwBY7OqQ/exec",
+            "url": "https://script.google.com/macros/s/<APPS_SCRIPT_ID>/exec",
             "sessionTargetType": "page",
             "protocol": "h2",
             "cache": "none",

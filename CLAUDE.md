@@ -781,7 +781,7 @@ export const PROYECTOS = [
 ### Contacto.tsx
 - Título: "Empecemos tu proyecto"
 - Select de servicios actualizado con los 5 del catálogo + mantenimiento + otro
-- Submit al Apps Script URL: `https://script.google.com/macros/s/AKfycbwyKDvZD-ci0BEHoCcWeFG4NxkalKO8NEGGpAidSKQ_RSyev5IpQiz0v_QN0H4wtSBe/exec`
+- Submit al Apps Script URL: `https://script.google.com/macros/s/<APPS_SCRIPT_ID>/exec`
 - Feedback visual de éxito/error después del submit
 - Honeypot anti-spam: `<input type="text" name="_honey" style={{display:'none'}} />`
 
@@ -835,3 +835,92 @@ Crear un componente `ServicePage.tsx` que reciba un `Servicio` como prop y rende
 14. Crear `public/_redirects`
 15. `npm run build` y verificar que no hay errores TypeScript
 16. Verificar mobile en DevTools (375px)
+
+---
+
+## Punto (asistente con IA)
+
+Punto es el asistente del sitio: un widget (botón flotante + panel) que habla con una función de Netlify, y esa función llama a un proveedor de IA. Las claves nunca llegan al navegador.
+
+### Piezas
+
+| Qué | Dónde |
+|---|---|
+| Widget, estados y chat (stream, errores) | `src/components/punto/` (`PuntoWidget`, `usePuntoChat`, `PuntoAvatar`, `filtroEtiqueta`, `servicioWhatsapp`, `respuestasRapidas`) |
+| Función `/api/punto` (cadena de proveedores, stream normalizado) | `netlify/functions/punto.mts` |
+| Personalidad y reglas (incluye cuándo emitir `[WHATSAPP]`) | `netlify/functions/punto/prompt.ts` |
+| Información que sabe (servicios, plazos, precios) | `netlify/functions/punto/conocimiento.ts`: se arma desde `src/data/servicios.ts` y los precios en vivo |
+| Precios en vivo (Apps Script, caché de 10 min, respaldo) | `netlify/functions/punto/config.ts`, `src/data/configFallback.ts` |
+| Límite diario por IP (Netlify Blobs, hash con sal) | `netlify/functions/punto/limite.ts` |
+| Política de privacidad (citas de cada proveedor) | `src/pages/PrivacidadPage.tsx` |
+| Pruebas de las 20 preguntas | `scripts/probar-punto.mjs` → `docs/punto/pruebas.md` |
+
+### Cambiar de modelo o de proveedor sin tocar código
+
+Todo se configura con variables de entorno (lista completa y comentada en `.env.example`):
+
+- **Cambiar el modelo** de un proveedor: editar `GROQ_MODEL`, `GEMINI_MODEL` o `CLOUDFLARE_MODEL`. Verificar antes que el id exista: Groq `GET https://api.groq.com/openai/v1/models`, Gemini `GET https://generativelanguage.googleapis.com/v1beta/openai/models` (ambos con `Authorization: Bearer <clave>`), Cloudflare en su catálogo de Workers AI (`@cf/...`).
+- **Modelos con razonamiento** (p. ej. `openai/gpt-oss-120b`): poner `<PROVEEDOR>_REASONING_EFFORT` (`low`). La función solo reenvía `delta.content`, así que el razonamiento nunca llega al chat.
+- **Sacar un proveedor de la cadena**: dejar vacío su `*_MODEL` o su clave. Un proveedor sin clave o sin modelo se saltea.
+- **Cambiar la clave**: actualizar `*_API_KEY` (o `CLOUDFLARE_API_TOKEN`).
+- Después de cambiar variables en Netlify hace falta **un deploy nuevo** para que la función las vea. Para probar en local: `npx netlify-cli dev` (lee `.env`) y, sin servidor, `node --env-file=.env scripts/probar-punto.mjs`.
+- El **orden** (Groq → Gemini → Cloudflare) y agregar un cuarto proveedor sí requieren código: `proveedores()` en `netlify/functions/punto.mts` (cualquier API compatible con OpenAI entra con una entrada más).
+- **Cloudflare se pide sin streaming** (`sinStream` en `proveedores()`): su stream manda los tokens puramente numéricos como número JSON y se perdían montos y plazos. No cambiarlo salvo que lo corrijan (probar con `--solo=4,6 --veces=3`).
+- Reglas fijas de la función: 5 s por proveedor hasta el primer fragmento de contenido; si falla (HTTP, vacío, timeout o stream cortado) pasa al siguiente; los últimos 8 mensajes, 500 caracteres cada uno, `max_tokens` 300.
+
+### Reglas al tocar a Punto
+
+- **Precios y plazos no se escriben en el prompt.** Salen de `src/data/servicios.ts` y del Sheet. Los hechos sin confirmar (hosting incluido, anticipo, validez del presupuesto, servicios que el sitio no muestra) están listados en `docs/pendientes.md` y **no** deben entrar al conocimiento hasta confirmarse.
+- **Después de cambiar `prompt.ts` o `conocimiento.ts`**, correr `node --env-file=.env scripts/probar-punto.mjs` y leer las 20 respuestas: el filtro automático marca montos, plazos y condiciones, pero no detecta todo (p. ej. un precio correcto atribuido al servicio equivocado). Cada corrida cambia las respuestas.
+- **No loguear** el contenido de los mensajes ni la IP en la función (hoy solo se registran el proveedor, el código HTTP y errores genéricos).
+- Las citas de `PrivacidadPage.tsx` son textuales y tienen fecha de lectura: si cambia un proveedor o el plan (p. ej. Gemini pasa a pago), releer su política y actualizar la página.
+- Eventos de medición: `punto_open`, `punto_whatsapp` (con `servicio`) y `cta_whatsapp_click` (`location: 'punto'`).
+
+### Protecciones contra abuso
+
+Todas se configuran con variables de entorno (en Netlify: *Site configuration → Environment variables*; después hace falta un **deploy nuevo**). Lista comentada en `.env.example`.
+
+| Protección | Variable (por defecto) | Qué pasa al saltar |
+|---|---|---|
+| Interruptor | `PUNTO_ACTIVO` (activo; solo `false` lo apaga) | La función devuelve 503 `desactivado` y el panel muestra solo el aviso y "Hablar con el equipo". |
+| Tope global diario, todos los visitantes juntos | `PUNTO_TOPE_DIARIO` (600) | 429 `tope`: el chat dice "Por hoy ya charlamos un montón…", bloquea el campo y muestra "Seguir por WhatsApp". |
+| Tope por IP y por día | `PUNTO_LIMITE_DIA` (30) | 429 `limite`, mismo mensaje. |
+| Intervalo mínimo entre mensajes de la misma IP | `PUNTO_INTERVALO_MS` (3000) | 429 `intervalo` con `Retry-After: 3`; el chat avisa sin bloquear. El cliente también espera 3 s. |
+| Origen del pedido | `PUNTO_NETLIFY_SITE`, `PUNTO_ORIGENES_EXTRA` | 403 `origen`. Se acepta solo `scdev.com.ar`, `www.scdev.com.ar`, los Deploy Previews del sitio y, en desarrollo, localhost. |
+
+Detalles: las IPv6 se agrupan por prefijo /64 (una IPv4 mapeada se trata como IPv4); la IP nunca se guarda, solo un hash con sal (`PUNTO_SALT`) y día. Los contadores viven en el store `punto-uso` de Netlify Blobs (claves `AAAA-MM-DD/global`, `AAAA-MM-DD/<hash>` y `AAAA-MM-DD/t/<hash>`) y se reinician a la medianoche de Argentina. El orden de las revisiones es: origen → interruptor → intervalo → tope por IP → tope global (una IP pasada de su tope no gasta el global). El header `X-Punto-Proveedor` solo existe en desarrollo (`NETLIFY_DEV=true`). Si Blobs falla, la función deja pasar el mensaje.
+
+#### Subir o bajar el tope diario
+
+1. Netlify → *Environment variables* → editar `PUNTO_TOPE_DIARIO` (el valor es la cantidad de mensajes por día para todos los visitantes).
+2. *Deploys → Trigger deploy → Deploy site*, para que la función tome el valor nuevo.
+3. Comprobar: `npx netlify-cli blobs:get punto-uso <AAAA-MM-DD>/global` muestra lo consumido hoy (el día es el de Argentina); `blobs:set` permite corregirlo a mano. Los subcomandos exactos están en `netlify blobs --help`.
+
+Cómo elegir el valor: el tope cuenta **mensajes**, no pedidos a proveedores. Conviene dejarlo por debajo de lo que aguanta en un día el plan gratuito del primer proveedor de la cadena (los límites vigentes se ven en su consola: cambian seguido), de modo que los otros dos queden de reserva para picos y fallas. Con 600 por día y 30 por IP hacen falta al menos 20 visitantes distintos para agotarlo.
+
+#### Si se agota el plan gratuito de la IA
+
+Cómo se nota: el chat dice "Uy, se me cortó la conexión…" (la función devuelve 503 `sin_servicio` cuando los tres proveedores fallan) y en *Logs de funciones* aparecen líneas como `[punto] groq: HTTP 429`.
+
+1. Mirar en los logs qué proveedores devuelven 429 o errores de cuota.
+2. Para frenar el gasto o dar un mensaje claro de inmediato: bajar `PUNTO_TOPE_DIARIO` (corta antes, con el mensaje de "por hoy ya charlamos" y el botón de WhatsApp) o poner `PUNTO_ACTIVO=false` (el panel avisa y deriva al equipo). Los planes gratuitos se reinician por día: se puede volver a activar al día siguiente.
+3. Si pasa seguido: pasar un proveedor a un plan pago (cambia la política de datos: en Gemini pasa a "Paid Services", hay que releer y actualizar la cita en `src/pages/PrivacidadPage.tsx`) o agregar otro proveedor (código: `proveedores()` en `netlify/functions/punto.mts`).
+4. Subir el tope solo si el plan lo aguanta. Después de cualquier cambio, correr `node --env-file=.env scripts/probar-punto.mjs`.
+
+#### Limitaciones conocidas y cómo probar
+
+- **Ráfagas simultáneas.** El intervalo y los contadores usan escrituras condicionales de Blobs (`onlyIfNew` / `onlyIfMatch`). El emulador local de `netlify dev` **no las respeta de forma atómica** (medido: de 6 pedidos simultáneos pasaban entre 1 y 4). Las ráfagas secuenciales sí se frenan siempre. En producción hay que verificarlo en un Deploy Preview: 6 `curl` en paralelo con un `Origin` válido deberían dar a lo sumo 1 respuesta 200 por ventana de 3 s. Si no es así, los topes diarios siguen acotando el daño.
+- **El origen no frena a un script** que falsifica el header `Origin`: para eso están los topes.
+- **Deploy Previews con 403.** El nombre del sitio se deduce de variables de Netlify; si no se puede, definir `PUNTO_NETLIFY_SITE` con el `<sitio>` de `<sitio>.netlify.app`.
+- **Pruebas sin red:** `node scripts/probar-limites.mjs` (IPv6, topes, intervalo, origen, interruptor y header). Pruebas de punta a punta: `PUNTO_TOPE_DIARIO=3 npx netlify-cli dev` y pedidos con `Origin: http://localhost:8888`.
+
+### Responsive del widget
+
+Reglas (todas en `.punto-panel` y `.punto-fab` de `src/index.css`): menos de 640 px es una hoja desde abajo de ancho completo con alto `min(85dvh, 100dvh - 24px)`; desde 640 px, panel abajo a la derecha de `min(380px, 100vw - 32px)` por `min(560px, 100dvh - 96px)`; con menos de 500 px de alto (celular en horizontal, zoom alto) ocupa `100dvh - 16px` y Punto del encabezado baja a 48 px. Con el teclado en pantalla, `useVisualViewport` publica `--punto-vvh` y `--punto-bottom` para que el panel se achique y suba (en iOS el teclado achica el visual viewport sin cambiar el de diseño). Solo scrollea la lista de mensajes; en celular el fondo se bloquea con la clase `punto-abierto` en `<html>`. El botón flotante respeta `env(safe-area-inset-*)` y se esconde con el panel abierto en celular, con el formulario de contacto y con el menú móvil del navbar. El panel está por encima del navbar (z-60); Escape y la trampa de foco son del documento (el foco puede quedar en el `<body>`). El campo de texto es de 16 px (si no, iOS hace zoom).
+
+Probar: con `npm run dev` corriendo, `node scripts/probar-punto-responsive.mjs --capturas=docs/capturas/punto-responsive` abre el widget en 11 tamaños (con zoom 200% y teclado simulado), mide cada regla, corre axe y sale con código 1 si algo falla.
+
+### Carrusel de Trabajos y planes de mantenimiento en celular
+
+- **Carrusel** (`src/components/sections/Trabajos.tsx`): el touch y el teclado usan el scroll nativo (`snap proximity`, sin JS en el camino); el mouse arrastra con `rAF` y la inercia la anima el navegador con `scrollTo` smooth. Mientras se arrastra, las cards no reciben el puntero (`[data-arrastrando]` en `index.css`). No volver a poner `transition-all` ni `scale` sin condición de hover en las cards: era el mayor costo medido. Las imágenes usan `srcset` con `-480.webp` y `-960.webp` (`node scripts/optimizar-imagenes.mjs`; opt-in con `anchoImagen` en `portfolio.ts`). Diagnóstico y números en `docs/auditoria-carrusel.md`. Pruebas: `node scripts/probar-carrusel.mjs` y `node scripts/medir-carrusel.mjs` (con el build servido en el puerto 4175).
+- **Mantenimiento mensual**: la tabla (desde 768 px) y las pestañas con tarjeta (menos de 768 px, `PlanesMantenimientoMovil`) leen los mismos datos (`PLANES`, `BENEFICIOS` y los precios de `useConfig`); no hay contenido propio en la vista de celular. Pruebas: `node scripts/probar-mantenimiento-mobile.mjs` (con `npm run dev`).

@@ -4,20 +4,14 @@ import { ChevronRight, Globe, Rocket, Building2, Settings, Bot } from 'lucide-re
 import type { LucideIcon } from 'lucide-react'
 import { SERVICIOS } from '../../data/servicios'
 import type { Servicio } from '../../data/servicios'
-import { PRICE_MAP } from '../../data/precios'
+import { PRICE_MAP, MANT_MAP } from '../../data/precios'
 import { track } from '../../utils/track'
 import { PLANES, BENEFICIOS } from '../../data/mantenimiento'
+import PlanesMantenimientoMovil from '../ui/PlanesMantenimientoMovil'
 import { useConfig } from '../../context/ConfigContext'
 import { formatPrice, buildWALink } from '../../hooks/useSheetConfig'
-import type { SheetConfig } from '../../hooks/useSheetConfig'
 
 const ICONOS: Record<string, LucideIcon> = { Globe, Rocket, Building2, Settings, Bot }
-
-const MANT_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
-  basico:   { min: 'price_mant_basico_min',   max: 'price_mant_basico_max' },
-  estandar: { min: 'price_mant_estandar_min', max: 'price_mant_estandar_max' },
-  pro:      { min: 'price_mant_pro_min',      max: 'price_mant_pro_max' },
-}
 
 function useDesde(s: Servicio) {
   const config = useConfig()
@@ -195,8 +189,14 @@ export default function Servicios() {
           <p className="text-[var(--s-muted)] mb-8 max-w-xl">
             Mantenemos tu sitio activo, seguro y actualizado. Vos te enfocás en tu negocio.
           </p>
-          <TablaMantenimiento />
-          <div className="mt-8">
+          {/* Mismos datos, dos presentaciones: tabla desde 768 px; pestañas y tarjeta en celular. */}
+          <div className="hidden md:block">
+            <TablaMantenimiento />
+          </div>
+          <div className="md:hidden">
+            <PlanesMantenimientoMovil />
+          </div>
+          <div className="mt-8 hidden md:block">
             <a
               href={buildWALink(config.whatsapp_number, 'Hola Santi! Me interesa un plan de mantenimiento mensual.')}
               target="_blank"
