@@ -55,15 +55,33 @@ for (const [f, ancho] of [['deca-blanco.png', 512], ['diputados-logo-blanco.png'
   console.log(`${f} -> ${path.basename(out)} ${info.width}x${info.height} ${(info.size / 1024).toFixed(1)} KB (con transparencia)`)
 }
 // Capturas 16:10 recortadas de las capturas de pantalla originales ({ left, top, width, height } en px del original).
-// Deca: dashboard completo desde el logo, sin la barra de scroll. Diputados: cabecera y portada, centradas en el contenido.
+// Deca: dashboard completo desde el logo, sin la barra de scroll. Diputados: cabecera, navegación y portada, centradas en el contenido.
+// `pixelar`: rectángulos (relativos al recorte) que se pixelan para que no se reconozcan personas ni fotos de prensa
+// (en Diputados: la nota principal y las dos fotos de la derecha). El encabezado, la navegación y los titulares quedan visibles.
 const RECORTES = {
-  'deca-captura': { left: 300, top: 0, width: 1513, height: 946 },
-  'diputados-captura': { left: 355, top: 0, width: 1192, height: 745 },
+  'deca-captura': { corte: { left: 300, top: 0, width: 1513, height: 946 } },
+  'diputados-captura': {
+    corte: { left: 355, top: 0, width: 1192, height: 745 },
+    pixelar: [
+      { left: 0, top: 186, width: 788, height: 552 }, // nota principal (empleados públicos)
+      { left: 808, top: 186, width: 384, height: 192 }, // foto de la nota de la derecha (papa)
+      { left: 808, top: 488, width: 384, height: 192 }, // foto de la segunda nota de la derecha
+    ],
+  },
 }
-for (const [base, r] of Object.entries(RECORTES)) {
+const BLOQUE = 28 // px por bloque de pixelado
+for (const [base, { corte, pixelar = [] }] of Object.entries(RECORTES)) {
   const out = path.join(DIR, base + '.webp')
-  const info = await sharp(path.join('scripts/fuentes', base + '.png')).extract(r).webp({ quality: 82, effort: 6 }).toFile(out)
-  console.log(`${base}.png -> ${base}.webp ${info.width}x${info.height} ${(info.size / 1024).toFixed(0)} KB`)
+  const recorte = await sharp(path.join('scripts/fuentes', base + '.png')).extract(corte).png().toBuffer()
+  const capas = []
+  for (const z of pixelar) {
+    // Dos pasos con buffer intermedio: sharp fusiona dos resize encadenados y solo aplicaría el último.
+    const chico = await sharp(recorte).extract(z).resize(Math.ceil(z.width / BLOQUE), Math.ceil(z.height / BLOQUE), { kernel: 'cubic' }).png().toBuffer()
+    const trozo = await sharp(chico).resize(z.width, z.height, { kernel: 'nearest' }).png().toBuffer()
+    capas.push({ input: trozo, left: z.left, top: z.top })
+  }
+  const info = await sharp(recorte).composite(capas).webp({ quality: 82, effort: 6 }).toFile(out)
+  console.log(`${base}.png -> ${base}.webp ${info.width}x${info.height} ${(info.size / 1024).toFixed(0)} KB${pixelar.length ? ` (${pixelar.length} zonas pixeladas)` : ''}`)
 }
 
 // Favicon: se exporta desde scripts/fuentes/LogoChicoFN.png (fuera de public/).
