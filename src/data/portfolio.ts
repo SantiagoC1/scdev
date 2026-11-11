@@ -20,7 +20,7 @@ export interface Proyecto {
 }
 
 export const PROYECTOS: Proyecto[] = [
-  // Orden: Tábano, Florencia y después los que ya estaban. SGI (Deca) y Diputados siguen ocultos (visible: false).
+  // Orden: Tábano, Florencia, Deca, Diputados y después los que ya estaban.
   // Tábano y Florencia: sin chips de tecnología porque no conocemos su stack; los chips son del tipo de proyecto (máx. 3).
   {
     id: 'tabano',
@@ -46,28 +46,24 @@ export const PROYECTOS: Proyecto[] = [
   },
   {
     id: 'deca-sgi',
-    // TODO(santi): pedir permiso a Juan Sequeira antes de mostrarlo. Hasta entonces no se renderiza.
-    // Cuando se active: sin nombre ni logo de Deca, salvo que Santi lo autorice. Sin imagen por ahora.
-    visible: false,
-    tipo: 'demo',
-    chip: 'Demo con datos de ejemplo',
-    nombre: 'SGI · Sistema de gestión integral',
+    tipo: 'cliente',
+    nombre: 'Deca Electromecánica · SGI',
     rubro: 'Sistema a medida',
-    descripcion: 'Demo de un módulo de seguridad e higiene: dashboard de cumplimiento, capacitaciones, vencimientos e inspecciones de equipos.',
-    imagen: '',
-    tags: [],
-    url: 'https://demo-deca.vercel.app/dashboard',
+    descripcion: 'Módulo de seguridad del sistema de gestión integral (SGI): dashboard de cumplimiento, capacitaciones del personal, inspecciones de equipos y vencimientos.',
+    imagen: '/images/deca-captura.webp',
+    anchoImagen: 1513,
+    tags: ['Sistema a medida'],
+    url: null, // el demo (demo-deca.vercel.app) tiene datos de ejemplo: no se enlaza desde la card
   },
   {
     id: 'diputados-bonaerenses',
-    // TODO(santi): confirmar con Juan Manuel Negri que podemos mostrar el sitio. Hasta entonces no se renderiza. Sin imagen por ahora.
-    visible: false,
     tipo: 'cliente',
     nombre: 'Diputados Bonaerenses',
     rubro: 'Medio de noticias',
-    descripcion: 'Portal de noticias sobre la Legislatura bonaerense. Mantenimiento y corrección de errores.',
-    imagen: '',
-    tags: [],
+    descripcion: 'Portal de noticias sobre la Legislatura y la política bonaerense. Mantenimiento y corrección de errores.',
+    imagen: '/images/diputados-captura.webp',
+    anchoImagen: 1192,
+    tags: ['Sitio de noticias', 'Mantenimiento'],
     url: 'https://diputadosbsas.com.ar/',
   },
   {
