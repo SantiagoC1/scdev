@@ -81,12 +81,12 @@ export default function PlanesMantenimientoMovil() {
             >
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <h4 className="font-[family-name:var(--font-display)] text-xl font-bold">{p.nombre}</h4>
-                {/* La etiqueta "Recomendado" es el "para" del plan destacado: se muestra como insignia, no como descripción. */}
+                {/* "Recomendado" es solo la etiqueta; la descripción del plan va debajo. */}
                 {p.destacado && (
                   <span className="rounded-md bg-[var(--s-btn)] px-2 py-0.5 text-xs font-semibold text-white">Recomendado</span>
                 )}
               </div>
-              {!p.destacado && <p className="mt-1 text-sm text-[var(--s-muted)]">{p.para}</p>}
+              <p className="mt-1 text-sm text-[var(--s-muted)]">{p.destacado ? p.descripcion ?? p.para : p.para}</p>
 
               <p className="mt-4 font-bold text-[var(--s-price)] [overflow-wrap:anywhere]">
                 {formatPrice(config[k.min])} – {formatPrice(config[k.max])}

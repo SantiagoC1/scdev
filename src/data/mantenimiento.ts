@@ -1,6 +1,14 @@
-export const PLANES = [
+export const PLANES: { id: string; nombre: string; para: string; destacado?: boolean; descripcion?: string }[] = [
   { id: 'basico', nombre: 'Básico', para: 'Para sitios simples' },
-  { id: 'estandar', nombre: 'Estándar', para: 'Recomendado', destacado: true },
+  // `para` ("Recomendado") es el rótulo de la tabla de escritorio. `descripcion` la usa solo la vista de celular, que
+  // muestra "Recomendado" como etiqueta aparte. Sale de los beneficios del plan (ver BENEFICIOS).
+  {
+    id: 'estandar',
+    nombre: 'Estándar',
+    para: 'Recomendado',
+    destacado: true,
+    descripcion: 'Para sitios que se actualizan seguido: 2 cambios de contenido por mes, reporte de analytics y backup.',
+  },
   { id: 'pro', nombre: 'Pro', para: 'Para negocios activos' },
 ]
 
