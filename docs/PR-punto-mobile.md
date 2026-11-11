@@ -17,7 +17,7 @@ Rama `feat/mobile-mantenimiento` → `main`. Son ~100 commits; este resumen los 
 
 ### Clientes y Trabajos
 - Trabajos fusiona Clientes y Proyectos; franja "Confían en SCdev" (marquee CSS) solo con `tipo === 'cliente'` y `visible !== false`.
-- Nuevos: Tábano, Florencia Inveninato (reemplaza a Padejimas), Unidos Construimos, Deca Electromecánica y Diputados Bonaerenses. Con captura, logo blanco en la franja y chips de tipo de proyecto. Tábano, Florencia, Deca y Diputados van primeros en el carrusel.
+- Nuevos: Tábano, Florencia Inveninato (reemplaza a Padejimas), Unidos Construimos, Deca Electromecánica y Diputados Bonaerenses. Con captura, logo blanco en la franja y chips de tipo de proyecto. Diputados: SCdev hace el mantenimiento mensual y el soporte técnico de su portal (no lo desarrolló), y la captura lleva pixeladas las fotos de personas y de prensa. Tábano, Florencia, Deca y Diputados van primeros en el carrusel.
 
 ### Mobile
 - **Carrusel de Trabajos**: scroll nativo en touch y teclado (`snap proximity`), arrastre con mouse por `rAF` con inercia nativa, hover barato (sin `transition-all` ni `scale` permanente), imágenes con `srcset` de 480 y 960 px. Diagnóstico con números antes y después en `docs/auditoria-carrusel.md`.
@@ -54,20 +54,20 @@ Rama `feat/mobile-mantenimiento` → `main`. Son ~100 commits; este resumen los 
 - [ ] Probar el interruptor: `PUNTO_ACTIVO=false` + deploy, el panel muestra solo el aviso y "Hablar con el equipo". Volver a dejarlo activo.
 
 **PageSpeed / Lighthouse**
-- [ ] PageSpeed de la home en móvil y escritorio (comparar con `docs/lighthouse/`).
+- [ ] PageSpeed de la home en móvil, **3 corridas** (usar la mediana) y una en escritorio. Referencia local (mediana de 5, móvil): rendimiento 74, LCP 1,4 s, CLS 0, TBT ~1,3 s; comparar con `docs/lighthouse/`.
 - [ ] Revisar LCP, CLS y que Punto no entre en el bundle inicial (va en un chunk aparte).
 
 **Rich Results**
 - [ ] Rich Results Test en la home (LocalBusiness), en cada `/servicios/*` (Service/Offer, FAQPage, BreadcrumbList) y comprobar que no hay errores.
 - [ ] `sitemap.xml` con 8 rutas y `robots.txt`; una ruta inexistente devuelve la 404 real.
 
-**Carrusel en teléfono real**
+**Carrusel en teléfono real (iPhone y Android)**
 - [ ] Deslizar con el dedo en iPhone y Android: inercia natural, el snap no frena de más, sin trabas.
 - [ ] Las cards cargan imagen a la medida (480/960) y no hay saltos de layout.
-- [ ] Con las cards de Deca y Diputados incluidas, comprobar que el arrastre sigue fluido.
+- [ ] Cards de Deca y Diputados: la de Diputados muestra las fotos pixeladas y se ve bien; comprobar con las dos cards incluidas que el arrastre sigue fluido.
 - [ ] Decidir si las flechas deben verse también en celular (hoy desde 768 px).
 
-**Mantenimiento mensual**
+**Mantenimiento mensual (teléfono real)**
 - [ ] En 320–767 px: pestañas Básico / Estándar / Pro, el Estándar viene preseleccionado con la etiqueta "Recomendado" y su descripción, la altura no salta al cambiar.
 - [ ] Desde 768 px sigue la tabla.
 
@@ -101,8 +101,6 @@ Sin clave o sin modelo, un proveedor se saltea. Los ids de modelo se verificaron
 ## Pendientes abiertos (`docs/pendientes.md`)
 
 **Clientes y Trabajos**
-- Florencia Inveninato figura como `tipo: 'cliente'` hasta que Santi lo confirme; si no lo es, volver a `demo`.
-- La captura de Diputados Bonaerenses incluye las fotos de la portada (una con una persona identificable): confirmar que está bien mostrarlas o recortarla.
 - La card de Deca no enlaza al demo (datos de ejemplo).
 - Pedir los logos originales (PNG/SVG) a Tábano y a la Dra. Inveninato.
 - Cargar más pacientes de ejemplo en el sistema de Florencia y volver a capturar `flor-captura.webp`.

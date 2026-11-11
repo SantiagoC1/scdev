@@ -60,10 +60,10 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'cliente',
     nombre: 'Diputados Bonaerenses',
     rubro: 'Medio de noticias',
-    descripcion: 'Portal de noticias sobre la Legislatura y la política bonaerense. Mantenimiento y corrección de errores.',
+    descripcion: 'Mantenimiento mensual y soporte técnico de un portal de noticias legislativas.',
     imagen: '/images/diputados-captura.webp',
     anchoImagen: 1192,
-    tags: ['Sitio de noticias', 'Mantenimiento'],
+    tags: ['Portal de noticias', 'Mantenimiento mensual'],
     url: 'https://diputadosbsas.com.ar/',
   },
   {

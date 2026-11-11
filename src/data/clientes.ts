@@ -88,6 +88,6 @@ export const CLIENTES: Cliente[] = [
     iniciales: 'DB',
     tipo: 'cliente',
     url: 'https://diputadosbsas.com.ar/',
-    desc: 'Portal de noticias sobre la Legislatura y la política bonaerense. Mantenimiento y corrección de errores.',
+    desc: 'Mantenimiento mensual y soporte técnico de un portal de noticias legislativas.',
   },
 ]
