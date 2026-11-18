@@ -86,7 +86,7 @@ console.log(`✓ 404.html  (${(out404.length / 1024).toFixed(1)} kB, noindex)`)
 
 // sitemap.xml con lastmod de la fecha del build
 const hoy = new Date().toISOString().slice(0, 10)
-const prioridad = (r) => (r === '/' ? '1.0' : r === '/nosotros' ? '0.9' : '0.8')
+const prioridad = (r) => (r === '/' ? '1.0' : r === '/nosotros' ? '0.9' : r === '/privacidad' ? '0.3' : '0.8')
 const urls = RUTAS.map(
   (r) => `  <url>\n    <loc>${SITE_URL}${r}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${prioridad(r)}</priority>\n  </url>`,
 ).join('\n')

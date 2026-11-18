@@ -77,6 +77,27 @@ main:focus { outline: none; }
 .modal-enter { animation: modal-in 180ms ease-out; }
 .modal-overlay-enter { animation: overlay-in 180ms ease-out; }
 
+/* Punto (asistente): solo transform y opacity. */
+@keyframes punto-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes punto-blink { 0%, 94%, 100% { transform: scaleY(1); } 96.5% { transform: scaleY(0.1); } }
+@keyframes punto-jump {
+  0% { transform: translateY(0) scale(1, 1); }
+  15% { transform: translateY(0) scale(1.06, 0.8); }
+  45% { transform: translateY(-14px) scale(0.96, 1.1); }
+  75% { transform: translateY(0) scale(1.05, 0.88); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes punto-wave { 0%, 100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
+@keyframes punto-spin { to { transform: rotate(360deg); } }
+.punto-float { animation: punto-float 3s ease-in-out infinite; }
+.punto-blink { transform-origin: 60px 52px; animation: punto-blink 4s infinite; }
+.punto-jump { animation: punto-jump 0.8s ease-in-out; }
+.punto-wave { transform-origin: 95px 46px; animation: punto-wave 0.55s ease-in-out 3; }
+.punto-spin { transform-origin: 60px 58px; animation: punto-spin 10s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .punto-float, .punto-blink, .punto-jump, .punto-wave, .punto-spin { animation: none !important; }
+}
+
 /* Sección comercial (Servicios): superficie clara, todos los colores salen de estas variables. */
 .seccion-comercial {
   --s-bg: #E3E5E9;
@@ -109,3 +130,100 @@ main:focus { outline: none; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---- Punto: panel y botón flotante responsive ----
+   Celular (< 640 px): hoja desde abajo, ancho completo. Tablet y escritorio: anclado abajo a la derecha.
+   Pantallas bajas (< 500 px de alto, p. ej. celular en horizontal o zoom alto): casi toda la altura.
+   --punto-vvh y --punto-bottom los publica useVisualViewport mientras el panel está abierto: con el teclado en pantalla
+   el panel se achica y sube para que el campo de texto siga a la vista. Los valores con vh son el respaldo sin dvh. */
+.punto-panel {
+  position: fixed;
+  z-index: 60; /* por encima del navbar (z-50): en horizontal el panel llega hasta arriba y el menú tapaba el botón de cerrar */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: #0a0a0a;
+  border: 1px solid rgb(255 255 255 / 0.15);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  left: 0;
+  right: 0;
+  bottom: var(--punto-bottom, 0px);
+  height: min(85vh, calc(100vh - 24px));
+  height: min(85dvh, calc(var(--punto-vvh, 100dvh) - 24px));
+  padding-bottom: env(safe-area-inset-bottom);
+  border-radius: 1rem 1rem 0 0;
+}
+@media (min-width: 640px) {
+  .punto-panel {
+    left: auto;
+    right: 16px;
+    bottom: calc(80px + var(--punto-bottom, 0px));
+    width: min(380px, calc(100vw - 32px));
+    height: min(560px, calc(100vh - 96px));
+    height: min(560px, calc(var(--punto-vvh, 100dvh) - 96px));
+    padding-bottom: 0;
+    border-radius: 1rem;
+  }
+}
+@media (max-height: 499px) {
+  .punto-panel {
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + var(--punto-bottom, 0px));
+    width: auto;
+    height: calc(100vh - 16px);
+    height: calc(var(--punto-vvh, 100dvh) - 16px);
+    padding-bottom: 0;
+    border-radius: 1rem;
+  }
+}
+@media (max-height: 499px) and (min-width: 640px) {
+  .punto-panel {
+    left: auto;
+    right: 16px;
+    width: min(380px, calc(100vw - 32px));
+  }
+}
+/* El botón flotante respeta las zonas seguras (notch, barra de gestos) y se esconde con el panel abierto en celular
+   o en pantallas bajas, donde el panel ocupa ese lugar. */
+.punto-fab {
+  position: fixed;
+  z-index: 30;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+@media (max-width: 639px), (max-height: 499px) {
+  .punto-fab[data-abierto='true'] { display: none; }
+  /* Con el panel abierto el fondo no scrollea. */
+  html.punto-abierto,
+  html.punto-abierto body { overflow: hidden; overscroll-behavior: none; }
+}
+
+/* Planes de mantenimiento en celular: las tres tarjetas comparten la misma celda de la grilla (la altura es la de la más
+   alta, no salta) y solo la activa se ve. Cambio de plan = cross-fade de opacidad de 150 ms. Con prefers-reduced-motion
+   la regla de arriba deja las transiciones en 0,01 ms (cambio instantáneo). visibility la saca del orden de foco y de
+   los lectores de pantalla. */
+.mant-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease, visibility 0s linear 150ms;
+}
+.mant-panel[data-activo='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 150ms ease;
+}
+
+/* Carrusel de Trabajos. Hover barato: en escritorio la imagen crece apenas con una transición de transform (solo compositor),
+   con will-change únicamente mientras hay hover. Mientras se arrastra con el mouse (data-arrastrando) las cards no reciben
+   el puntero: sin cambios de hover ni transiciones que repinten imágenes grandes en pleno scroll (medido: era el mayor
+   costo del arrastre). */
+.carrusel-img { transition: transform 300ms ease; }
+@media (hover: hover) {
+  .carrusel-card:hover .carrusel-img { transform: scale(1.03); will-change: transform; }
+}
+[data-arrastrando='true'] > * { pointer-events: none; }
+[data-arrastrando='true'] .carrusel-img { transform: none !important; transition: none !important; }

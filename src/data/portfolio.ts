@@ -2,18 +2,70 @@ export interface Proyecto {
   id: string
   nombre: string
   imagen: string
+  /** Ancho en px del archivo `imagen`. Si está, la card usa srcset con las variantes -480.webp y -960.webp (scripts/optimizar-imagenes.mjs). */
+  anchoImagen?: number
   tags: string[]
   url: string | null
   descripcion?: string
   categoria?: string
   repo?: string
-  /** 'cliente' = trabajo real entregado; 'demo' = proyecto de muestra. */
-  tipo: 'cliente' | 'demo'
+  /** 'cliente' = trabajo real entregado; 'demo' = proyecto de muestra; 'propio' = un proyecto de SCdev. */
+  tipo: 'cliente' | 'demo' | 'propio'
+  /** Texto del chip sobre la imagen (por defecto "Demo" en los demos). */
+  chip?: string
+  /** Rubro, para el texto de la card. */
+  rubro?: string
   /** false = no se renderiza. Por defecto visible. */
   visible?: boolean
 }
 
 export const PROYECTOS: Proyecto[] = [
+  // Orden: Tábano, Florencia, Deca, Diputados y después los que ya estaban.
+  // Tábano y Florencia: sin chips de tecnología porque no conocemos su stack; los chips son del tipo de proyecto (máx. 3).
+  {
+    id: 'tabano',
+    tipo: 'cliente',
+    nombre: 'Tábano · Cultura y Vida Cristiana',
+    rubro: 'Institucional, educación',
+    descripcion: 'Sitio institucional de una asociación civil de educación y cultura. Mantenimiento mensual de contenido.',
+    imagen: '/images/tabano-captura.webp',
+    anchoImagen: 1600,
+    tags: ['Sitio institucional', 'Mantenimiento mensual'],
+    url: 'https://tabanocultura.org/',
+  },
+  {
+    id: 'florencia-inveninato',
+    tipo: 'cliente', // sin cartel "Demo" ni link: ya no se enlaza al sistema (https://demo-flor.vercel.app/pacientes)
+    nombre: 'Florencia Inveninato',
+    rubro: 'Salud, consultorio',
+    descripcion: 'Sistema de gestión de pacientes y agenda para un consultorio de ortodoncia con dos sedes.',
+    imagen: '/images/flor-captura.webp',
+    anchoImagen: 1600,
+    tags: ['Sistema a medida'],
+    url: null,
+  },
+  {
+    id: 'deca-sgi',
+    tipo: 'cliente',
+    nombre: 'Deca Electromecánica · SGI',
+    rubro: 'Sistema a medida',
+    descripcion: 'Módulo de seguridad del sistema de gestión integral (SGI): dashboard de cumplimiento, capacitaciones del personal, inspecciones de equipos y vencimientos.',
+    imagen: '/images/deca-captura.webp',
+    anchoImagen: 1513,
+    tags: ['Sistema a medida'],
+    url: null, // el demo (demo-deca.vercel.app) tiene datos de ejemplo: no se enlaza desde la card
+  },
+  {
+    id: 'diputados-bonaerenses',
+    tipo: 'cliente',
+    nombre: 'Diputados Bonaerenses',
+    rubro: 'Medio de noticias',
+    descripcion: 'Mantenimiento mensual y soporte técnico de un portal de noticias legislativas.',
+    imagen: '/images/diputados-captura.webp',
+    anchoImagen: 1192,
+    tags: ['Portal de noticias', 'Mantenimiento mensual'],
+    url: 'https://diputadosbsas.com.ar/',
+  },
   {
     id: 'unidos-construimos',
     tipo: 'cliente',
@@ -24,6 +76,7 @@ export const PROYECTOS: Proyecto[] = [
     url: 'https://www.unidosconstruimos.com.ar',
     repo: 'https://github.com/scdevok-sudo/Ticketera',
     imagen: '/images/UnidosConstruimos.webp',
+    anchoImagen: 640,
     categoria: 'Plataforma / Sistema a medida',
   },
   {
@@ -31,15 +84,17 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'cliente',
     nombre: 'Balance, agencia de marketing',
     imagen: '/images/balance.webp',
+    anchoImagen: 1600,
     tags: ['React 19', 'TypeScript', 'Tailwind', 'Framer Motion', 'Vite'],
     url: 'https://somosbalance.com.ar',
   },
   {
     id: 'scdev',
-    tipo: 'demo',
-    nombre: 'Portfolio Personal (scdev)',
+    tipo: 'propio',
+    nombre: 'Sitio de SCdev',
     imagen: '/images/Scdev.webp',
-    tags: ['HTML5', 'CSS3', 'JavaScript'],
+    anchoImagen: 1280,
+    tags: ['React 19', 'TypeScript', 'Tailwind v4'],
     url: 'https://scdev.com.ar',
   },
   {
@@ -47,6 +102,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'cliente',
     nombre: 'Adsum Pater (Web App)',
     imagen: '/images/AdsumPater.webp',
+    anchoImagen: 1600,
     tags: ['.NET 8', 'Blazor', 'Firebase', 'Clean Arch'],
     url: 'https://adsumpater.com.ar',
   },
@@ -55,6 +111,7 @@ export const PROYECTOS: Proyecto[] = [
     tipo: 'demo',
     nombre: 'CentroEventos (CampusFit)',
     imagen: '/images/campusfit.webp',
+    anchoImagen: 751,
     tags: ['.NET 8', 'Blazor', 'SQLite', 'EF Core'],
     url: null,
   },

@@ -2,6 +2,15 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "22"
+  # Variables que el bundle del cliente embebe a propósito (la URL del Apps Script es pública) o que no son secretas
+  # (ids de modelo, topes, id de cuenta). Las claves y tokens NO van en esta lista.
+  SECRETS_SCAN_OMIT_KEYS = "APPS_SCRIPT_URL,VITE_APPS_SCRIPT_URL,GROQ_MODEL,GEMINI_MODEL,CLOUDFLARE_MODEL,GROQ_REASONING_EFFORT,GEMINI_REASONING_EFFORT,PUNTO_TOPE_DIARIO,CLOUDFLARE_ACCOUNT_ID"
+
+[functions]
+  directory = "netlify/functions"
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -19,6 +28,24 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Rutas del sitio viejo que ya no existen como archivo: 301 hacia la sección equivalente de la home.
+# Van antes de la regla /* (Netlify aplica la primera que coincide).
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true # existe como archivo en dist: sin force Netlify serviría el archivo en vez de redirigir
+
+[[redirects]]
+  from = "/servicios"
+  to = "/#servicios"
+  status = 301
+
+[[redirects]]
+  from = "/contacto"
+  to = "/#contacto"
+  status = 301
 
 # Rutas desconocidas: página 404 real (prerenderizada, noindex). Todas las rutas válidas existen como archivo,
 # así que no hace falta ningún rewrite a index.html.

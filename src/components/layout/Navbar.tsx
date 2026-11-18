@@ -31,9 +31,15 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const config = useConfig()
   const waLink = buildWALink(config.whatsapp_number, config.whatsapp_default_text)
-  const { openContact } = useModal()
+  const { openContact, setMenuMovilAbierto } = useModal()
   const { pathname, hash } = useLocation()
   const navigate = useNavigate()
+
+  // Avisa al resto de la página (Punto) si el menú móvil está abierto.
+  useEffect(() => {
+    setMenuMovilAbierto(menuOpen)
+    return () => setMenuMovilAbierto(false)
+  }, [menuOpen, setMenuMovilAbierto])
   const isHome = pathname === '/'
 
   useEffect(() => {

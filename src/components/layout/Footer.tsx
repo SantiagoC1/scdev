@@ -74,7 +74,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/5 pt-6 text-center text-white/60 text-xs">
-          © {year} SCdev. Todos los derechos reservados.
+          © {year} SCdev. Todos los derechos reservados.{' '}
+          <Link to="/privacidad" className="underline underline-offset-2 hover:text-white transition-colors">Política de privacidad</Link>
         </div>
       </div>
     </footer>

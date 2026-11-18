@@ -1,6 +1,13 @@
 import type { SheetConfig } from '../hooks/useSheetConfig'
 
 // Claves de la config (Sheet) con el rango de precio de cada servicio.
+// Claves de la config (Sheet) con el rango de precio de cada plan de mantenimiento mensual.
+export const MANT_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
+  basico:   { min: 'price_mant_basico_min',   max: 'price_mant_basico_max' },
+  estandar: { min: 'price_mant_estandar_min', max: 'price_mant_estandar_max' },
+  pro:      { min: 'price_mant_pro_min',      max: 'price_mant_pro_max' },
+}
+
 export const PRICE_MAP: Record<string, { min: keyof SheetConfig; max: keyof SheetConfig }> = {
   'presencia-web-esencial':   { min: 'price_esencial_min',       max: 'price_esencial_max' },
   'landing-page-profesional': { min: 'price_landing_min',        max: 'price_landing_max' },
