@@ -95,6 +95,28 @@ function banderas(texto) {
   if (neg) b.push(`AFIRMACIÓN NEGATIVA a revisar: "${neg[0].trim()}"`)
   if (/\b\d{1,3}\s?%/.test(texto)) b.push(`PORCENTAJE a revisar: "${texto.match(/\b\d{1,3}\s?%/)[0]}"`)
   if (FUGA_PROMPT.test(texto)) b.push('POSIBLE FUGA del prompt')
+  b.push(...banderasFormato(texto))
+  return b
+}
+
+// Formato del texto CRUDO del modelo (el panel además lo normaliza, pero conviene que el modelo ya lo escriba bien).
+// Preguntas que piden detalle y pueden pasar de las 90 palabras: ninguna de las 20 (el límite del prompt es 60-80).
+function banderasFormato(texto) {
+  const b = []
+  const sinEtiqueta = texto.replace(/\[WHATSAPP\]/gi, '').trim()
+  if (/\*\*/.test(sinEtiqueta)) b.push('FORMATO: markdown "**"')
+  if (/^\s*#{1,6}\s/m.test(sinEtiqueta) || /^\s*\|.*\|\s*$/m.test(sinEtiqueta)) b.push('FORMATO: título o tabla')
+  if (/[   ]/.test(sinEtiqueta)) b.push('FORMATO: espacio fino o no separable (U+202F/U+00A0/U+2009)')
+  if (/‑/.test(sinEtiqueta)) b.push('FORMATO: guion no separable (U+2011)')
+  for (const m of sinEtiqueta.matchAll(/\$\s?(\d[\d.\s]*\d)/g)) {
+    if (!/^\d{1,3}(\.\d{3})+$/.test(m[1].trim()) && Number(m[1].replace(/\D/g, '')) >= 1000) b.push(`FORMATO: monto sin punto de miles: ${m[0].trim()}`)
+  }
+  if (/\d\s?[–-]\s?\d+\s*(días|semanas|meses)/i.test(sinEtiqueta)) b.push('FORMATO: rango de tiempo con guion (usar "a")')
+  const palabras = sinEtiqueta.split(/\s+/).filter(Boolean).length
+  if (palabras > 90) b.push(`FORMATO: ${palabras} palabras (máx. 90)`)
+  const preguntas = (sinEtiqueta.match(/\?/g) ?? []).length
+  if (preguntas > 1) b.push(`FORMATO: ${preguntas} preguntas (máx. 1)`)
+  else if (preguntas === 1 && !/\?[^\w¿?]*$/.test(sinEtiqueta)) b.push('FORMATO: la pregunta no está al final')
   return b
 }
 
