@@ -29,6 +29,24 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Rutas del sitio viejo que ya no existen como archivo: 301 hacia la sección equivalente de la home.
+# Van antes de la regla /* (Netlify aplica la primera que coincide).
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true # existe como archivo en dist: sin force Netlify serviría el archivo en vez de redirigir
+
+[[redirects]]
+  from = "/servicios"
+  to = "/#servicios"
+  status = 301
+
+[[redirects]]
+  from = "/contacto"
+  to = "/#contacto"
+  status = 301
+
 # Rutas desconocidas: página 404 real (prerenderizada, noindex). Todas las rutas válidas existen como archivo,
 # así que no hace falta ningún rewrite a index.html.
 [[redirects]]
