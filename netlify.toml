@@ -3,6 +3,7 @@
   publish = "dist"
 
 [build.environment]
+  NODE_VERSION = "22"
   # Variables que el bundle del cliente embebe a propósito (la URL del Apps Script es pública) o que no son secretas
   # (ids de modelo, topes, id de cuenta). Las claves y tokens NO van en esta lista.
   SECRETS_SCAN_OMIT_KEYS = "APPS_SCRIPT_URL,VITE_APPS_SCRIPT_URL,GROQ_MODEL,GEMINI_MODEL,CLOUDFLARE_MODEL,GROQ_REASONING_EFFORT,GEMINI_REASONING_EFFORT,PUNTO_TOPE_DIARIO,CLOUDFLARE_ACCOUNT_ID"
