@@ -143,6 +143,26 @@ Sin clave o sin modelo, un proveedor se saltea. Los ids de modelo se verificaron
 - Confirmar la descripción del Estándar en mantenimiento (celular).
 - No hay ESLint configurado; la verificación es `tsc` (dentro de `npm run build`) y los scripts `scripts/probar-*.mjs`.
 
+## Auditoría de deploy (`docs/auditoria-deploy.md`)
+
+Resueltos:
+
+- **B1, secrets scanning:** `SECRETS_SCAN_OMIT_KEYS` en `netlify.toml` con las variables que no son secretas (la URL del Apps Script se embebe en el bundle a propósito). Las claves y tokens no están en la lista.
+- **B2, Node:** `NODE_VERSION = "22"` en `netlify.toml`, `engines` (`>=22.12`) en `package.json` y `.nvmrc` con `22`. Probado con Node 22.23.5: `npm ci` y `npm run build` con `CI=true`, sin diferencias respecto de Node 24.
+- **P1, redirects del sitio viejo:** 301 de `/index.html` (con `force`, porque existe como archivo), `/servicios` y `/contacto`, antes de la regla `/*`.
+- **I6:** los tres `*FB.png` sin usar pasaron de `public/images` a `scripts/fuentes`, así que no se publican (4,3 MB menos en `dist/`).
+- **I7:** `docs/lighthouse/` está en `.gitignore` y fuera del índice de git (los archivos siguen en disco; no había resúmenes `.md` dentro).
+
+Pendientes de verificación:
+
+- **I1:** en el Deploy Preview, `curl -i -H "Origin: https://<preview>" https://<preview>/api/punto` debe devolver JSON (`{"activo":true}`) y no el HTML de la 404. Si no, agregar un redirect explícito a `/.netlify/functions/punto` antes de `/*`. También probar los redirects nuevos: `/servicios`, `/contacto` y `/index.html`.
+- **I2:** TODO(santi): cargar `PUNTO_NETLIFY_SITE=scdev-portfolio` en Netlify (lo carga Santi), para que los Deploy Previews no den 403 en Punto.
+
+Decididos como "no por ahora":
+
+- **I5, rotar la URL del Apps Script:** el repo es público y la URL está en el historial, pero es un endpoint que el sitio expone igual a cualquier visitante. El riesgo es spam al formulario, y reescribir el historial no sirve en un repo público. Se rota si aparece spam.
+- **P2, `react-router-dom` 7:** `npm audit` no da altas ni críticas en producción, solo 2 moderadas (open redirect con backslash y `deserializeErrors()` en hidratación SSR). El salto de versión mayor lleva unas 2 h y no se justifica ahora. Se revisa en una tarea aparte.
+
 ## Verificación hecha
 
 - `npm run build` sin errores de TypeScript; 8 rutas válidas verificadas en el prerender.
