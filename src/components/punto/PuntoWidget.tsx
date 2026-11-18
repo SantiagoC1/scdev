@@ -7,6 +7,7 @@ import { usePuntoChat } from './usePuntoChat'
 import { useVisualViewport, useMediaQuery } from './useVisualViewport'
 import { RESPUESTAS_RAPIDAS, MENSAJE_DESACTIVADO } from './respuestasRapidas'
 import { servicioDeConversacion, textoWhatsApp } from './servicioWhatsapp'
+import { TextoPunto } from './TextoPunto'
 import { useConfig } from '../../context/ConfigContext'
 import { useModal } from '../../context/ModalContext'
 import { buildWALink } from '../../hooks/useSheetConfig'
@@ -221,15 +222,15 @@ export default function PuntoWidget() {
               {chat.mensajes.map((msg) => (
                 <div key={msg.id} className={`flex min-w-0 max-w-[85%] flex-col gap-2 ${msg.role === 'user' ? 'self-end' : 'self-start'}`}>
                 <div
-                  className={`whitespace-pre-line rounded-2xl px-4 py-2.5 text-sm leading-relaxed [overflow-wrap:anywhere] ${
+                  className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed [overflow-wrap:anywhere] ${
                     msg.role === 'user'
-                      ? 'bg-[#D32F2F] text-white rounded-br-md'
+                      ? 'whitespace-pre-line bg-[#D32F2F] text-white rounded-br-md'
                       : msg.error
                         ? 'bg-[#161618] text-[#F5F5F4] rounded-bl-md border border-[#D32F2F]/50'
                         : 'bg-[#161618] text-[#F5F5F4] rounded-bl-md'
                   }`}
                 >
-                  {msg.texto}
+                  {msg.role === 'user' ? msg.texto : <TextoPunto texto={msg.texto} />}
                 </div>
                 {msg.id === idUltimoWhatsApp && !chat.ocupado && (
                   <a

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { EstadoPunto } from './PuntoAvatar'
 import { RESPUESTAS_RAPIDAS, SALUDO_INICIAL, MENSAJE_ERROR, MENSAJE_LIMITE, MENSAJE_RAPIDO } from './respuestasRapidas'
 import { crearFiltroEtiqueta } from './filtroEtiqueta'
+import { normalizarTexto } from './formato'
 import type { SheetConfig } from '../../hooks/useSheetConfig'
 
 export interface Mensaje {
@@ -218,7 +219,7 @@ export function usePuntoChat(config: SheetConfig) {
     const t = texto.trim().slice(0, 500)
     if (!t) return false
     // Historial para el modelo: sin mensajes de error, hasta HISTORIAL_MAX, terminando en el mensaje nuevo.
-    const previo = mensajesRef.current.filter((m) => !m.error && m.texto).map((m) => ({ role: m.role, content: m.texto }))
+    const previo = mensajesRef.current.filter((m) => !m.error && m.texto).map((m) => ({ role: m.role, content: m.role === 'assistant' ? normalizarTexto(m.texto) : m.texto }))
     const historial = [...previo, { role: 'user' as const, content: t }].slice(-HISTORIAL_MAX)
     return enviar(t, () => {
       void consultarIA(historial)
