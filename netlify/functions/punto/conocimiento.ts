@@ -29,7 +29,10 @@ export function armarConocimiento(precios: Record<string, string>): string {
   const servicios = SERVICIOS.map((s) => {
     const keys = PRICE_MAP[s.id]
     const desde = keys ? pesos(precios[keys.min]) : s.precio
-    return `- ${s.nombre}: desde ${desde}, ${s.tiempo}. ${s.descripcion}`
+    // Plazos como se dicen: "3 a 5 días" (el dato de servicios.ts usa raya). El servicio de entrada se marca para el "punto de partida".
+    const plazo = s.tiempo.replace(/(\d+)\s*[–-]\s*(\d+)/, '$1 a $2')
+    const entrada = s.badge?.tipo === 'entrada' ? ' (servicio de entrada, el punto de partida)' : ''
+    return `- ${s.nombre}${entrada}: desde ${desde}, ${plazo}. ${s.descripcion}`
   }).join('\n')
 
   return `Sobre SCdev
